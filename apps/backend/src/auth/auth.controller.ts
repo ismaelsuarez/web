@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ThrottleAuthGuard } from '../common/guards/throttle-auth.guard';
 import { RegisterDtoSwagger, LoginDtoSwagger, RefreshTokenDtoSwagger } from '../dto/auth.dto';
+import { RegisterDto, LoginDto, RefreshTokenDto, AuthenticatedRequest } from '../types';
 
 @ApiTags('auth')
 @Controller('api/auth')
@@ -25,7 +26,7 @@ export class AuthController {
   @ApiResponse({ status: 201, description: 'User registered successfully' })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
-  async register(@Body() body: any) {
+  async register(@Body() body: RegisterDto) {
     try {
       return await this.authService.register(body);
     } catch (error) {
@@ -46,7 +47,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Login successful' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
-  async login(@Body() body: any) {
+  async login(@Body() body: LoginDto) {
     try {
       return await this.authService.login(body);
     } catch (error) {
@@ -67,7 +68,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Token refreshed successfully' })
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
-  async refreshToken(@Body() body: any) {
+  async refreshToken(@Body() body: RefreshTokenDto) {
     try {
       return await this.authService.refreshToken(body);
     } catch (error) {
@@ -86,7 +87,7 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Logout user' })
   @ApiResponse({ status: 200, description: 'Logout successful' })
-  async logout(@Request() req: any) {
+  async logout(@Request() req: AuthenticatedRequest) {
     try {
       return await this.authService.logout(req.user.id);
     } catch (error) {
@@ -102,7 +103,7 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user info' })
   @ApiResponse({ status: 200, description: 'User info retrieved successfully' })
-  async getProfile(@Request() req: any) {
+  async getProfile(@Request() req: AuthenticatedRequest) {
     return {
       user: req.user,
     };

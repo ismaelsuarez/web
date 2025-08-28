@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import mercadopago from 'mercadopago';
+import { CartItem, ShippingAddress, MercadoPagoWebhookData, OrderItem } from '../types';
 
 @Injectable()
 export class MercadoPagoService {
@@ -15,7 +16,7 @@ export class MercadoPagoService {
     });
   }
 
-  async createPayment(userId: string, cartItems: any[], shippingAddress: any) {
+  async createPayment(userId: string, cartItems: CartItem[], shippingAddress: ShippingAddress) {
     try {
       // Calculate total amount
       const totalAmount = cartItems.reduce((sum, item) => {
@@ -121,6 +122,7 @@ export class MercadoPagoService {
         sandboxUrl: response.body.sandbox_init_point,
       };
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error creating MercadoPago payment:', error);
       throw new HttpException(
         'Error al crear el pago',
@@ -129,7 +131,9 @@ export class MercadoPagoService {
     }
   }
 
-  async handleWebhook(data: any, signature: string) {
+  async handleWebhook(data: MercadoPagoWebhookData, signature: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    const _signature = signature;
     try {
       // Verify webhook signature (if MercadoPago provides it)
       // Note: MercadoPago doesn't always send signatures, so we'll validate the data structure
@@ -199,6 +203,7 @@ export class MercadoPagoService {
 
       return { success: true, message: 'Webhook processed' };
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error processing MercadoPago webhook:', error);
       throw new HttpException(
         'Error al procesar webhook',
@@ -298,6 +303,7 @@ export class MercadoPagoService {
       if (error instanceof HttpException) {
         throw error;
       }
+      // eslint-disable-next-line no-console
       console.error('Error confirming checkout:', error);
       throw new HttpException(
         'Error al confirmar el checkout',
@@ -306,7 +312,7 @@ export class MercadoPagoService {
     }
   }
 
-  private async decrementStock(items: any[]) {
+  private async decrementStock(items: OrderItem[]) {
     // Use a transaction to ensure data consistency
     await this.prisma.$transaction(async (prisma) => {
       for (const item of items) {
@@ -348,6 +354,7 @@ export class MercadoPagoService {
       
       throw new Error('Failed to get payment status');
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error getting payment status:', error);
       throw new HttpException(
         'Error al obtener estado del pago',

@@ -13,6 +13,7 @@ import { MercadoPagoService } from './mercadopago.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ThrottlePaymentsGuard } from '../common/guards/throttle-payments.guard';
 import { CreatePaymentDtoSwagger, ConfirmCheckoutDtoSwagger } from '../dto/checkout.dto';
+import { AuthenticatedRequest, CreatePaymentDto, ConfirmCheckoutDto, MercadoPagoWebhookData } from '../types';
 
 @ApiTags('payments')
 @Controller('api')
@@ -28,7 +29,7 @@ export class PaymentsController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
-  async createPayment(@Request() req: any, @Body() body: any) {
+  async createPayment(@Request() req: AuthenticatedRequest, @Body() body: CreatePaymentDto) {
     try {
       const { cartItems, shippingAddress } = body;
       
@@ -55,6 +56,7 @@ export class PaymentsController {
       if (error instanceof HttpException) {
         throw error;
       }
+      // eslint-disable-next-line no-console
       console.error('Error creating payment:', error);
       throw new HttpException(
         'Error al crear el pago',
@@ -66,15 +68,16 @@ export class PaymentsController {
   @Post('payments/mercadopago/webhook')
   @ApiOperation({ summary: 'MercadoPago webhook handler' })
   @ApiResponse({ status: 200, description: 'Webhook processed successfully' })
-  async handleWebhook(@Body() body: any, @Request() req: any) {
+  async handleWebhook(@Body() body: MercadoPagoWebhookData, @Request() req: AuthenticatedRequest) {
     try {
       // Get signature from headers if available
-      const signature = req.headers['x-signature'] || req.headers['x-mercadopago-signature'] || '';
+      const signature = (req.headers['x-signature'] as string) || (req.headers['x-mercadopago-signature'] as string) || '';
       
       const result = await this.mercadopagoService.handleWebhook(body, signature);
       
       return result;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error handling webhook:', error);
       // Return 200 to MercadoPago even on error to prevent retries
       return { success: false, error: 'Webhook processing failed' };
@@ -91,7 +94,7 @@ export class PaymentsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Order not found' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
-  async confirmCheckout(@Request() req: any, @Body() body: any) {
+  async confirmCheckout(@Request() req: AuthenticatedRequest, @Body() body: ConfirmCheckoutDto) {
     try {
       const { orderId, paymentMethod } = body;
       
@@ -114,6 +117,7 @@ export class PaymentsController {
       if (error instanceof HttpException) {
         throw error;
       }
+      // eslint-disable-next-line no-console
       console.error('Error confirming checkout:', error);
       throw new HttpException(
         'Error al confirmar el checkout',
@@ -141,6 +145,7 @@ export class PaymentsController {
       if (error instanceof HttpException) {
         throw error;
       }
+      // eslint-disable-next-line no-console
       console.error('Error getting payment status:', error);
       throw new HttpException(
         'Error al obtener estado del pago',

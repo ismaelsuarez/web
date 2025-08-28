@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ApiProperty } from '@nestjs/swagger';
+import { CartItem, ShippingAddress } from '../types';
 
 export const CreatePaymentSchema = z.object({
   cartItems: z.array(z.object({
@@ -71,7 +72,7 @@ export class CreatePaymentDtoSwagger {
       },
     },
   })
-  cartItems!: any[];
+  cartItems!: CartItem[];
 
   @ApiProperty({
     type: 'object',
@@ -87,7 +88,7 @@ export class CreatePaymentDtoSwagger {
       shippingCost: { type: 'number' },
     },
   })
-  shippingAddress!: any;
+  shippingAddress!: ShippingAddress;
 }
 
 export class ConfirmCheckoutDtoSwagger {

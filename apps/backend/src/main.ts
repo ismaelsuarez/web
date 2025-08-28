@@ -42,8 +42,11 @@ async function bootstrap() {
   const port = process.env.PORT || 3001;
   await app.listen(port);
   
+  // eslint-disable-next-line no-console
   console.log(`🚀 Backend corriendo en http://localhost:${port}`);
+  // eslint-disable-next-line no-console
   console.log(`📚 API Documentation disponible en http://localhost:${port}/api/docs`);
+  // eslint-disable-next-line no-console
   console.log(`🔒 Security: Helmet.js ${process.env.CSP_ENABLED === 'true' ? 'con CSP activado' : 'sin CSP'}`);
 }
 

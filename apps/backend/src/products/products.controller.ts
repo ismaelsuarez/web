@@ -9,6 +9,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { GetProductsQuerySchema, GetProductParamsSchema } from '../dto/product.dto';
+import { GetProductsQuery, GetProductParams } from '../types';
 
 @ApiTags('products')
 @Controller('api/products')
@@ -22,7 +23,7 @@ export class ProductsController {
   @ApiQuery({ name: 'page', required: false, description: 'Page number', type: Number })
   @ApiQuery({ name: 'limit', required: false, description: 'Items per page', type: Number })
   @ApiResponse({ status: 200, description: 'Products retrieved successfully' })
-  async findAll(@Query() query: any) {
+  async findAll(@Query() query: GetProductsQuery) {
     try {
       const validatedQuery = GetProductsQuerySchema.parse(query);
       return await this.productsService.findAll(validatedQuery);
@@ -39,7 +40,7 @@ export class ProductsController {
   @ApiParam({ name: 'id', description: 'Product ID' })
   @ApiResponse({ status: 200, description: 'Product retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Product not found' })
-  async findOne(@Param() params: any) {
+  async findOne(@Param() params: GetProductParams) {
     try {
       const { id } = GetProductParamsSchema.parse(params);
       const product = await this.productsService.findOne(id);

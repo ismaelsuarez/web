@@ -15,6 +15,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } 
 import { CartService } from './cart.service';
 import { AddToCartSchema, UpdateCartItemSchema, CartItemParamsSchema } from '../dto/cart.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AddToCartDto, UpdateCartItemDto, CartItemParams, AuthenticatedRequest } from '../types';
 
 @ApiTags('cart')
 @Controller('api/cart')
@@ -26,7 +27,7 @@ export class CartController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get user cart' })
   @ApiResponse({ status: 200, description: 'Cart retrieved successfully' })
-  async getCart(@Request() req: any) {
+  async getCart(@Request() req: AuthenticatedRequest) {
     try {
       const userId = req.user.id;
       return await this.cartService.getCart(userId);
@@ -46,7 +47,7 @@ export class CartController {
   @ApiResponse({ status: 200, description: 'Item added to cart successfully' })
   @ApiResponse({ status: 400, description: 'Invalid data or insufficient stock' })
   @ApiResponse({ status: 404, description: 'Variant not found' })
-  async addToCart(@Request() req: any, @Body() body: any) {
+  async addToCart(@Request() req: AuthenticatedRequest, @Body() body: AddToCartDto) {
     try {
       const validatedData = AddToCartSchema.parse(body);
       const userId = req.user.id;
@@ -72,9 +73,9 @@ export class CartController {
   @ApiResponse({ status: 400, description: 'Invalid data or insufficient stock' })
   @ApiResponse({ status: 404, description: 'Cart item not found' })
   async updateCartItem(
-    @Request() req: any,
-    @Param() params: any,
-    @Body() body: any,
+    @Request() req: AuthenticatedRequest,
+    @Param() params: CartItemParams,
+    @Body() body: UpdateCartItemDto,
   ) {
     try {
       const { id } = CartItemParamsSchema.parse(params);
@@ -99,7 +100,7 @@ export class CartController {
   @ApiParam({ name: 'id', description: 'Cart item ID' })
   @ApiResponse({ status: 200, description: 'Cart item removed successfully' })
   @ApiResponse({ status: 404, description: 'Cart item not found' })
-  async removeCartItem(@Request() req: any, @Param() params: any) {
+  async removeCartItem(@Request() req: AuthenticatedRequest, @Param() params: CartItemParams) {
     try {
       const { id } = CartItemParamsSchema.parse(params);
       const userId = req.user.id;
@@ -120,7 +121,7 @@ export class CartController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Clear entire cart' })
   @ApiResponse({ status: 200, description: 'Cart cleared successfully' })
-  async clearCart(@Request() req: any) {
+  async clearCart(@Request() req: AuthenticatedRequest) {
     try {
       const userId = req.user.id;
       return await this.cartService.clearCart(userId);
