@@ -27,23 +27,23 @@ describe('Security Guards', () => {
       expect(throttleAuthGuard).toBeDefined();
     });
 
-    it('should return IP address as tracker', () => {
+    it('should return IP address as tracker', async () => {
       const mockReq = {
         ip: '192.168.1.1',
         ips: [],
       };
 
-      const tracker = throttleAuthGuard['getTracker'](mockReq);
+      const tracker = await throttleAuthGuard['getTracker'](mockReq);
       expect(tracker).toBe('192.168.1.1');
     });
 
-    it('should return first IP from ips array', () => {
+    it('should return first IP from ips array', async () => {
       const mockReq = {
         ip: '192.168.1.1',
         ips: ['10.0.0.1', '192.168.1.1'],
       };
 
-      const tracker = throttleAuthGuard['getTracker'](mockReq);
+      const tracker = await throttleAuthGuard['getTracker'](mockReq);
       expect(tracker).toBe('10.0.0.1');
     });
 
@@ -59,13 +59,13 @@ describe('Security Guards', () => {
       expect(throttlePaymentsGuard).toBeDefined();
     });
 
-    it('should return IP address as tracker', () => {
+    it('should return IP address as tracker', async () => {
       const mockReq = {
         ip: '192.168.1.1',
         ips: [],
       };
 
-      const tracker = throttlePaymentsGuard['getTracker'](mockReq);
+      const tracker = await throttlePaymentsGuard['getTracker'](mockReq);
       expect(tracker).toBe('192.168.1.1');
     });
 
