@@ -10,7 +10,12 @@
     "format": "turbo run format",
     "bootstrap": "pnpm install && pnpm run build",
     "clean": "turbo run clean",
-    "type-check": "turbo run type-check"
+    "type-check": "turbo run type-check",
+    "backend:dev": "pnpm --filter backend start:dev",
+    "backend:prod": "pnpm --filter backend start:prod",
+    "backend:db:generate": "pnpm --filter backend db:generate",
+    "backend:db:push": "pnpm --filter backend db:push",
+    "backend:db:seed": "pnpm --filter backend db:seed"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0",
