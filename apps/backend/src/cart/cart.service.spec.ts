@@ -255,17 +255,6 @@ describe('CartService', () => {
       expect(mockPrismaService.cartItem.update).toHaveBeenCalledWith({
         where: { id: 1 },
         data: { quantity: 3 },
-        include: {
-          variant: {
-            include: {
-              product: {
-                include: {
-                  category: true,
-                },
-              },
-            },
-          },
-        },
       });
     });
 
