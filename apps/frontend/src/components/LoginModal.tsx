@@ -93,31 +93,32 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               />
             </div>
 
-                      {error && (
-            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
-              {error}
-            </div>
-          )}
+            {error && (
+              <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+                {error}
+              </div>
+            )}
 
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={loginMutation.isPending}
-          >
-            {loginMutation.isPending ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-          </Button>
-        </form>
-
-        <div className="mt-4 text-center text-sm text-gray-600">
-          <p>
-            ¿No tienes cuenta?{' '}
-            <button
-              onClick={onSwitchToRegister}
-              className="text-primary-600 hover:text-primary-700 font-medium"
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={loginMutation.isPending}
             >
-              Registrarse
-            </button>
-          </p>
+              {loginMutation.isPending ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+            </Button>
+          </form>
+
+          <div className="mt-4 text-center text-sm text-gray-600">
+            <p>
+              ¿No tienes cuenta?{' '}
+              <button
+                onClick={onSwitchToRegister}
+                className="text-primary-600 hover:text-primary-700 font-medium"
+              >
+                Registrarse
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </div>
