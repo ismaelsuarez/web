@@ -69,23 +69,23 @@ export const useCreatePayment = () => {
         throw new Error('El carrito está vacío');
       }
 
-      const cartItems = items.map((item: any) => ({
-        product: {
-          id: item.product.id,
-          name: item.product.name,
-          images: item.product.images,
-        },
-        variant: {
-          id: item.variant.id,
-          name: item.variant.name,
-          price: item.variant.price,
-        },
-        quantity: item.quantity,
-      }));
+             const cartItems = items.map((item: any) => ({
+         product: {
+           id: item.product.id,
+           name: item.product.title,
+           images: item.product.images,
+         },
+         variant: {
+           id: item.variant.id,
+           name: item.variant.sku,
+           price: item.variant.price,
+         },
+         quantity: item.quantity,
+       }));
 
       return createPayment({ cartItems, shippingAddress });
     },
-    onSuccess: (data: any) => {
+    onSuccess: () => {
       // Clear cart after successful payment creation
       clearCart();
     },

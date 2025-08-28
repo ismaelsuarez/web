@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CheckCircle, ArrowLeft } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { useConfirmCheckout } from '../hooks/useCheckout';
@@ -13,7 +13,6 @@ const CheckoutSuccess: React.FC = () => {
   
   const orderId = searchParams.get('order_id');
   const paymentId = searchParams.get('payment_id');
-  const status = searchParams.get('status');
   
   const confirmCheckoutMutation = useConfirmCheckout();
 

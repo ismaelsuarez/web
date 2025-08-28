@@ -5,11 +5,11 @@ import { useAuthStore } from '../stores/authStore';
 import { useCreatePayment, useShippingCost, useProvinces, useMercadoPago, type ShippingAddress } from '../hooks/useCheckout';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { MapPin, CreditCard, Truck, CheckCircle } from 'lucide-react';
+import { MapPin, CreditCard, CheckCircle } from 'lucide-react';
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
-  const { items, getTotal, clearCart } = useCartStore();
+  const { items, getTotal } = useCartStore();
   const { isAuthenticated } = useAuthStore();
   const { data: provinces } = useProvinces();
   const { redirectToPayment } = useMercadoPago();
@@ -29,8 +29,8 @@ const Checkout: React.FC = () => {
   const [selectedProvince, setSelectedProvince] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'online' | 'offline'>('online');
 
-  // Calculate total weight for shipping
-  const totalWeight = items.reduce((weight, item) => weight + (item.variant.weight || 0.5) * item.quantity, 0);
+  // Calculate total weight for shipping (default 0.5kg per item)
+  const totalWeight = items.reduce((weight, item) => weight + 0.5 * item.quantity, 0);
 
   // Get shipping cost
   const { data: shippingData } = useShippingCost(selectedProvince, totalWeight);
@@ -147,11 +147,11 @@ const Checkout: React.FC = () => {
               <div className="space-y-4">
                 {items.map((item) => (
                   <div key={`${item.product.id}-${item.variant.id}`} className="flex justify-between items-center">
-                    <div>
-                      <p className="font-medium">{item.product.name}</p>
-                      <p className="text-sm text-gray-600">{item.variant.name}</p>
-                      <p className="text-sm text-gray-500">Cantidad: {item.quantity}</p>
-                    </div>
+                                         <div>
+                       <p className="font-medium">{item.product.title}</p>
+                       <p className="text-sm text-gray-600">{item.variant.sku}</p>
+                       <p className="text-sm text-gray-500">Cantidad: {item.quantity}</p>
+                     </div>
                     <p className="font-medium">${item.variant.price * item.quantity}</p>
                   </div>
                 ))}
