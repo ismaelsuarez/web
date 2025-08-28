@@ -4,7 +4,6 @@ import { PrismaService } from '../prisma/prisma.service';
 
 describe('CartService', () => {
   let service: CartService;
-  let prismaService: PrismaService;
 
   const mockPrismaService = {
     cart: {
@@ -37,7 +36,6 @@ describe('CartService', () => {
     }).compile();
 
     service = module.get<CartService>(CartService);
-    prismaService = module.get<PrismaService>(PrismaService);
   });
 
   afterEach(() => {

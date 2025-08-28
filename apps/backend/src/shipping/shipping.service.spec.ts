@@ -131,7 +131,7 @@ describe('ShippingService', () => {
         expect(rate.weightRanges).toHaveLength(5);
         
         // Check weight range structure
-        rate.weightRanges.forEach((range, index) => {
+        rate.weightRanges.forEach((range) => {
           expect(range).toHaveProperty('minWeight');
           expect(range).toHaveProperty('maxWeight');
           expect(range).toHaveProperty('cost');
@@ -144,7 +144,9 @@ describe('ShippingService', () => {
         for (let i = 0; i < rate.weightRanges.length - 1; i++) {
           const current = rate.weightRanges[i];
           const next = rate.weightRanges[i + 1];
-          expect(next.minWeight).toBe(current.maxWeight);
+          if (current && next) {
+            expect(next.minWeight).toBe(current.maxWeight);
+          }
         }
       });
     });

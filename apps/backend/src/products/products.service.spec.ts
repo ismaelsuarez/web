@@ -4,7 +4,6 @@ import { PrismaService } from '../prisma/prisma.service';
 
 describe('ProductsService', () => {
   let service: ProductsService;
-  let prismaService: PrismaService;
 
   const mockPrismaService = {
     product: {
@@ -26,7 +25,6 @@ describe('ProductsService', () => {
     }).compile();
 
     service = module.get<ProductsService>(ProductsService);
-    prismaService = module.get<PrismaService>(PrismaService);
   });
 
   afterEach(() => {
