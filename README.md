@@ -71,6 +71,10 @@ Monorepo para aplicación de ecommerce construido con **pnpm + Turborepo**.
 | `pnpm format` | Formatea código con Prettier |
 | `pnpm bootstrap` | Instala dependencias y construye paquetes |
 | `pnpm clean` | Limpia archivos de build |
+| `pnpm test` | Ejecuta tests de backend y frontend |
+| `pnpm test:coverage` | Ejecuta tests con reporte de cobertura |
+| `pnpm backend:test` | Ejecuta solo tests del backend |
+| `pnpm frontend:test` | Ejecuta solo tests del frontend |
 
 ## 🌐 Servicios
 
@@ -117,13 +121,65 @@ Componentes React reutilizables con TypeScript.
 - Volúmenes persistentes
 - Configuración de desarrollo optimizada
 
+## 🐳 Docker y Staging
+
+### Desarrollo Local con Docker
+
+Para ejecutar la aplicación completa en contenedores Docker:
+
+```bash
+# Construir y levantar todos los servicios
+docker-compose -f docker-compose.staging.yml up --build
+
+# Ejecutar en segundo plano
+docker-compose -f docker-compose.staging.yml up -d --build
+
+# Ver logs
+docker-compose -f docker-compose.staging.yml logs -f
+
+# Detener servicios
+docker-compose -f docker-compose.staging.yml down
+```
+
+### Servicios Disponibles en Staging
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:3001
+- **PostgreSQL**: localhost:5432
+- **Redis**: localhost:6379
+- **PgAdmin**: http://localhost:5050 (con `--profile admin`)
+
+### Variables de Entorno
+
+Crea un archivo `.env` en la raíz del proyecto:
+
+```env
+# JWT Secrets
+JWT_ACCESS_SECRET=your-super-secret-access-key-here
+JWT_REFRESH_SECRET=your-super-secret-refresh-key-here
+
+# MercadoPago
+MERCADOPAGO_ACCESS_TOKEN=your-mercadopago-access-token
+MERCADOPAGO_PUBLIC_KEY=your-mercadopago-public-key
+
+# URLs
+FRONTEND_URL=http://localhost:3000
+BACKEND_URL=http://localhost:3001
+VITE_API_URL=http://localhost:3001
+```
+
 ## 🚀 Próximos Pasos
 
-1. Configurar Prisma para la base de datos
-2. Implementar autenticación
-3. Crear componentes UI adicionales
-4. Configurar CI/CD
-5. Implementar tests
+1. ✅ Configurar Prisma para la base de datos
+2. ✅ Implementar autenticación JWT
+3. ✅ Crear componentes UI adicionales
+4. ✅ Configurar CI/CD con GitHub Actions
+5. ✅ Implementar tests unitarios
+6. ✅ Configurar Docker para staging
+7. 🔄 Implementar tests de integración
+8. 🔄 Configurar monitoreo y logging
+9. 🔄 Optimizar performance
+10. 🔄 Implementar PWA
 
 ## 📝 Licencia
 
