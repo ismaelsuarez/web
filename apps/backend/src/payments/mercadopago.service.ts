@@ -1,99 +1,118 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import mercadopago from 'mercadopago';
-import { PrismaService } from '../prisma/prisma.service';
-import { CartService } from '../cart/cart.service';
-import { ConfirmCheckoutDto } from '../dto/checkout.dto';
 
 @Injectable()
 export class MercadoPagoService {
-  private readonly logger = new Logger(MercadoPagoService.name);
-
   constructor(
-    private configService: ConfigService,
-    private prisma: PrismaService,
-    private cartService: CartService,
+    private readonly prisma: PrismaService,
+    private readonly configService: ConfigService,
   ) {
-    // Configurar MercadoPago
+    // Configure MercadoPago with access token
     mercadopago.configure({
       access_token: this.configService.get<string>('MERCADOPAGO_ACCESS_TOKEN'),
     });
   }
 
-  async createPayment(userId: number, shippingAddress: any) {
+  async createPayment(userId: string, cartItems: any[], shippingAddress: any) {
     try {
-      // Obtener carrito del usuario
-      const cart = await this.cartService.getCart(userId);
-      
-      if (!cart.items || cart.items.length === 0) {
-        throw new Error('El carrito está vacío');
-      }
+      // Calculate total amount
+      const totalAmount = cartItems.reduce((sum, item) => {
+        return sum + (item.variant.price * item.quantity);
+      }, 0);
 
-      // Crear orden en la base de datos
+      // Create provisional order
       const order = await this.prisma.order.create({
         data: {
           userId,
-          total: cart.total,
           status: 'pending',
-          shippingAddress,
+          total: totalAmount,
+          shippingAddress: JSON.stringify(shippingAddress),
           items: {
-            create: cart.items.map(item => ({
+            create: cartItems.map(item => ({
+              productId: item.product.id,
               variantId: item.variant.id,
-              priceAtPurchase: item.variant.price,
               quantity: item.quantity,
+              price: item.variant.price,
             })),
           },
         },
         include: {
           items: {
             include: {
-              variant: {
-                include: {
-                  product: true,
-                },
-              },
+              product: true,
+              variant: true,
             },
           },
         },
       });
 
-      // Crear preferencia en MercadoPago
-      const preference = {
-        items: cart.items.map(item => ({
-          id: item.variant.id.toString(),
-          title: item.product.title,
-          description: `${item.product.title} - ${Object.entries(item.variant.specs)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(', ')}`,
-          quantity: item.quantity,
-          unit_price: item.variant.price,
+      // Prepare preference items for MercadoPago
+      const preferenceItems = cartItems.map(item => ({
+        title: `${item.product.name} - ${item.variant.name}`,
+        unit_price: item.variant.price,
+        quantity: item.quantity,
+        currency_id: 'ARS',
+        picture_url: item.product.images?.[0] || '',
+      }));
+
+      // Add shipping cost if applicable
+      if (shippingAddress.shippingCost > 0) {
+        preferenceItems.push({
+          title: 'Costo de envío',
+          unit_price: shippingAddress.shippingCost,
+          quantity: 1,
           currency_id: 'ARS',
-        })),
-        external_reference: order.id.toString(),
+        });
+      }
+
+      // Create MercadoPago preference
+      const preference = {
+        items: preferenceItems,
+        payer: {
+          name: shippingAddress.fullName,
+          email: shippingAddress.email,
+          phone: {
+            number: shippingAddress.phone,
+          },
+          address: {
+            street_name: shippingAddress.street,
+            street_number: shippingAddress.streetNumber,
+            zip_code: shippingAddress.zipCode,
+            city: shippingAddress.city,
+            state: shippingAddress.province,
+            country: 'AR',
+          },
+        },
+        shipments: {
+          cost: shippingAddress.shippingCost,
+          mode: 'not_specified',
+          free_shipping: shippingAddress.shippingCost === 0,
+        },
         back_urls: {
-          success: `${this.configService.get<string>('FRONTEND_URL')}/payment/success`,
-          failure: `${this.configService.get<string>('FRONTEND_URL')}/payment/failure`,
-          pending: `${this.configService.get<string>('FRONTEND_URL')}/payment/pending`,
+          success: `${this.configService.get('FRONTEND_URL')}/checkout/success?order_id=${order.id}`,
+          failure: `${this.configService.get('FRONTEND_URL')}/checkout/failure?order_id=${order.id}`,
+          pending: `${this.configService.get('FRONTEND_URL')}/checkout/pending?order_id=${order.id}`,
         },
         auto_return: 'approved',
-        notification_url: `${this.configService.get<string>('BACKEND_URL')}/api/payments/mercadopago/webhook`,
+        external_reference: order.id,
+        notification_url: `${this.configService.get('BACKEND_URL')}/api/payments/mercadopago/webhook`,
         expires: true,
-        expiration_date_to: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 minutos
+        expiration_date_to: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 minutes
       };
 
       const response = await mercadopago.preferences.create(preference);
 
-      // Actualizar orden con información de MercadoPago
+      // Update order with MercadoPago data
       await this.prisma.order.update({
         where: { id: order.id },
         data: {
+          mercadopagoId: response.body.id,
           preferenceId: response.body.id,
           paymentUrl: response.body.init_point,
         },
       });
-
-      // Limpiar carrito después de crear la orden
-      await this.cartService.clearCart(userId);
 
       return {
         orderId: order.id,
@@ -102,89 +121,101 @@ export class MercadoPagoService {
         sandboxUrl: response.body.sandbox_init_point,
       };
     } catch (error) {
-      this.logger.error('Error creating payment:', error);
-      throw error;
+      console.error('Error creating MercadoPago payment:', error);
+      throw new HttpException(
+        'Error al crear el pago',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  async handleWebhook(data: any) {
+  async handleWebhook(data: any, signature: string) {
     try {
-      const { data: webhookData, type } = data;
-
-      if (type === 'payment') {
-        const paymentId = webhookData.id;
+      // Verify webhook signature (if MercadoPago provides it)
+      // Note: MercadoPago doesn't always send signatures, so we'll validate the data structure
+      
+      if (data.type === 'payment') {
+        const paymentId = data.data.id;
         
-        // Obtener información del pago desde MercadoPago
-        const payment = await mercadopago.payment.findById(paymentId);
-        const paymentData = payment.body;
-
-        // Buscar orden por external_reference
-        const orderId = parseInt(paymentData.external_reference);
-        const order = await this.prisma.order.findUnique({
-          where: { id: orderId },
-        });
-
-        if (!order) {
-          this.logger.error(`Order not found for payment ${paymentId}`);
-          return;
-        }
-
-        // Actualizar estado de la orden según el estado del pago
-        let orderStatus = 'pending';
+        // Get payment details from MercadoPago
+        const payment = await mercadopago.payment.get(paymentId);
         
-        switch (paymentData.status) {
-          case 'approved':
-            orderStatus = 'paid';
-            break;
-          case 'rejected':
-          case 'cancelled':
-            orderStatus = 'failed';
-            break;
-          case 'pending':
-            orderStatus = 'pending';
-            break;
-          default:
-            orderStatus = 'pending';
+        if (payment.status === 200) {
+          const paymentData = payment.body;
+          const orderId = paymentData.external_reference;
+          
+          // Find the order
+          const order = await this.prisma.order.findUnique({
+            where: { id: orderId },
+            include: { items: true },
+          });
+
+          if (!order) {
+            throw new Error(`Order not found: ${orderId}`);
+          }
+
+          // Update order status based on payment status
+          let orderStatus = 'pending';
+          switch (paymentData.status) {
+            case 'approved':
+              orderStatus = 'paid';
+              break;
+            case 'rejected':
+              orderStatus = 'failed';
+              break;
+            case 'pending':
+              orderStatus = 'pending';
+              break;
+            case 'in_process':
+              orderStatus = 'processing';
+              break;
+            default:
+              orderStatus = 'pending';
+          }
+
+          // Update order
+          await this.prisma.order.update({
+            where: { id: orderId },
+            data: {
+              status: orderStatus,
+              mercadopagoId: paymentId,
+              updatedAt: new Date(),
+            },
+          });
+
+          // If payment is approved, decrement stock
+          if (paymentData.status === 'approved') {
+            await this.decrementStock(order.items);
+          }
+
+          return {
+            success: true,
+            orderId,
+            paymentStatus: paymentData.status,
+            orderStatus,
+          };
         }
-
-        // Actualizar orden
-        await this.prisma.order.update({
-          where: { id: orderId },
-          data: {
-            status: orderStatus,
-            mercadopagoId: paymentId,
-          },
-        });
-
-        this.logger.log(`Order ${orderId} updated to status: ${orderStatus}`);
       }
+
+      return { success: true, message: 'Webhook processed' };
     } catch (error) {
-      this.logger.error('Error handling webhook:', error);
-      throw error;
+      console.error('Error processing MercadoPago webhook:', error);
+      throw new HttpException(
+        'Error al procesar webhook',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  async getPaymentStatus(paymentId: string) {
+  async confirmCheckout(orderId: string, paymentMethod: string) {
     try {
-      const payment = await mercadopago.payment.findById(paymentId);
-      return payment.body;
-    } catch (error) {
-      this.logger.error('Error getting payment status:', error);
-      throw error;
-    }
-  }
-
-  async confirmCheckout(userId: number, checkoutData: ConfirmCheckoutDto) {
-    try {
-      // Verificar que la orden existe y pertenece al usuario
-      const order = await this.prisma.order.findFirst({
-        where: {
-          id: checkoutData.orderId,
-          userId: userId,
-        },
+      // Find the order
+      const order = await this.prisma.order.findUnique({
+        where: { id: orderId },
         include: {
           items: {
             include: {
+              product: true,
               variant: true,
             },
           },
@@ -192,78 +223,136 @@ export class MercadoPagoService {
       });
 
       if (!order) {
-        throw new Error('Orden no encontrada o no autorizada');
+        throw new HttpException('Orden no encontrada', HttpStatus.NOT_FOUND);
       }
 
-      // Verificar stock disponible para todos los items
-      for (const item of order.items) {
-        const variant = await this.prisma.productVariant.findUnique({
+      if (order.status !== 'pending') {
+        throw new HttpException(
+          'La orden ya ha sido procesada',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      // For offline payments, simulate approval
+      if (paymentMethod === 'offline') {
+        // Update order status
+        await this.prisma.order.update({
+          where: { id: orderId },
+          data: {
+            status: 'paid',
+            updatedAt: new Date(),
+          },
+        });
+
+        // Decrement stock transactionally
+        await this.decrementStock(order.items);
+
+        return {
+          success: true,
+          orderId,
+          status: 'paid',
+          message: 'Pago offline confirmado',
+        };
+      }
+
+      // For online payments, check MercadoPago status
+      if (order.mercadopagoId) {
+        const payment = await mercadopago.payment.get(order.mercadopagoId);
+        
+        if (payment.status === 200) {
+          const paymentData = payment.body;
+          
+          if (paymentData.status === 'approved') {
+            // Update order status
+            await this.prisma.order.update({
+              where: { id: orderId },
+              data: {
+                status: 'paid',
+                updatedAt: new Date(),
+              },
+            });
+
+            // Decrement stock transactionally
+            await this.decrementStock(order.items);
+
+            return {
+              success: true,
+              orderId,
+              status: 'paid',
+              message: 'Pago confirmado',
+            };
+          } else {
+            throw new HttpException(
+              `Pago no aprobado. Estado: ${paymentData.status}`,
+              HttpStatus.BAD_REQUEST,
+            );
+          }
+        }
+      }
+
+      throw new HttpException(
+        'No se pudo confirmar el pago',
+        HttpStatus.BAD_REQUEST,
+      );
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      console.error('Error confirming checkout:', error);
+      throw new HttpException(
+        'Error al confirmar el checkout',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  private async decrementStock(items: any[]) {
+    // Use a transaction to ensure data consistency
+    await this.prisma.$transaction(async (prisma) => {
+      for (const item of items) {
+        // Check current stock
+        const variant = await prisma.productVariant.findUnique({
           where: { id: item.variantId },
         });
 
         if (!variant) {
-          throw new Error(`Variante ${item.variantId} no encontrada`);
+          throw new Error(`Variant not found: ${item.variantId}`);
         }
 
         if (variant.stock < item.quantity) {
-          throw new Error(`Stock insuficiente para ${variant.sku}. Disponible: ${variant.stock}, Solicitado: ${item.quantity}`);
-        }
-      }
-
-      // Procesar en transacción para asegurar consistencia
-      const result = await this.prisma.$transaction(async (prisma) => {
-        // Decrementar stock de todas las variantes
-        for (const item of order.items) {
-          await prisma.productVariant.update({
-            where: { id: item.variantId },
-            data: {
-              stock: {
-                decrement: item.quantity,
-              },
-            },
-          });
+          throw new Error(`Insufficient stock for variant: ${item.variantId}`);
         }
 
-        // Actualizar orden con información de envío y método de pago
-        const updatedOrder = await prisma.order.update({
-          where: { id: order.id },
+        // Decrement stock
+        await prisma.productVariant.update({
+          where: { id: item.variantId },
           data: {
-            status: checkoutData.paymentMethod === 'offline' ? 'pending' : 'paid',
-            shippingAddress: checkoutData.shippingAddress,
-            total: order.total + checkoutData.shippingCost,
-          },
-          include: {
-            items: {
-              include: {
-                variant: {
-                  include: {
-                    product: true,
-                  },
-                },
-              },
-            },
+            stock: variant.stock - item.quantity,
           },
         });
+      }
+    });
+  }
 
-        // Limpiar carrito del usuario
-        await this.cartService.clearCart(userId);
-
-        return updatedOrder;
-      });
-
-      this.logger.log(`Order ${order.id} confirmed successfully`);
-
-      return {
-        orderId: result.id,
-        status: result.status,
-        total: result.total,
-        items: result.items,
-        shippingAddress: result.shippingAddress,
-        message: 'Orden confirmada y stock actualizado exitosamente',
-      };
+  async getPaymentStatus(paymentId: string) {
+    try {
+      const payment = await mercadopago.payment.get(paymentId);
+      
+      if (payment.status === 200) {
+        return {
+          status: payment.body.status,
+          statusDetail: payment.body.status_detail,
+          externalReference: payment.body.external_reference,
+        };
+      }
+      
+      throw new Error('Failed to get payment status');
     } catch (error) {
-      this.logger.error('Error confirming checkout:', error);
-      throw error;
+      console.error('Error getting payment status:', error);
+      throw new HttpException(
+        'Error al obtener estado del pago',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

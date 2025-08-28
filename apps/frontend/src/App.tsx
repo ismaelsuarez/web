@@ -8,6 +8,8 @@ import { Products } from './pages/Products';
 import { ProductDetail } from './pages/ProductDetail';
 import { Profile } from './pages/Profile';
 import { Checkout } from './pages/Checkout';
+import CheckoutSuccess from './pages/CheckoutSuccess';
+import CheckoutFailure from './pages/CheckoutFailure';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +45,9 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/checkout/failure" element={<CheckoutFailure />} />
+            <Route path="/checkout/pending" element={<CheckoutFailure />} />
           </Routes>
         </Layout>
       </Router>

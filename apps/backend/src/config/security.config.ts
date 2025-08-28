@@ -17,8 +17,8 @@ export const securityConfig = {
 
   // Rate Limiting
   rateLimit: {
-    ttl: parseInt(process.env.RATE_LIMIT_TTL) || 900, // 15 minutes
-    limit: parseInt(process.env.RATE_LIMIT_LIMIT) || 100, // 100 requests
+    ttl: parseInt(process.env.RATE_LIMIT_TTL || '900'), // 15 minutes
+    limit: parseInt(process.env.RATE_LIMIT_LIMIT || '100'), // 100 requests
   },
 
   // Logging

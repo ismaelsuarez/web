@@ -22,6 +22,7 @@
     "zustand": "^4.4.6",
     "axios": "^1.6.0",
     "lucide-react": "^0.292.0",
+    "@mercadopago/sdk-js": "^2.0.0",
     "@ecommerce/ui": "workspace:*"
   },
   "devDependencies": {

@@ -11,7 +11,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nes
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ThrottleAuthGuard } from '../common/guards/throttle-auth.guard';
-import { RegisterSchema, LoginSchema, RefreshTokenSchema } from '../dto/auth.dto';
+import { RegisterDtoSwagger, LoginDtoSwagger, RefreshTokenDtoSwagger } from '../dto/auth.dto';
 
 @ApiTags('auth')
 @Controller('api/auth')
@@ -21,7 +21,7 @@ export class AuthController {
   @Post('register')
   @UseGuards(ThrottleAuthGuard)
   @ApiOperation({ summary: 'Register new user' })
-  @ApiBody({ schema: RegisterSchema })
+  @ApiBody({ type: RegisterDtoSwagger })
   @ApiResponse({ status: 201, description: 'User registered successfully' })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
@@ -42,7 +42,7 @@ export class AuthController {
   @Post('login')
   @UseGuards(ThrottleAuthGuard)
   @ApiOperation({ summary: 'Login user' })
-  @ApiBody({ schema: LoginSchema })
+  @ApiBody({ type: LoginDtoSwagger })
   @ApiResponse({ status: 200, description: 'Login successful' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
@@ -63,7 +63,7 @@ export class AuthController {
   @Post('refresh')
   @UseGuards(ThrottleAuthGuard)
   @ApiOperation({ summary: 'Refresh access token' })
-  @ApiBody({ schema: RefreshTokenSchema })
+  @ApiBody({ type: RefreshTokenDtoSwagger })
   @ApiResponse({ status: 200, description: 'Token refreshed successfully' })
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   @ApiResponse({ status: 429, description: 'Too many requests' })

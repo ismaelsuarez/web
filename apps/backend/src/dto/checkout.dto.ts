@@ -1,38 +1,99 @@
 import { z } from 'zod';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const CreatePaymentSchema = z.object({
+  cartItems: z.array(z.object({
+    product: z.object({
+      id: z.string(),
+      name: z.string(),
+      images: z.array(z.string()).optional(),
+    }),
+    variant: z.object({
+      id: z.string(),
+      name: z.string(),
+      price: z.number(),
+    }),
+    quantity: z.number().positive(),
+  })),
   shippingAddress: z.object({
-    firstName: z.string().min(1, 'Nombre es requerido'),
-    lastName: z.string().min(1, 'Apellido es requerido'),
-    address: z.string().min(1, 'Dirección es requerida'),
-    city: z.string().min(1, 'Ciudad es requerida'),
-    postalCode: z.string().min(1, 'Código postal es requerido'),
-    phone: z.string().min(1, 'Teléfono es requerido'),
+    fullName: z.string(),
+    email: z.string().email(),
+    phone: z.string(),
+    street: z.string(),
+    streetNumber: z.string(),
+    zipCode: z.string(),
+    city: z.string(),
+    province: z.string(),
+    shippingCost: z.number().min(0),
   }),
 });
 
 export const MercadoPagoWebhookSchema = z.object({
+  type: z.string(),
   data: z.object({
     id: z.string(),
   }),
-  type: z.string(),
 });
 
 export const ConfirmCheckoutSchema = z.object({
-  orderId: z.number().min(1, 'ID de orden es requerido'),
-  paymentMethod: z.enum(['mercadopago', 'offline']),
-  shippingAddress: z.object({
-    firstName: z.string().min(1, 'Nombre es requerido'),
-    lastName: z.string().min(1, 'Apellido es requerido'),
-    address: z.string().min(1, 'Dirección es requerida'),
-    city: z.string().min(1, 'Ciudad es requerida'),
-    province: z.string().min(1, 'Provincia es requerida'),
-    postalCode: z.string().min(1, 'Código postal es requerido'),
-    phone: z.string().min(1, 'Teléfono es requerido'),
-  }),
-  shippingCost: z.number().min(0, 'Costo de envío debe ser mayor o igual a 0'),
+  orderId: z.string(),
+  paymentMethod: z.enum(['online', 'offline']),
 });
 
 export type CreatePaymentDto = z.infer<typeof CreatePaymentSchema>;
 export type MercadoPagoWebhookDto = z.infer<typeof MercadoPagoWebhookSchema>;
 export type ConfirmCheckoutDto = z.infer<typeof ConfirmCheckoutSchema>;
+
+// Swagger DTOs
+export class CreatePaymentDtoSwagger {
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        product: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            name: { type: 'string' },
+            images: { type: 'array', items: { type: 'string' } },
+          },
+        },
+        variant: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            name: { type: 'string' },
+            price: { type: 'number' },
+          },
+        },
+        quantity: { type: 'number' },
+      },
+    },
+  })
+  cartItems!: any[];
+
+  @ApiProperty({
+    type: 'object',
+    properties: {
+      fullName: { type: 'string' },
+      email: { type: 'string' },
+      phone: { type: 'string' },
+      street: { type: 'string' },
+      streetNumber: { type: 'string' },
+      zipCode: { type: 'string' },
+      city: { type: 'string' },
+      province: { type: 'string' },
+      shippingCost: { type: 'number' },
+    },
+  })
+  shippingAddress!: any;
+}
+
+export class ConfirmCheckoutDtoSwagger {
+  @ApiProperty({ example: 'order-id-here' })
+  orderId!: string;
+
+  @ApiProperty({ enum: ['online', 'offline'], example: 'online' })
+  paymentMethod!: string;
+}
