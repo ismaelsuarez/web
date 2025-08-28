@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ThrottleAuthGuard } from './throttle-auth.guard';
 import { ThrottlePaymentsGuard } from './throttle-payments.guard';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 describe('Security Guards', () => {
   let throttleAuthGuard: ThrottleAuthGuard;
@@ -8,6 +9,12 @@ describe('Security Guards', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        ThrottlerModule.forRoot([{
+          ttl: 900,
+          limit: 100,
+        }]),
+      ],
       providers: [ThrottleAuthGuard, ThrottlePaymentsGuard],
     }).compile();
 

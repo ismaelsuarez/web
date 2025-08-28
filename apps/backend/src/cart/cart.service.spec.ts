@@ -224,9 +224,8 @@ describe('CartService', () => {
         quantity: 3,
       });
 
-      const result = await service.addToCart(1, { variantId: 1, quantity: 2 });
-
-      expect(result).toEqual({
+      // Mock the getCart method to return the expected result
+      const expectedResult = {
         items: [{
           id: mockCartItem.id,
           quantity: 3,
@@ -235,7 +234,23 @@ describe('CartService', () => {
         }],
         total: 3000,
         itemCount: 3,
+      };
+
+      // Mock the getCart call that happens at the end of addToCart
+      mockPrismaService.cart.findFirst.mockResolvedValueOnce(mockCart);
+      mockPrismaService.cart.findFirst.mockResolvedValueOnce({
+        id: 1,
+        userId: 1,
+        items: [{
+          id: 1,
+          quantity: 3,
+          variant: mockVariant,
+        }],
       });
+
+      const result = await service.addToCart(1, { variantId: 1, quantity: 2 });
+
+      expect(result).toEqual(expectedResult);
 
       expect(mockPrismaService.cartItem.update).toHaveBeenCalledWith({
         where: { id: 1 },
@@ -326,9 +341,8 @@ describe('CartService', () => {
         quantity: 3,
       });
 
-      const result = await service.updateCartItem(1, 1, { quantity: 3 });
-
-      expect(result).toEqual({
+      // Mock the getCart method to return the expected result
+      const expectedResult = {
         items: [{
           id: mockCartItem.id,
           quantity: 3,
@@ -337,7 +351,22 @@ describe('CartService', () => {
         }],
         total: 3000,
         itemCount: 3,
+      };
+
+      // Mock the getCart call that happens at the end of updateCartItem
+      mockPrismaService.cart.findFirst.mockResolvedValueOnce({
+        id: 1,
+        userId: 1,
+        items: [{
+          id: 1,
+          quantity: 3,
+          variant: mockVariant,
+        }],
       });
+
+      const result = await service.updateCartItem(1, 1, { quantity: 3 });
+
+      expect(result).toEqual(expectedResult);
     });
 
     it('should throw error for non-existent cart item', async () => {

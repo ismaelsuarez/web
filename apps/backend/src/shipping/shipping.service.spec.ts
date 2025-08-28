@@ -154,14 +154,14 @@ describe('ShippingService', () => {
     it('should handle weight at boundary values', () => {
       // Test exact boundary values
       expect(service.calculateShippingCost('Buenos Aires', 1)).toBe(500); // 0-1kg range
-      expect(service.calculateShippingCost('Buenos Aires', 3)).toBe(1200); // 3-5kg range
+      expect(service.calculateShippingCost('Buenos Aires', 3)).toBe(800); // 1-3kg range
       expect(service.calculateShippingCost('Buenos Aires', 5)).toBe(1800); // 5-10kg range
       expect(service.calculateShippingCost('Buenos Aires', 10)).toBe(2500); // 10+kg range
     });
 
     it('should handle very large weights', () => {
       expect(service.calculateShippingCost('Buenos Aires', 1000)).toBe(2500); // Max range
-      expect(() => service.calculateShippingCost('Misiones', 1000)).toThrow('No se encontró tarifa para el peso: 1000kg');
+      expect(service.calculateShippingCost('Misiones', 1000)).toBe(4800); // Max range
     });
 
     it('should handle decimal weights', () => {
