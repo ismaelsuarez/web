@@ -106,7 +106,7 @@ describe('Products Page', () => {
     // Check if product cards are rendered
     expect(screen.getByText('$ 1.000,00')).toBeInTheDocument();
     expect(screen.getByText('$ 2.000,00')).toBeInTheDocument();
-    expect(screen.getByText('Test Brand')).toBeInTheDocument();
+    expect(screen.getAllByText('Test Brand')).toHaveLength(2);
   });
 
   it('should display loading state initially', () => {
