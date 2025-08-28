@@ -1,18 +1,20 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import mercadopago from 'mercadopago';
-import { CartItem, ShippingAddress, MercadoPagoWebhookData, OrderItem } from '../types';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { CartItem, ShippingAddress, MercadoPagoWebhookData } from '../types';
 
 @Injectable()
 export class MercadoPagoService {
+  private mercadopago: MercadoPagoConfig;
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {
     // Configure MercadoPago with access token
-    mercadopago.configure({
-      access_token: this.configService.get<string>('MERCADOPAGO_ACCESS_TOKEN'),
+    this.mercadopago = new MercadoPagoConfig({
+      accessToken: this.configService.get<string>('MERCADOPAGO_ACCESS_TOKEN') || '',
     });
   }
 
@@ -26,16 +28,17 @@ export class MercadoPagoService {
       // Create provisional order
       const order = await this.prisma.order.create({
         data: {
-          userId,
+          userId: parseInt(userId, 10),
           status: 'pending',
           total: totalAmount,
           shippingAddress: JSON.stringify(shippingAddress),
           items: {
             create: cartItems.map(item => ({
-              productId: item.product.id,
-              variantId: item.variant.id,
+              variant: {
+                connect: { id: parseInt(item.variant.id, 10) }
+              },
               quantity: item.quantity,
-              price: item.variant.price,
+              priceAtPurchase: item.variant.price,
             })),
           },
         },
@@ -50,26 +53,29 @@ export class MercadoPagoService {
       });
 
       // Prepare preference items for MercadoPago
-      const preferenceItems = cartItems.map(item => ({
-        title: `${item.product.name} - ${item.variant.name}`,
+      const preferenceItems = cartItems.map((item, index) => ({
+        id: `item_${index}`,
+        title: `${item.variant.name}`,
         unit_price: item.variant.price,
         quantity: item.quantity,
         currency_id: 'ARS',
-        picture_url: item.product.images?.[0] || '',
+        picture_url: '',
       }));
 
       // Add shipping cost if applicable
       if (shippingAddress.shippingCost > 0) {
         preferenceItems.push({
+          id: 'shipping',
           title: 'Costo de envío',
           unit_price: shippingAddress.shippingCost,
           quantity: 1,
           currency_id: 'ARS',
+          picture_url: '',
         });
       }
 
       // Create MercadoPago preference
-      const preference = {
+      const preferenceData = {
         items: preferenceItems,
         payer: {
           name: shippingAddress.fullName,
@@ -97,29 +103,30 @@ export class MercadoPagoService {
           pending: `${this.configService.get('FRONTEND_URL')}/checkout/pending?order_id=${order.id}`,
         },
         auto_return: 'approved',
-        external_reference: order.id,
+        external_reference: order.id.toString(),
         notification_url: `${this.configService.get('BACKEND_URL')}/api/payments/mercadopago/webhook`,
         expires: true,
         expiration_date_to: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 minutes
       };
 
-      const response = await mercadopago.preferences.create(preference);
+      const preference = new Preference(this.mercadopago);
+      const response = await preference.create({ body: preferenceData });
 
       // Update order with MercadoPago data
       await this.prisma.order.update({
         where: { id: order.id },
         data: {
-          mercadopagoId: response.body.id,
-          preferenceId: response.body.id,
-          paymentUrl: response.body.init_point,
+          mercadopagoId: response.id,
+          preferenceId: response.id,
+          paymentUrl: response.init_point,
         },
       });
 
       return {
         orderId: order.id,
-        preferenceId: response.body.id,
-        paymentUrl: response.body.init_point,
-        sandboxUrl: response.body.sandbox_init_point,
+        preferenceId: response.id,
+        paymentUrl: response.init_point,
+        sandboxUrl: response.sandbox_init_point,
       };
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -133,7 +140,9 @@ export class MercadoPagoService {
 
   async handleWebhook(data: MercadoPagoWebhookData, signature: string) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-    const _signature = signature;
+    const _signature = signature; // TODO: Implement signature verification when MercadoPago provides it
+    // eslint-disable-next-line no-console
+    console.log('Webhook signature:', _signature);
     try {
       // Verify webhook signature (if MercadoPago provides it)
       // Note: MercadoPago doesn't always send signatures, so we'll validate the data structure
@@ -142,13 +151,18 @@ export class MercadoPagoService {
         const paymentId = data.data.id;
         
         // Get payment details from MercadoPago
-        const payment = await mercadopago.payment.get(paymentId);
+        const { Payment } = await import('mercadopago');
+        const payment = new Payment(this.mercadopago);
+        const paymentData = await payment.get({ id: paymentId });
         
-        if (payment.status === 200) {
-          const paymentData = payment.body;
-          const orderId = paymentData.external_reference;
+        if (paymentData) {
+          const orderId = paymentData.external_reference ? parseInt(paymentData.external_reference, 10) : null;
           
           // Find the order
+          if (!orderId) {
+            throw new Error('No external reference found in payment data');
+          }
+          
           const order = await this.prisma.order.findUnique({
             where: { id: orderId },
             include: { items: true },
@@ -262,10 +276,11 @@ export class MercadoPagoService {
 
       // For online payments, check MercadoPago status
       if (order.mercadopagoId) {
-        const payment = await mercadopago.payment.get(order.mercadopagoId);
+        const { Payment } = await import('mercadopago');
+        const payment = new Payment(this.mercadopago);
+        const paymentData = await payment.get({ id: order.mercadopagoId });
         
-        if (payment.status === 200) {
-          const paymentData = payment.body;
+        if (paymentData) {
           
           if (paymentData.status === 'approved') {
             // Update order status
@@ -312,7 +327,7 @@ export class MercadoPagoService {
     }
   }
 
-  private async decrementStock(items: OrderItem[]) {
+  private async decrementStock(items: any[]) {
     // Use a transaction to ensure data consistency
     await this.prisma.$transaction(async (prisma) => {
       for (const item of items) {
@@ -342,15 +357,17 @@ export class MercadoPagoService {
 
   async getPaymentStatus(paymentId: string) {
     try {
-      const payment = await mercadopago.payment.get(paymentId);
+      const { Payment } = await import('mercadopago');
+      const payment = new Payment(this.mercadopago);
+      const paymentData = await payment.get({ id: paymentId });
       
-      if (payment.status === 200) {
-        return {
-          status: payment.body.status,
-          statusDetail: payment.body.status_detail,
-          externalReference: payment.body.external_reference,
-        };
-      }
+              if (paymentData) {
+          return {
+            status: paymentData.status,
+            statusDetail: paymentData.status_detail,
+            externalReference: paymentData.external_reference,
+          };
+        }
       
       throw new Error('Failed to get payment status');
     } catch (error) {

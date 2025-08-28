@@ -29,7 +29,7 @@ export class CartController {
   @ApiResponse({ status: 200, description: 'Cart retrieved successfully' })
   async getCart(@Request() req: AuthenticatedRequest) {
     try {
-      const userId = req.user.id;
+      const userId = parseInt(req.user.id, 10);
       return await this.cartService.getCart(userId);
     } catch (error) {
       throw new HttpException(
@@ -43,14 +43,14 @@ export class CartController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Add item to cart' })
-  @ApiBody({ schema: AddToCartSchema })
+  @ApiBody({ type: 'object', schema: { $ref: '#/components/schemas/AddToCartDto' } })
   @ApiResponse({ status: 200, description: 'Item added to cart successfully' })
   @ApiResponse({ status: 400, description: 'Invalid data or insufficient stock' })
   @ApiResponse({ status: 404, description: 'Variant not found' })
   async addToCart(@Request() req: AuthenticatedRequest, @Body() body: AddToCartDto) {
     try {
       const validatedData = AddToCartSchema.parse(body);
-      const userId = req.user.id;
+      const userId = parseInt(req.user.id, 10);
       return await this.cartService.addToCart(userId, validatedData);
     } catch (error) {
       if (error instanceof HttpException) {
@@ -68,7 +68,7 @@ export class CartController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update cart item quantity' })
   @ApiParam({ name: 'id', description: 'Cart item ID' })
-  @ApiBody({ schema: UpdateCartItemSchema })
+  @ApiBody({ type: 'object', schema: { $ref: '#/components/schemas/UpdateCartItemDto' } })
   @ApiResponse({ status: 200, description: 'Cart item updated successfully' })
   @ApiResponse({ status: 400, description: 'Invalid data or insufficient stock' })
   @ApiResponse({ status: 404, description: 'Cart item not found' })
@@ -80,7 +80,7 @@ export class CartController {
     try {
       const { id } = CartItemParamsSchema.parse(params);
       const validatedData = UpdateCartItemSchema.parse(body);
-      const userId = req.user.id;
+      const userId = parseInt(req.user.id, 10);
       return await this.cartService.updateCartItem(userId, id, validatedData);
     } catch (error) {
       if (error instanceof HttpException) {
@@ -103,7 +103,7 @@ export class CartController {
   async removeCartItem(@Request() req: AuthenticatedRequest, @Param() params: CartItemParams) {
     try {
       const { id } = CartItemParamsSchema.parse(params);
-      const userId = req.user.id;
+      const userId = parseInt(req.user.id, 10);
       return await this.cartService.removeCartItem(userId, id);
     } catch (error) {
       if (error instanceof HttpException) {
@@ -123,7 +123,7 @@ export class CartController {
   @ApiResponse({ status: 200, description: 'Cart cleared successfully' })
   async clearCart(@Request() req: AuthenticatedRequest) {
     try {
-      const userId = req.user.id;
+      const userId = parseInt(req.user.id, 10);
       return await this.cartService.clearCart(userId);
     } catch (error) {
       throw new HttpException(

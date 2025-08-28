@@ -6,7 +6,7 @@ import { ThrottlerRequest } from '../../types';
 export class ThrottleAuthGuard extends ThrottlerGuard {
   protected async getTracker(req: ThrottlerRequest): Promise<string> {
     // Use IP address as tracker for rate limiting
-    return req.ips.length ? req.ips[0] : req.ip;
+    return req.ips.length ? (req.ips[0] as string) : (req.ip || 'unknown');
   }
 
   protected errorMessage = 'Too many authentication attempts. Please try again later.';

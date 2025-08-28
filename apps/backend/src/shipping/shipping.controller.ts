@@ -50,7 +50,7 @@ export class ShippingController {
       }
 
       throw new HttpException(
-        error.message || 'Error al calcular el costo de envío',
+        (error as Error).message || 'Error al calcular el costo de envío',
         HttpStatus.BAD_REQUEST,
       );
     }

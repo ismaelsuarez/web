@@ -94,7 +94,7 @@ export class PaymentsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Order not found' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
-  async confirmCheckout(@Request() req: AuthenticatedRequest, @Body() body: ConfirmCheckoutDto) {
+  async confirmCheckout(@Request() _req: AuthenticatedRequest, @Body() body: ConfirmCheckoutDto) {
     try {
       const { orderId, paymentMethod } = body;
       

@@ -12,7 +12,8 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ThrottleAuthGuard } from '../common/guards/throttle-auth.guard';
 import { RegisterDtoSwagger, LoginDtoSwagger, RefreshTokenDtoSwagger } from '../dto/auth.dto';
-import { RegisterDto, LoginDto, RefreshTokenDto, AuthenticatedRequest } from '../types';
+import { AuthenticatedRequest } from '../types';
+import { RegisterDto, LoginDto, RefreshTokenDto } from '../dto/auth.dto';
 
 @ApiTags('auth')
 @Controller('api/auth')
@@ -89,7 +90,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Logout successful' })
   async logout(@Request() req: AuthenticatedRequest) {
     try {
-      return await this.authService.logout(req.user.id);
+      return await this.authService.logout(parseInt(req.user.id, 10));
     } catch (error) {
       throw new HttpException(
         'Error al cerrar sesión',
