@@ -1,5 +1,5 @@
 import api from './authInterceptor';
-import type { ProductsResponse, Product, Cart, AddToCartRequest, UpdateCartItemRequest, RegisterRequest, LoginRequest, RefreshTokenRequest, AuthResponse } from '../types/api';
+import type { ProductsResponse, Product, Cart, AddToCartRequest, UpdateCartItemRequest, RegisterRequest, LoginRequest, RefreshTokenRequest, AuthResponse, ShippingCost, ConfirmCheckoutRequest } from '../types/api';
 
 // API_URL ya está configurado en authInterceptor
 
@@ -70,6 +70,34 @@ export const authApi = {
 
   getProfile: async (): Promise<{ user: any }> => {
     const response = await api.post('/api/auth/me');
+    return response.data;
+  },
+};
+
+export const shippingApi = {
+  getShippingCost: async (province: string, weight: number): Promise<ShippingCost> => {
+    const response = await api.get('/api/shipping/cost', {
+      params: { province, weight },
+    });
+    return response.data.data;
+  },
+
+  getProvinces: async (): Promise<string[]> => {
+    const response = await api.get('/api/shipping/provinces');
+    return response.data.data;
+  },
+};
+
+export const checkoutApi = {
+  createPayment: async (shippingAddress: any): Promise<any> => {
+    const response = await api.post('/api/checkout/create-payment', {
+      shippingAddress,
+    });
+    return response.data;
+  },
+
+  confirmCheckout: async (data: ConfirmCheckoutRequest): Promise<any> => {
+    const response = await api.post('/api/checkout/confirm', data);
     return response.data;
   },
 };

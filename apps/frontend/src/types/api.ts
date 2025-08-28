@@ -80,3 +80,26 @@ export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface ShippingCost {
+  province: string;
+  weight: number;
+  cost: number;
+}
+
+export interface ShippingAddress {
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  phone: string;
+}
+
+export interface ConfirmCheckoutRequest {
+  orderId: number;
+  paymentMethod: 'mercadopago' | 'offline';
+  shippingAddress: ShippingAddress;
+  shippingCost: number;
+}

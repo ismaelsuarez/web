@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import mercadopago from 'mercadopago';
 import { PrismaService } from '../prisma/prisma.service';
 import { CartService } from '../cart/cart.service';
+import { ConfirmCheckoutDto } from '../dto/checkout.dto';
 
 @Injectable()
 export class MercadoPagoService {
@@ -169,6 +170,99 @@ export class MercadoPagoService {
       return payment.body;
     } catch (error) {
       this.logger.error('Error getting payment status:', error);
+      throw error;
+    }
+  }
+
+  async confirmCheckout(userId: number, checkoutData: ConfirmCheckoutDto) {
+    try {
+      // Verificar que la orden existe y pertenece al usuario
+      const order = await this.prisma.order.findFirst({
+        where: {
+          id: checkoutData.orderId,
+          userId: userId,
+        },
+        include: {
+          items: {
+            include: {
+              variant: true,
+            },
+          },
+        },
+      });
+
+      if (!order) {
+        throw new Error('Orden no encontrada o no autorizada');
+      }
+
+      // Verificar stock disponible para todos los items
+      for (const item of order.items) {
+        const variant = await this.prisma.productVariant.findUnique({
+          where: { id: item.variantId },
+        });
+
+        if (!variant) {
+          throw new Error(`Variante ${item.variantId} no encontrada`);
+        }
+
+        if (variant.stock < item.quantity) {
+          throw new Error(`Stock insuficiente para ${variant.sku}. Disponible: ${variant.stock}, Solicitado: ${item.quantity}`);
+        }
+      }
+
+      // Procesar en transacción para asegurar consistencia
+      const result = await this.prisma.$transaction(async (prisma) => {
+        // Decrementar stock de todas las variantes
+        for (const item of order.items) {
+          await prisma.productVariant.update({
+            where: { id: item.variantId },
+            data: {
+              stock: {
+                decrement: item.quantity,
+              },
+            },
+          });
+        }
+
+        // Actualizar orden con información de envío y método de pago
+        const updatedOrder = await prisma.order.update({
+          where: { id: order.id },
+          data: {
+            status: checkoutData.paymentMethod === 'offline' ? 'pending' : 'paid',
+            shippingAddress: checkoutData.shippingAddress,
+            total: order.total + checkoutData.shippingCost,
+          },
+          include: {
+            items: {
+              include: {
+                variant: {
+                  include: {
+                    product: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // Limpiar carrito del usuario
+        await this.cartService.clearCart(userId);
+
+        return updatedOrder;
+      });
+
+      this.logger.log(`Order ${order.id} confirmed successfully`);
+
+      return {
+        orderId: result.id,
+        status: result.status,
+        total: result.total,
+        items: result.items,
+        shippingAddress: result.shippingAddress,
+        message: 'Orden confirmada y stock actualizado exitosamente',
+      };
+    } catch (error) {
+      this.logger.error('Error confirming checkout:', error);
       throw error;
     }
   }

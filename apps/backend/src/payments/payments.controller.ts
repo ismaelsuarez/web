@@ -11,7 +11,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { MercadoPagoService } from './mercadopago.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreatePaymentSchema, MercadoPagoWebhookSchema } from '../dto/checkout.dto';
+import { CreatePaymentSchema, MercadoPagoWebhookSchema, ConfirmCheckoutSchema } from '../dto/checkout.dto';
 
 @ApiTags('payments')
 @Controller('api')
@@ -19,6 +19,42 @@ export class PaymentsController {
   private readonly logger = new Logger(PaymentsController.name);
 
   constructor(private readonly mercadopagoService: MercadoPagoService) {}
+
+  @Post('checkout/confirm')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Confirm checkout and process order' })
+  @ApiBody({ schema: ConfirmCheckoutSchema })
+  @ApiResponse({ status: 201, description: 'Order confirmed successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid data or insufficient stock' })
+  async confirmCheckout(@Request() req: any, @Body() body: any) {
+    try {
+      const validatedData = ConfirmCheckoutSchema.parse(body);
+      const userId = req.user.id;
+
+      const result = await this.mercadopagoService.confirmCheckout(
+        userId,
+        validatedData,
+      );
+
+      return {
+        success: true,
+        data: result,
+        message: 'Orden confirmada exitosamente',
+      };
+    } catch (error) {
+      this.logger.error('Error confirming checkout:', error);
+      
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      
+      throw new HttpException(
+        error.message || 'Error al confirmar la orden',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 
   @Post('checkout/create-payment')
   @UseGuards(JwtAuthGuard)
