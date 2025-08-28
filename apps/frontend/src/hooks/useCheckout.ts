@@ -117,9 +117,8 @@ export const useProvinces = () => {
 export const useMercadoPago = () => {
   const redirectToPayment = async (paymentUrl: string) => {
     try {
-      // For development, use sandbox URL
-      const url = paymentUrl.includes('sandbox') ? paymentUrl : paymentUrl.replace('www.mercadopago.com', 'www.mercadopago.com/sandbox');
-      window.location.href = url;
+      // Use the payment URL directly (MercadoPago handles sandbox/production)
+      window.location.href = paymentUrl;
     } catch (error) {
       console.error('Error redirecting to MercadoPago:', error);
       throw new Error('Error al redirigir al pago');
