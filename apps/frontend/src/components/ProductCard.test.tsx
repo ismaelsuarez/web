@@ -155,7 +155,7 @@ describe('ProductCard', () => {
       description: undefined,
     };
 
-    renderWithRouter(<ProductCard product={productWithoutDescription} />);
+    renderWithRouter(<ProductCard product={productWithoutDescription} onAddToCart={mockAddToCart} />);
 
     expect(screen.getByText('Test Product')).toBeInTheDocument();
     expect(screen.getByText('Test Brand')).toBeInTheDocument();
@@ -172,7 +172,7 @@ describe('ProductCard', () => {
       ],
     };
 
-    renderWithRouter(<ProductCard product={productWithoutImages} />);
+    renderWithRouter(<ProductCard product={productWithoutImages} onAddToCart={mockAddToCart} />);
 
     // Should show a placeholder or default image
     const image = screen.getByRole('img');
@@ -180,13 +180,13 @@ describe('ProductCard', () => {
   });
 
   it('should display category information', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     expect(screen.getByText('Electronics')).toBeInTheDocument();
   });
 
   it('should have proper accessibility attributes', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     const image = screen.getByRole('img');
     expect(image).toHaveAttribute('alt', 'Test Product');

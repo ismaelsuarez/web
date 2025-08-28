@@ -4,7 +4,7 @@ import { ShoppingCart, LogOut } from 'lucide-react';
 import { CartDrawer } from '@ecommerce/ui';
 import { useCartStore } from '../stores/cartStore';
 import { useAuthStore } from '../stores/authStore';
-import { useCart, useAddToCart, useUpdateCartItem, useRemoveCartItem, useClearCart } from '../hooks/useCart';
+import { useCart, useUpdateCartItem, useRemoveCartItem, useClearCart } from '../hooks/useCart';
 import { LoginModal } from './LoginModal';
 import { RegisterModal } from './RegisterModal';
 import { useLogout } from '../hooks/useAuth';
