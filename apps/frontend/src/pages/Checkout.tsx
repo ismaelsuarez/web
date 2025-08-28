@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { CreditCard, Truck, CheckCircle, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { CreditCard, Truck, CheckCircle } from 'lucide-react';
 import { Button } from '@ecommerce/ui';
 import { useCartStore } from '../stores/cartStore';
 import { useShippingCost, useProvinces } from '../hooks/useShipping';
@@ -60,7 +60,7 @@ export const Checkout: React.FC = () => {
         }
       } else {
         // Pago offline - confirmar directamente
-        const result = await confirmCheckoutMutation.mutateAsync({
+        await confirmCheckoutMutation.mutateAsync({
           orderId: 1, // Esto debería venir del backend
           paymentMethod: 'offline',
           shippingAddress,

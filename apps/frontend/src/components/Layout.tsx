@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, User, LogOut } from 'lucide-react';
+import { ShoppingCart, LogOut } from 'lucide-react';
 import { CartDrawer } from '@ecommerce/ui';
 import { useCartStore } from '../stores/cartStore';
 import { useAuthStore } from '../stores/authStore';
@@ -68,12 +68,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         updateLocalQuantity(variant.id, existingItem.quantity + quantity);
       } else {
         // Agregar nuevo item al carrito local
-        const newItem = {
-          variant,
-          product,
-          quantity,
-        };
-        // Simular agregar al carrito local
         // En una implementación real, esto se manejaría en el store
       }
     }

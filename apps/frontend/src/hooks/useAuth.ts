@@ -7,7 +7,7 @@ import type { RegisterRequest, LoginRequest } from '../types/api';
 export const useRegister = () => {
   const queryClient = useQueryClient();
   const { login, setLoading } = useAuthStore();
-  const { syncWithBackend } = useCartStore();
+  // const { syncWithBackend } = useCartStore();
 
   return useMutation({
     mutationFn: (data: RegisterRequest) => authApi.register(data),
@@ -31,7 +31,7 @@ export const useRegister = () => {
 export const useLogin = () => {
   const queryClient = useQueryClient();
   const { login, setLoading } = useAuthStore();
-  const { syncWithBackend } = useCartStore();
+  // const { syncWithBackend } = useCartStore();
 
   return useMutation({
     mutationFn: (data: LoginRequest) => authApi.login(data),

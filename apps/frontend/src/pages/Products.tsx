@@ -21,7 +21,7 @@ export const Products: React.FC = () => {
     category: selectedCategory || undefined,
     page: currentPage,
     limit: 12,
-  });
+  } as any);
 
   const handleAddToCart = async (product: Product, variant: ProductVariant) => {
     if (isAuthenticated) {

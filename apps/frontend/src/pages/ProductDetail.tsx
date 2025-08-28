@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Star, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Star, Truck, Shield, RotateCcw } from 'lucide-react';
 import { Button } from '@ecommerce/ui';
 import { useProduct } from '../hooks/useProducts';
 import { useCartStore } from '../stores/cartStore';
@@ -43,7 +43,7 @@ export const ProductDetail: React.FC = () => {
 
   // Set default selected variant if none selected
   if (!selectedVariant && product.variants.length > 0) {
-    setSelectedVariant(product.variants[0]);
+    setSelectedVariant(product.variants[0] || null);
   }
 
   const formatPrice = (price: number) => {
