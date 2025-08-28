@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-import { Button } from '@ecommerce/ui';
+import { Button } from './Button';
 import { useLogin } from '../hooks/useAuth';
 
 interface LoginModalProps {

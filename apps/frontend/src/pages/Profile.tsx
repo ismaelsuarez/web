@@ -1,6 +1,6 @@
 import React from 'react';
 import { User, LogOut, ShoppingBag, Package } from 'lucide-react';
-import { Button } from '@ecommerce/ui';
+import { Button } from '../components/Button';
 import { useAuthStore } from '../stores/authStore';
 import { useLogout } from '../hooks/useAuth';
 

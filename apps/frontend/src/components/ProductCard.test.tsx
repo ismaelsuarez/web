@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { ProductCard } from '@ecommerce/ui';
+import { ProductCard } from './ProductCard';
 
 // Mock the cart store
 const mockAddToCart = vi.fn();

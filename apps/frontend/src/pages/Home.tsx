@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@ecommerce/ui';
+import { Button } from '../components/Button';
 
 export const Home: React.FC = () => {
   return (

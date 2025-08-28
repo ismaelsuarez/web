@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CreditCard, Truck, CheckCircle } from 'lucide-react';
-import { Button } from '@ecommerce/ui';
+import { Button } from '../components/Button';
 import { useCartStore } from '../stores/cartStore';
 import { useShippingCost, useProvinces } from '../hooks/useShipping';
 import { useCreatePayment, useConfirmCheckout } from '../hooks/useCheckout';

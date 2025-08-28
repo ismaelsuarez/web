@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Filter } from 'lucide-react';
-import { ProductCard } from '@ecommerce/ui';
+import { ProductCard } from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
 import { useCartStore } from '../stores/cartStore';
 import { useAuthStore } from '../stores/authStore';

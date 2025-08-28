@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Star, Truck, Shield, RotateCcw } from 'lucide-react';
-import { Button } from '@ecommerce/ui';
+import { Button } from '../components/Button';
 import { useProduct } from '../hooks/useProducts';
 import { useCartStore } from '../stores/cartStore';
 import { useAuthStore } from '../stores/authStore';

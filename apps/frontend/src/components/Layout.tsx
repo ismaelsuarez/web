@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, LogOut } from 'lucide-react';
-import { CartDrawer } from '@ecommerce/ui';
+import { CartDrawer } from './CartDrawer';
 import { useCartStore } from '../stores/cartStore';
 import { useAuthStore } from '../stores/authStore';
 import { useCart, useUpdateCartItem, useRemoveCartItem, useClearCart } from '../hooks/useCart';
