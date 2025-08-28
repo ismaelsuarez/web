@@ -10,6 +10,8 @@ API REST para la aplicación de ecommerce construida con NestJS, Prisma y Postgr
 - **Validación**: Zod
 - **Documentación**: Swagger/OpenAPI
 - **Lenguaje**: TypeScript
+- **Seguridad**: Helmet.js, Rate Limiting, CSP
+- **Logging**: Pino (structured logging)
 
 ## 📋 Prerrequisitos
 
@@ -24,7 +26,26 @@ API REST para la aplicación de ecommerce construida con NestJS, Prisma y Postgr
 Crea un archivo `.env` en la raíz del backend:
 
 ```bash
+# Base de datos
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ecommerce_dev?schema=public"
+
+# JWT
+JWT_ACCESS_SECRET="your-super-secret-access-key-here"
+JWT_REFRESH_SECRET="your-super-secret-refresh-key-here"
+
+# MercadoPago
+MERCADOPAGO_ACCESS_TOKEN="your-mercadopago-access-token-here"
+MERCADOPAGO_PUBLIC_KEY="your-mercadopago-public-key-here"
+
+# URLs
+FRONTEND_URL="http://localhost:5173"
+BACKEND_URL="http://localhost:3001"
+
+# 🔒 Configuración de Seguridad
+CSP_ENABLED=true
+RATE_LIMIT_TTL=900
+RATE_LIMIT_LIMIT=100
+LOG_LEVEL=info
 ```
 
 ### 2. Instalar Dependencias
@@ -106,6 +127,47 @@ GET /api/products?page=2&limit=10
 
 # Combinar filtros
 GET /api/products?q=apple&category=electronics&page=1&limit=5
+```
+
+## 🔒 Seguridad
+
+### Protecciones Implementadas
+
+#### Helmet.js
+- **Headers de seguridad**: Configuración automática de headers HTTP seguros
+- **X-Powered-By**: Deshabilitado para ocultar información del servidor
+- **Content Security Policy (CSP)**: Configurable con `CSP_ENABLED=true/false`
+
+#### Rate Limiting
+- **Límite global**: 100 requests por 15 minutos por IP (configurable)
+- **Endpoints protegidos**: `/api/auth/*` y `/api/payments/*` con límites más estrictos
+- **Configuración**: `RATE_LIMIT_TTL` y `RATE_LIMIT_LIMIT`
+
+#### Logging Estructurado
+- **Pino**: Logging de alto rendimiento en formato JSON
+- **Nivel configurable**: `LOG_LEVEL=info|debug|error`
+- **Serialización**: Requests y responses serializados
+
+### Configuración de Seguridad
+
+```bash
+# Content Security Policy
+CSP_ENABLED=true                    # Activar/desactivar CSP
+RATE_LIMIT_TTL=900                  # Tiempo en segundos (15 min)
+RATE_LIMIT_LIMIT=100                # Número máximo de requests
+LOG_LEVEL=info                      # Nivel de logging
+```
+
+### Verificación de Seguridad
+
+```bash
+# Verificar headers de seguridad
+curl -I http://localhost:3001/api/products
+
+# Verificar rate limiting
+curl -X POST http://localhost:3001/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"test"}'
 ```
 
 ## 📚 Documentación API

@@ -10,6 +10,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { ThrottleAuthGuard } from '../common/guards/throttle-auth.guard';
 import { RegisterSchema, LoginSchema, RefreshTokenSchema } from '../dto/auth.dto';
 
 @ApiTags('auth')
@@ -18,10 +19,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @UseGuards(ThrottleAuthGuard)
   @ApiOperation({ summary: 'Register new user' })
   @ApiBody({ schema: RegisterSchema })
   @ApiResponse({ status: 201, description: 'User registered successfully' })
   @ApiResponse({ status: 409, description: 'Email already exists' })
+  @ApiResponse({ status: 429, description: 'Too many requests' })
   async register(@Body() body: any) {
     try {
       return await this.authService.register(body);
@@ -37,10 +40,12 @@ export class AuthController {
   }
 
   @Post('login')
+  @UseGuards(ThrottleAuthGuard)
   @ApiOperation({ summary: 'Login user' })
   @ApiBody({ schema: LoginSchema })
   @ApiResponse({ status: 200, description: 'Login successful' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  @ApiResponse({ status: 429, description: 'Too many requests' })
   async login(@Body() body: any) {
     try {
       return await this.authService.login(body);
@@ -56,10 +61,12 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @UseGuards(ThrottleAuthGuard)
   @ApiOperation({ summary: 'Refresh access token' })
   @ApiBody({ schema: RefreshTokenSchema })
   @ApiResponse({ status: 200, description: 'Token refreshed successfully' })
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
+  @ApiResponse({ status: 429, description: 'Too many requests' })
   async refreshToken(@Body() body: any) {
     try {
       return await this.authService.refreshToken(body);

@@ -11,6 +11,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { MercadoPagoService } from './mercadopago.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ThrottlePaymentsGuard } from '../common/guards/throttle-payments.guard';
 import { CreatePaymentSchema, MercadoPagoWebhookSchema, ConfirmCheckoutSchema } from '../dto/checkout.dto';
 
 @ApiTags('payments')
@@ -21,12 +22,13 @@ export class PaymentsController {
   constructor(private readonly mercadopagoService: MercadoPagoService) {}
 
   @Post('checkout/confirm')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ThrottlePaymentsGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Confirm checkout and process order' })
   @ApiBody({ schema: ConfirmCheckoutSchema })
   @ApiResponse({ status: 201, description: 'Order confirmed successfully' })
   @ApiResponse({ status: 400, description: 'Invalid data or insufficient stock' })
+  @ApiResponse({ status: 429, description: 'Too many requests' })
   async confirmCheckout(@Request() req: any, @Body() body: any) {
     try {
       const validatedData = ConfirmCheckoutSchema.parse(body);
@@ -57,12 +59,13 @@ export class PaymentsController {
   }
 
   @Post('checkout/create-payment')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ThrottlePaymentsGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create payment and redirect to MercadoPago' })
   @ApiBody({ schema: CreatePaymentSchema })
   @ApiResponse({ status: 201, description: 'Payment created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid data or empty cart' })
+  @ApiResponse({ status: 429, description: 'Too many requests' })
   async createPayment(@Request() req: any, @Body() body: any) {
     try {
       const validatedData = CreatePaymentSchema.parse(body);
