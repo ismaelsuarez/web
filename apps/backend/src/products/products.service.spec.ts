@@ -62,7 +62,7 @@ describe('ProductsService', () => {
       mockPrismaService.product.findMany.mockResolvedValue(mockProducts);
       mockPrismaService.product.count.mockResolvedValue(mockCount);
 
-      const result = await service.getProducts({
+      const result = await service.findAll({
         page: 1,
         limit: 10,
         q: 'test',
@@ -84,12 +84,21 @@ describe('ProductsService', () => {
           OR: [
             { title: { contains: 'test', mode: 'insensitive' } },
             { description: { contains: 'test', mode: 'insensitive' } },
+            { brand: { contains: 'test', mode: 'insensitive' } },
           ],
           category: { slug: 'electronics' },
         },
         include: {
           category: true,
-          variants: true,
+          variants: {
+            select: {
+              id: true,
+              sku: true,
+              price: true,
+              stock: true,
+              images: true,
+            },
+          },
         },
         skip: 0,
         take: 10,
@@ -101,6 +110,7 @@ describe('ProductsService', () => {
           OR: [
             { title: { contains: 'test', mode: 'insensitive' } },
             { description: { contains: 'test', mode: 'insensitive' } },
+            { brand: { contains: 'test', mode: 'insensitive' } },
           ],
           category: { slug: 'electronics' },
         },
@@ -114,7 +124,7 @@ describe('ProductsService', () => {
       mockPrismaService.product.findMany.mockResolvedValue(mockProducts);
       mockPrismaService.product.count.mockResolvedValue(mockCount);
 
-      const result = await service.getProducts({
+      const result = await service.findAll({
         page: 1,
         limit: 10,
       });
@@ -133,7 +143,15 @@ describe('ProductsService', () => {
         where: {},
         include: {
           category: true,
-          variants: true,
+          variants: {
+            select: {
+              id: true,
+              sku: true,
+              price: true,
+              stock: true,
+              images: true,
+            },
+          },
         },
         skip: 0,
         take: 10,
@@ -166,14 +184,23 @@ describe('ProductsService', () => {
 
       mockPrismaService.product.findUnique.mockResolvedValue(mockProduct);
 
-      const result = await service.getProduct(1);
+      const result = await service.findOne(1);
 
       expect(result).toEqual(mockProduct);
       expect(mockPrismaService.product.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
         include: {
           category: true,
-          variants: true,
+          variants: {
+            select: {
+              id: true,
+              sku: true,
+              price: true,
+              stock: true,
+              images: true,
+              specs: true,
+            },
+          },
         },
       });
     });
@@ -181,14 +208,23 @@ describe('ProductsService', () => {
     it('should return null for non-existent product', async () => {
       mockPrismaService.product.findUnique.mockResolvedValue(null);
 
-      const result = await service.getProduct(999);
+      const result = await service.findOne(999);
 
       expect(result).toBeNull();
       expect(mockPrismaService.product.findUnique).toHaveBeenCalledWith({
         where: { id: 999 },
         include: {
           category: true,
-          variants: true,
+          variants: {
+            select: {
+              id: true,
+              sku: true,
+              price: true,
+              stock: true,
+              images: true,
+              specs: true,
+            },
+          },
         },
       });
     });

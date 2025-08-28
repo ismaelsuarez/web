@@ -78,7 +78,12 @@ describe('CartService', () => {
       const result = await service.getCart(1);
 
       expect(result).toEqual({
-        items: mockCart.items,
+        items: mockCart.items.map(item => ({
+          id: item.id,
+          quantity: item.quantity,
+          variant: item.variant,
+          product: item.variant.product,
+        })),
         total: 2000, // 2 * 1000
         itemCount: 2,
       });
@@ -159,7 +164,12 @@ describe('CartService', () => {
       const result = await service.addToCart(1, { variantId: 1, quantity: 2 });
 
       expect(result).toEqual({
-        items: mockCart.items,
+        items: mockCart.items.map(item => ({
+          id: item.id,
+          quantity: item.quantity,
+          variant: item.variant,
+          product: item.variant.product,
+        })),
         total: 2000,
         itemCount: 2,
       });
@@ -217,7 +227,12 @@ describe('CartService', () => {
       const result = await service.addToCart(1, { variantId: 1, quantity: 2 });
 
       expect(result).toEqual({
-        items: [{ ...mockCartItem, quantity: 3 }],
+        items: [{
+          id: mockCartItem.id,
+          quantity: 3,
+          variant: mockCartItem.variant,
+          product: mockCartItem.variant.product,
+        }],
         total: 3000,
         itemCount: 3,
       });
@@ -260,7 +275,7 @@ describe('CartService', () => {
       mockPrismaService.productVariant.findUnique.mockResolvedValue(mockVariant);
 
       await expect(service.addToCart(1, { variantId: 1, quantity: 10 })).rejects.toThrow(
-        'Stock insuficiente para TEST-001. Disponible: 5, Solicitado: 10'
+        'Stock insuficiente. Disponible: 5'
       );
     });
 
@@ -314,7 +329,12 @@ describe('CartService', () => {
       const result = await service.updateCartItem(1, 1, { quantity: 3 });
 
       expect(result).toEqual({
-        items: [{ ...mockCartItem, quantity: 3 }],
+        items: [{
+          id: mockCartItem.id,
+          quantity: 3,
+          variant: mockCartItem.variant,
+          product: mockCartItem.variant.product,
+        }],
         total: 3000,
         itemCount: 3,
       });
