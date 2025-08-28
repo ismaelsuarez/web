@@ -16,6 +16,7 @@ async function bootstrap() {
     .setDescription('API para aplicación de ecommerce')
     .setVersion('1.0')
     .addTag('products')
+    .addTag('cart')
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

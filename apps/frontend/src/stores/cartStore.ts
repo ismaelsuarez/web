@@ -5,12 +5,15 @@ import type { CartItem, Product, ProductVariant } from '../types/api';
 interface CartStore {
   items: CartItem[];
   isOpen: boolean;
+  isSyncing: boolean;
   addItem: (product: Product, variant: ProductVariant, quantity?: number) => void;
   removeItem: (variantId: number) => void;
   updateQuantity: (variantId: number, quantity: number) => void;
   clearCart: () => void;
   toggleCart: () => void;
   closeCart: () => void;
+  syncWithBackend: (backendCart: CartItem[]) => void;
+  setSyncing: (syncing: boolean) => void;
   getTotal: () => number;
   getItemCount: () => number;
 }
@@ -20,6 +23,7 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       isOpen: false,
+      isSyncing: false,
 
       addItem: (product: Product, variant: ProductVariant, quantity = 1) => {
         set((state) => {
@@ -79,6 +83,14 @@ export const useCartStore = create<CartStore>()(
 
       closeCart: () => {
         set({ isOpen: false });
+      },
+
+      syncWithBackend: (backendCart: CartItem[]) => {
+        set({ items: backendCart, isSyncing: false });
+      },
+
+      setSyncing: (syncing: boolean) => {
+        set({ isSyncing: syncing });
       },
 
       getTotal: () => {

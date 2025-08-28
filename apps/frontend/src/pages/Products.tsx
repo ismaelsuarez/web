@@ -3,6 +3,8 @@ import { Search, Filter } from 'lucide-react';
 import { ProductCard } from '@ecommerce/ui';
 import { useProducts } from '../hooks/useProducts';
 import { useCartStore } from '../stores/cartStore';
+import { useAuthStore } from '../stores/authStore';
+import { useAddToCart } from '../hooks/useCart';
 import type { Product, ProductVariant } from '../types/api';
 
 export const Products: React.FC = () => {
@@ -11,6 +13,8 @@ export const Products: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   
   const { addItem } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+  const addToCartMutation = useAddToCart();
   
   const { data, isLoading, error } = useProducts({
     q: searchQuery || undefined,
@@ -19,8 +23,19 @@ export const Products: React.FC = () => {
     limit: 12,
   });
 
-  const handleAddToCart = (product: Product, variant: ProductVariant) => {
-    addItem(product, variant);
+  const handleAddToCart = async (product: Product, variant: ProductVariant) => {
+    if (isAuthenticated) {
+      try {
+        await addToCartMutation.mutateAsync({
+          variantId: variant.id,
+          quantity: 1,
+        });
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
+    } else {
+      addItem(product, variant);
+    }
   };
 
   const handleSearch = (e: React.FormEvent) => {

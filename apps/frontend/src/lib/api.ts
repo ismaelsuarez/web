@@ -27,4 +27,31 @@ export const productsApi = {
   },
 };
 
+export const cartApi = {
+  getCart: async (): Promise<Cart> => {
+    const response = await api.get('/api/cart');
+    return response.data;
+  },
+
+  addToCart: async (data: AddToCartRequest): Promise<Cart> => {
+    const response = await api.post('/api/cart', data);
+    return response.data;
+  },
+
+  updateCartItem: async (itemId: number, data: UpdateCartItemRequest): Promise<Cart> => {
+    const response = await api.put(`/api/cart/item/${itemId}`, data);
+    return response.data;
+  },
+
+  removeCartItem: async (itemId: number): Promise<Cart> => {
+    const response = await api.delete(`/api/cart/item/${itemId}`);
+    return response.data;
+  },
+
+  clearCart: async (): Promise<Cart> => {
+    const response = await api.delete('/api/cart');
+    return response.data;
+  },
+};
+
 export default api;

@@ -4,6 +4,8 @@ import { ArrowLeft, Star, Truck, Shield, RotateCcw } from 'lucide-react';
 import { Button } from '@ecommerce/ui';
 import { useProduct } from '../hooks/useProducts';
 import { useCartStore } from '../stores/cartStore';
+import { useAuthStore } from '../stores/authStore';
+import { useAddToCart } from '../hooks/useCart';
 import type { ProductVariant } from '../types/api';
 
 export const ProductDetail: React.FC = () => {
@@ -13,6 +15,8 @@ export const ProductDetail: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   
   const { addItem } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+  const addToCartMutation = useAddToCart();
   
   const { data: product, isLoading, error } = useProduct(Number(id));
 
@@ -49,9 +53,20 @@ export const ProductDetail: React.FC = () => {
     }).format(price);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (selectedVariant) {
-      addItem(product, selectedVariant, quantity);
+      if (isAuthenticated) {
+        try {
+          await addToCartMutation.mutateAsync({
+            variantId: selectedVariant.id,
+            quantity,
+          });
+        } catch (error) {
+          console.error('Error adding to cart:', error);
+        }
+      } else {
+        addItem(product, selectedVariant, quantity);
+      }
     }
   };
 
