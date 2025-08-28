@@ -48,30 +48,30 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [isAuthenticated, backendCart, isLoadingCart, syncWithBackend]);
 
   // Funciones que manejan tanto el carrito local como el backend
-  const handleAddItem = async (product: any, variant: any, quantity: number) => {
-    if (isAuthenticated) {
-      try {
-        setSyncing(true);
-        await addToCartMutation.mutateAsync({
-          variantId: variant.id,
-          quantity,
-        });
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-      } finally {
-        setSyncing(false);
-      }
-    } else {
-      // Carrito local para usuarios no autenticados
-      const existingItem = localItems.find(item => item.variant.id === variant.id);
-      if (existingItem) {
-        updateLocalQuantity(variant.id, existingItem.quantity + quantity);
-      } else {
-        // Agregar nuevo item al carrito local
-        // En una implementación real, esto se manejaría en el store
-      }
-    }
-  };
+  // const handleAddItem = async (product: any, variant: any, quantity: number) => {
+  //   if (isAuthenticated) {
+  //     try {
+  //       setSyncing(true);
+  //       await addToCartMutation.mutateAsync({
+  //         variantId: variant.id,
+  //         quantity,
+  //       });
+  //     } catch (error) {
+  //       console.error('Error adding to cart:', error);
+  //     } finally {
+  //       setSyncing(false);
+  //     }
+  //   } else {
+  //     // Carrito local para usuarios no autenticados
+  //     const existingItem = localItems.find(item => item.variant.id === variant.id);
+  //     if (existingItem) {
+  //       updateLocalQuantity(variant.id, existingItem.quantity + quantity);
+  //     } else {
+  //       // Agregar nuevo item al carrito local
+  //       // En una implementación real, esto se manejaría en el store
+  //     }
+  //   }
+  // };
 
   const handleRemoveItem = async (variantId: number) => {
     if (isAuthenticated) {
