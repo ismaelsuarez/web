@@ -93,12 +93,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               />
             </div>
 
-            <Button type="submit" className="w-full">
-              Iniciar Sesión
-            </Button>
-          </form>
-
-          {error && (
+                      {error && (
             <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
               {error}
             </div>
@@ -123,7 +118,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               Registrarse
             </button>
           </p>
-        </div>
         </div>
       </div>
     </div>
