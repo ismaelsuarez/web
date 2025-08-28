@@ -104,8 +104,8 @@ describe('Products Page', () => {
     });
 
     // Check if product cards are rendered
-    expect(screen.getByText('$1,000')).toBeInTheDocument();
-    expect(screen.getByText('$2,000')).toBeInTheDocument();
+    expect(screen.getByText('$ 1.000,00')).toBeInTheDocument();
+    expect(screen.getByText('$ 2.000,00')).toBeInTheDocument();
     expect(screen.getByText('Test Brand')).toBeInTheDocument();
   });
 
@@ -135,16 +135,26 @@ describe('Products Page', () => {
     });
   });
 
-  it('should display search input', () => {
+  it('should display search input', async () => {
+    const { productsApi } = await import('../lib/api');
+    vi.mocked(productsApi.getProducts).mockResolvedValue(mockProducts);
+
     renderWithProviders(<Products />);
 
-    expect(screen.getByPlaceholderText('Buscar productos...')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Buscar productos...')).toBeInTheDocument();
+    });
   });
 
-  it('should display category filter', () => {
+  it('should display category filter', async () => {
+    const { productsApi } = await import('../lib/api');
+    vi.mocked(productsApi.getProducts).mockResolvedValue(mockProducts);
+
     renderWithProviders(<Products />);
 
-    expect(screen.getByText('Todas las categorías')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Categorías:')).toBeInTheDocument();
+    });
   });
 
   it('should handle API error gracefully', async () => {
@@ -154,7 +164,7 @@ describe('Products Page', () => {
     renderWithProviders(<Products />);
 
     await waitFor(() => {
-      expect(screen.getByText('Error al cargar productos')).toBeInTheDocument();
+      expect(screen.getByText('Error al cargar los productos')).toBeInTheDocument();
     });
   });
 

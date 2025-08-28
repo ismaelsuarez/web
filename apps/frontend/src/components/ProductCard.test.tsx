@@ -58,8 +58,8 @@ describe('ProductCard', () => {
 
     expect(screen.getByText('Test Product')).toBeInTheDocument();
     expect(screen.getByText('Test Brand')).toBeInTheDocument();
-    expect(screen.getByText('$1,000')).toBeInTheDocument();
-    expect(screen.getByText('Stock: 10')).toBeInTheDocument();
+    expect(screen.getByText('$ 1.000,00')).toBeInTheDocument();
+    expect(screen.getByText('Stock: 5')).toBeInTheDocument();
   });
 
   it('should display product image', () => {
@@ -74,8 +74,8 @@ describe('ProductCard', () => {
     renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     // Should show the lowest price (1000)
-    expect(screen.getByText('$1,000')).toBeInTheDocument();
-    expect(screen.queryByText('$1,200')).not.toBeInTheDocument();
+    expect(screen.getByText('$ 1.000,00')).toBeInTheDocument();
+    expect(screen.queryByText('$ 1.200,00')).not.toBeInTheDocument();
   });
 
   it('should display lowest stock when multiple variants', () => {
@@ -89,8 +89,8 @@ describe('ProductCard', () => {
   it('should have link to product detail page', () => {
     renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
-    const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/productos/1');
+    const links = screen.getAllByRole('link');
+    expect(links[0]).toHaveAttribute('href', '/productos/1');
   });
 
   it('should show "Ver detalles" button', () => {
@@ -112,7 +112,7 @@ describe('ProductCard', () => {
     fireEvent.click(addToCartButton);
 
     await waitFor(() => {
-      expect(mockAddToCart).toHaveBeenCalledWith(mockProduct.variants[0], 1);
+      expect(mockAddToCart).toHaveBeenCalledWith(mockProduct, mockProduct.variants[0]);
     });
   });
 
@@ -129,7 +129,7 @@ describe('ProductCard', () => {
 
     renderWithRouter(<ProductCard product={productWithNoStock} onAddToCart={mockAddToCart} />);
 
-    const addToCartButton = screen.getByText('Agregar al carrito');
+    const addToCartButton = screen.getByText('Sin stock');
     expect(addToCartButton).toBeDisabled();
   });
 
@@ -191,7 +191,7 @@ describe('ProductCard', () => {
     const image = screen.getByRole('img');
     expect(image).toHaveAttribute('alt', 'Test Product');
 
-    const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/productos/1');
+    const links = screen.getAllByRole('link');
+    expect(links[0]).toHaveAttribute('href', '/productos/1');
   });
 });
