@@ -8,6 +8,7 @@ declare module '@ecommerce/ui' {
     disabled?: boolean;
     className?: string;
     size?: 'sm' | 'md' | 'lg';
+    variant?: string;
   }
 
   export interface CardProps {

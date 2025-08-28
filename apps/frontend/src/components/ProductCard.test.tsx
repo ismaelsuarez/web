@@ -54,7 +54,7 @@ describe('ProductCard', () => {
   });
 
   it('should render product information correctly', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     expect(screen.getByText('Test Product')).toBeInTheDocument();
     expect(screen.getByText('Test Brand')).toBeInTheDocument();
@@ -63,7 +63,7 @@ describe('ProductCard', () => {
   });
 
   it('should display product image', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     const image = screen.getByRole('img');
     expect(image).toHaveAttribute('src', 'https://via.placeholder.com/300');
@@ -71,7 +71,7 @@ describe('ProductCard', () => {
   });
 
   it('should display lowest price when multiple variants', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     // Should show the lowest price (1000)
     expect(screen.getByText('$1,000')).toBeInTheDocument();
@@ -79,7 +79,7 @@ describe('ProductCard', () => {
   });
 
   it('should display lowest stock when multiple variants', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     // Should show the lowest stock (5)
     expect(screen.getByText('Stock: 5')).toBeInTheDocument();
@@ -87,26 +87,26 @@ describe('ProductCard', () => {
   });
 
   it('should have link to product detail page', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', '/productos/1');
   });
 
   it('should show "Ver detalles" button', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     expect(screen.getByText('Ver detalles')).toBeInTheDocument();
   });
 
   it('should show "Agregar al carrito" button', () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     expect(screen.getByText('Agregar al carrito')).toBeInTheDocument();
   });
 
   it('should call addToCart when "Agregar al carrito" is clicked', async () => {
-    renderWithRouter(<ProductCard product={mockProduct} />);
+    renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     const addToCartButton = screen.getByText('Agregar al carrito');
     fireEvent.click(addToCartButton);
@@ -127,7 +127,7 @@ describe('ProductCard', () => {
       ],
     };
 
-    renderWithRouter(<ProductCard product={productWithNoStock} />);
+    renderWithRouter(<ProductCard product={productWithNoStock} onAddToCart={mockAddToCart} />);
 
     const addToCartButton = screen.getByText('Agregar al carrito');
     expect(addToCartButton).toBeDisabled();
@@ -144,7 +144,7 @@ describe('ProductCard', () => {
       ],
     };
 
-    renderWithRouter(<ProductCard product={productWithNoStock} />);
+    renderWithRouter(<ProductCard product={productWithNoStock} onAddToCart={mockAddToCart} />);
 
     expect(screen.getByText('Sin stock')).toBeInTheDocument();
   });

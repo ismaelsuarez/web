@@ -35,7 +35,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Backend cart hooks
   const { data: backendCart, isLoading: isLoadingCart } = useCart();
-  const addToCartMutation = useAddToCart();
+  // const addToCartMutation = useAddToCart();
   const updateCartItemMutation = useUpdateCartItem();
   const removeCartItemMutation = useRemoveCartItem();
   const clearCartMutation = useClearCart();
