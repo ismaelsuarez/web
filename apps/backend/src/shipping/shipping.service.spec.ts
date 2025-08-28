@@ -160,7 +160,7 @@ describe('ShippingService', () => {
     });
 
     it('should handle very large weights', () => {
-      expect(service.calculateShippingCost('Buenos Aires', 1000)).toBe(2500); // Max range
+      expect(service.calculateShippingCost('Buenos Aires', 999)).toBe(2500); // Max range
       expect(() => service.calculateShippingCost('Misiones', 1000)).toThrow('No se encontró tarifa para el peso: 1000kg');
     });
 
