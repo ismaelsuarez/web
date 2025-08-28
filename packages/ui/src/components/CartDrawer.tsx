@@ -12,6 +12,7 @@ export interface CartDrawerProps {
   onClearCart: () => void;
   total: number;
   itemCount: number;
+  onCheckout?: () => void;
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
@@ -23,6 +24,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onClearCart,
   total,
   itemCount,
+  onCheckout,
 }) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-AR', {
@@ -139,7 +141,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 >
                   Vaciar carrito
                 </Button>
-                <Button className="flex-1">
+                <Button 
+                  className="flex-1"
+                  onClick={onCheckout}
+                >
+                  <ShoppingCart size={16} className="mr-2" />
                   Finalizar compra
                 </Button>
               </div>

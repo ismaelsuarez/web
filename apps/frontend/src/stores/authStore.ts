@@ -10,8 +10,10 @@ interface User {
 interface AuthStore {
   user: User | null;
   isAuthenticated: boolean;
-  login: (user: User) => void;
+  isLoading: boolean;
+  login: (user: User, accessToken: string, refreshToken: string) => void;
   logout: () => void;
+  setLoading: (loading: boolean) => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -19,13 +21,22 @@ export const useAuthStore = create<AuthStore>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
+      isLoading: false,
 
-      login: (user: User) => {
+      login: (user: User, accessToken: string, refreshToken: string) => {
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
         set({ user, isAuthenticated: true });
       },
 
       logout: () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         set({ user: null, isAuthenticated: false });
+      },
+
+      setLoading: (loading: boolean) => {
+        set({ isLoading: loading });
       },
     }),
     {

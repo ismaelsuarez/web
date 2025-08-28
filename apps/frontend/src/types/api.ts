@@ -55,3 +55,28 @@ export interface AddToCartRequest {
 export interface UpdateCartItemRequest {
   quantity: number;
 }
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  name: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+export interface AuthResponse {
+  user: {
+    id: number;
+    email: string;
+    name: string;
+  };
+  accessToken: string;
+  refreshToken: string;
+}

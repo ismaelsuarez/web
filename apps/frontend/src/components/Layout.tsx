@@ -6,6 +6,8 @@ import { useCartStore } from '../stores/cartStore';
 import { useAuthStore } from '../stores/authStore';
 import { useCart, useAddToCart, useUpdateCartItem, useRemoveCartItem, useClearCart } from '../hooks/useCart';
 import { LoginModal } from './LoginModal';
+import { RegisterModal } from './RegisterModal';
+import { useLogout } from '../hooks/useAuth';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,8 +15,10 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
+  const logoutMutation = useLogout();
   const {
     items: localItems,
     isOpen,
@@ -129,9 +133,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    clearLocalCart();
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   };
 
   return (
@@ -157,6 +164,22 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               >
                 Productos
               </Link>
+              {isAuthenticated && (
+                <>
+                  <Link
+                    to="/perfil"
+                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Perfil
+                  </Link>
+                  <Link
+                    to="/checkout"
+                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Checkout
+                  </Link>
+                </>
+              )}
               
               <button
                 onClick={toggleCart}
@@ -184,15 +207,22 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <LogOut size={20} />
                   </button>
                 </div>
-              ) : (
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className="p-2 text-gray-600 hover:text-gray-900 transition-colors"
-                  title="Iniciar sesión"
-                >
-                  <User size={20} />
-                </button>
-              )}
+                                   ) : (
+                       <div className="flex items-center space-x-2">
+                         <button
+                           onClick={() => setShowLoginModal(true)}
+                           className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                         >
+                           Iniciar Sesión
+                         </button>
+                         <button
+                           onClick={() => setShowRegisterModal(true)}
+                           className="px-3 py-1 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                         >
+                           Registrarse
+                         </button>
+                       </div>
+                     )}
             </nav>
           </div>
         </div>
@@ -213,12 +243,30 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         onClearCart={handleClearCart}
         total={getTotal()}
         itemCount={getItemCount()}
+        onCheckout={() => {
+          closeCart();
+          window.location.href = '/checkout';
+        }}
       />
 
       {/* Login Modal */}
       <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
+        onSwitchToRegister={() => {
+          setShowLoginModal(false);
+          setShowRegisterModal(true);
+        }}
+      />
+
+      {/* Register Modal */}
+      <RegisterModal
+        isOpen={showRegisterModal}
+        onClose={() => setShowRegisterModal(false)}
+        onSwitchToLogin={() => {
+          setShowRegisterModal(false);
+          setShowLoginModal(true);
+        }}
       />
     </div>
   );

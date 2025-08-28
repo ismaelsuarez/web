@@ -9,10 +9,12 @@ import {
   HttpException,
   HttpStatus,
   Request,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { CartService } from './cart.service';
 import { AddToCartSchema, UpdateCartItemSchema, CartItemParamsSchema } from '../dto/cart.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('cart')
 @Controller('api/cart')
@@ -20,13 +22,13 @@ export class CartController {
   constructor(private readonly cartService: CartService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get user cart' })
   @ApiResponse({ status: 200, description: 'Cart retrieved successfully' })
   async getCart(@Request() req: any) {
     try {
-      // TODO: Implementar autenticación real
-      // Por ahora simulamos un userId = 1 para testing
-      const userId = req.user?.id || 1;
+      const userId = req.user.id;
       return await this.cartService.getCart(userId);
     } catch (error) {
       throw new HttpException(
@@ -37,6 +39,8 @@ export class CartController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Add item to cart' })
   @ApiBody({ schema: AddToCartSchema })
   @ApiResponse({ status: 200, description: 'Item added to cart successfully' })
@@ -45,8 +49,7 @@ export class CartController {
   async addToCart(@Request() req: any, @Body() body: any) {
     try {
       const validatedData = AddToCartSchema.parse(body);
-      // TODO: Implementar autenticación real
-      const userId = req.user?.id || 1;
+      const userId = req.user.id;
       return await this.cartService.addToCart(userId, validatedData);
     } catch (error) {
       if (error instanceof HttpException) {
@@ -60,6 +63,8 @@ export class CartController {
   }
 
   @Put('item/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update cart item quantity' })
   @ApiParam({ name: 'id', description: 'Cart item ID' })
   @ApiBody({ schema: UpdateCartItemSchema })
@@ -74,8 +79,7 @@ export class CartController {
     try {
       const { id } = CartItemParamsSchema.parse(params);
       const validatedData = UpdateCartItemSchema.parse(body);
-      // TODO: Implementar autenticación real
-      const userId = req.user?.id || 1;
+      const userId = req.user.id;
       return await this.cartService.updateCartItem(userId, id, validatedData);
     } catch (error) {
       if (error instanceof HttpException) {
@@ -89,6 +93,8 @@ export class CartController {
   }
 
   @Delete('item/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Remove item from cart' })
   @ApiParam({ name: 'id', description: 'Cart item ID' })
   @ApiResponse({ status: 200, description: 'Cart item removed successfully' })
@@ -96,8 +102,7 @@ export class CartController {
   async removeCartItem(@Request() req: any, @Param() params: any) {
     try {
       const { id } = CartItemParamsSchema.parse(params);
-      // TODO: Implementar autenticación real
-      const userId = req.user?.id || 1;
+      const userId = req.user.id;
       return await this.cartService.removeCartItem(userId, id);
     } catch (error) {
       if (error instanceof HttpException) {
@@ -111,12 +116,13 @@ export class CartController {
   }
 
   @Delete()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Clear entire cart' })
   @ApiResponse({ status: 200, description: 'Cart cleared successfully' })
   async clearCart(@Request() req: any) {
     try {
-      // TODO: Implementar autenticación real
-      const userId = req.user?.id || 1;
+      const userId = req.user.id;
       return await this.cartService.clearCart(userId);
     } catch (error) {
       throw new HttpException(

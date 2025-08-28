@@ -1,14 +1,7 @@
-import axios from 'axios';
-import type { ProductsResponse, Product } from '../types/api';
+import api from './authInterceptor';
+import type { ProductsResponse, Product, Cart, AddToCartRequest, UpdateCartItemRequest, RegisterRequest, LoginRequest, RefreshTokenRequest, AuthResponse } from '../types/api';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+// API_URL ya está configurado en authInterceptor
 
 export const productsApi = {
   getProducts: async (params?: {
@@ -50,6 +43,33 @@ export const cartApi = {
 
   clearCart: async (): Promise<Cart> => {
     const response = await api.delete('/api/cart');
+    return response.data;
+  },
+};
+
+export const authApi = {
+  register: async (data: RegisterRequest): Promise<AuthResponse> => {
+    const response = await api.post('/api/auth/register', data);
+    return response.data;
+  },
+
+  login: async (data: LoginRequest): Promise<AuthResponse> => {
+    const response = await api.post('/api/auth/login', data);
+    return response.data;
+  },
+
+  refreshToken: async (data: RefreshTokenRequest): Promise<AuthResponse> => {
+    const response = await api.post('/api/auth/refresh', data);
+    return response.data;
+  },
+
+  logout: async (): Promise<{ message: string }> => {
+    const response = await api.post('/api/auth/logout');
+    return response.data;
+  },
+
+  getProfile: async (): Promise<{ user: any }> => {
+    const response = await api.post('/api/auth/me');
     return response.data;
   },
 };
