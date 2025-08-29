@@ -75,6 +75,8 @@ Monorepo para aplicación de ecommerce construido con **pnpm + Turborepo**.
 | `pnpm test:coverage` | Ejecuta tests con reporte de cobertura |
 | `pnpm backend:test` | Ejecuta solo tests del backend |
 | `pnpm frontend:test` | Ejecuta solo tests del frontend |
+| `pnpm test:e2e` | Ejecuta tests E2E con Playwright |
+| `pnpm test:e2e:headed` | Ejecuta tests E2E con navegador visible |
 
 ## 🌐 Servicios
 
@@ -92,6 +94,72 @@ Monorepo para aplicación de ecommerce construido con **pnpm + Turborepo**.
 - **PgAdmin**: http://localhost:5050
   - Email: `admin@ecommerce.com`
   - Contraseña: `admin`
+
+## 🧪 Tests E2E
+
+### Playwright Tests
+
+El proyecto incluye tests E2E completos con Playwright que validan el flujo completo de compra:
+
+#### Ejecutar Tests E2E
+
+```bash
+# Ejecutar tests E2E en modo headless
+pnpm --filter frontend test:e2e
+
+# Ejecutar tests E2E con navegador visible
+pnpm --filter frontend test:e2e:headed
+
+# Ejecutar tests E2E específicos
+pnpm --filter frontend test:e2e --grep "checkout"
+```
+
+#### Escenarios de Test
+
+Los tests E2E cubren los siguientes escenarios:
+
+1. **Catálogo (PLP)**
+   - Navegación a `/productos`
+   - Validación de carga de productos
+   - Búsqueda de productos
+
+2. **Página de Producto (PDP)**
+   - Visualización de detalles del producto
+   - Agregar productos al carrito
+   - Validación del drawer del carrito
+
+3. **Carrito → Checkout**
+   - Gestión del carrito
+   - Login de usuario
+   - Persistencia del carrito
+
+4. **Pago (Mercado Pago)**
+   - Configuración de envío
+   - Creación de preference de pago
+   - Redirección a Mercado Pago
+
+5. **Confirmación de Orden**
+   - Verificación de estado de orden
+   - Validación de reducción de stock
+
+#### Reportes
+
+Los reportes de Playwright se generan en:
+- **Local**: `apps/frontend/playwright-report/`
+- **CI/CD**: Disponible como artefacto en GitHub Actions
+
+#### Configuración
+
+- **Base URL**: http://localhost:3000
+- **Navegador**: Chromium por defecto
+- **Retries**: 2 en CI, 0 en local
+- **Reporter**: List + HTML
+
+### Usuario de Prueba
+
+Los tests utilizan un usuario de prueba:
+- **Email**: testuser@example.com
+- **Password**: Test1234
 
 ## 📦 Paquetes
 
