@@ -19,7 +19,7 @@ RUN pnpm install --frozen-lockfile
 # Copiar código fuente
 COPY apps/backend ./apps/backend
 COPY packages/ui ./packages/ui
-COPY prisma ./prisma
+COPY apps/backend/prisma ./apps/backend/prisma
 
 # Generar cliente Prisma
 RUN pnpm --filter backend db:generate
