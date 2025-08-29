@@ -37,11 +37,11 @@ attempt=0
 while [ $attempt -lt $max_attempts ]; do
   echo "📊 Intento $((attempt + 1))/$max_attempts de conectar a la base de datos..."
   
-  # Verificar conexión básica primero
-  if npx prisma db execute --stdin <<< "SELECT 1;" > /dev/null 2>&1; then
+  # Verificar conexión básica primero usando prisma db push con --skip-generate
+  if npx prisma db push --accept-data-loss --skip-generate > /dev/null 2>&1; then
     echo "✅ Conexión básica a la base de datos establecida"
     
-    # Intentar aplicar migraciones
+    # Intentar aplicar migraciones completas
     if npx prisma db push --accept-data-loss; then
       echo "✅ Base de datos lista y migraciones aplicadas"
       break
