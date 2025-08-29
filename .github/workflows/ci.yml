@@ -45,7 +45,9 @@ jobs:
       run: pnpm install
 
     - name: Generate Prisma client
-      run: pnpm --filter backend db:generate
+      run: |
+        pnpm --filter backend db:generate
+        pnpm --filter frontend exec prisma generate || true
 
     - name: Run backend tests
       run: pnpm --filter backend test

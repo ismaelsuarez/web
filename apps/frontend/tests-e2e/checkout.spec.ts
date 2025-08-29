@@ -1,13 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { TEST_DATA, SELECTORS } from './fixtures/test-data';
+import { getProductStock, closeDb } from './utils/db';
 
 test.describe('E2E Checkout Flow', () => {
   test.describe.configure({ retries: 2 });
   
-  test('Complete checkout flow from catalog to order confirmation', async ({ page }) => {
+  test('Complete checkout flow from catalog to order confirmation', async ({ page, request }) => {
     // Test data del seed
     const testUser = TEST_DATA.users.testUser;
     const testProduct = TEST_DATA.products.notebook;
+    const initialStock = await getProductStock(testProduct.slug);
 
     // 1. Catálogo (PLP) - Navegar a productos
     await test.step('Navigate to products catalog', async () => {
@@ -111,15 +113,9 @@ test.describe('E2E Checkout Flow', () => {
       webhookData.data.external_reference = orderId;
       
       // Simular webhook call
-      await page.evaluate(async (data) => {
-        await fetch('/api/payments/mercadopago/webhook', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data)
-        });
-      }, webhookData);
+      await request.post('/api/payments/mercadopago/webhook', {
+        data: webhookData,
+      });
     });
 
     // 6. Confirmación de orden - Volver al sitio y verificar orden
@@ -134,17 +130,13 @@ test.describe('E2E Checkout Flow', () => {
 
     // 7. Validar que stock se reduce en la DB
     await test.step('Verify stock reduction in database', async () => {
-      // Volver a productos para verificar stock actualizado
-      await page.goto('/productos');
-      
-      // Buscar el producto que compramos
-      const searchInput = page.locator('[data-testid="search-input"]');
-      await searchInput.fill(testProduct.searchTerm);
-      await searchInput.press('Enter');
-      
-      // Verificar que el producto sigue disponible
-      await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
+      const finalStock = await getProductStock(testProduct.slug);
+      expect(finalStock).toBe(initialStock - 1);
     });
+  });
+
+  test.afterAll(async () => {
+    await closeDb();
   });
 
   test('Product catalog loads with seed data', async ({ page }) => {
