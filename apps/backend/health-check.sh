@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/ash
 
 # Script de health check para el backend
 # Verifica que la aplicación esté respondiendo correctamente

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/ash
 
 # Script de entrada para Docker Backend
 # Ejecuta migraciones de Prisma y luego inicia la aplicación

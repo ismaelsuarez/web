@@ -89,7 +89,7 @@ export class MercadoPagoService {
           },
           address: {
             street_name: shippingAddress.street,
-            street_number: shippingAddress.streetNumber,
+            street_number: parseInt(shippingAddress.streetNumber, 10) || 0,
             zip_code: shippingAddress.zipCode,
             city: shippingAddress.city,
             state: shippingAddress.province,

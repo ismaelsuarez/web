@@ -29,14 +29,16 @@ import { securityConfig } from './config/security.config';
     LoggerModule.forRoot({
       pinoHttp: {
         level: securityConfig.logging.level,
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            colorize: true,
-            levelFirst: true,
-            translateTime: 'yyyy-mm-dd HH:MM:ss',
-          },
-        },
+        transport: process.env.NODE_ENV === 'production' 
+          ? undefined // En producción, usar formato JSON estándar
+          : {
+              target: 'pino-pretty',
+              options: {
+                colorize: true,
+                levelFirst: true,
+                translateTime: 'yyyy-mm-dd HH:MM:ss',
+              },
+            },
         serializers: {
           req: req => ({
             method: req.method,

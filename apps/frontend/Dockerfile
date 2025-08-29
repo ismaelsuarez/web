@@ -8,14 +8,17 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Copiar archivos de configuración
-COPY package.json pnpm-lock.yaml ./
+COPY package.json ./
 COPY tsconfig.json ./
 COPY apps/frontend/package.json ./apps/frontend/
 COPY packages/ui/package.json ./packages/ui/
 COPY pnpm-workspace.yaml ./
 
+# Copiar pnpm-lock.yaml si existe
+COPY pnpm-lock.yaml* ./
+
 # Instalar dependencias
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Copiar código fuente
 COPY apps/frontend ./apps/frontend
