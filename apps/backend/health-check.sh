@@ -5,13 +5,9 @@
 
 set -e
 
-# Función para verificar si el puerto está abierto
-check_port() {
-  local port=$1
-  local host=${2:-localhost}
-  
-  # Usar netstat para verificar si el puerto está en uso
-  if netstat -tuln | grep -q ":$port "; then
+# Función para verificar que el proceso de Node.js esté ejecutándose
+check_node_process() {
+  if pgrep -f "node.*dist/main.js" >/dev/null; then
     return 0
   else
     return 1
@@ -38,23 +34,7 @@ check_health_endpoint() {
     fi
   fi
   
-  # Intentar con nc (netcat) como última opción
-  if command -v nc >/dev/null 2>&1; then
-    if echo "GET /health HTTP/1.1\r\nHost: $host\r\n\r\n" | nc "$host" "$port" | grep -q "HTTP/1.1 200"; then
-      return 0
-    fi
-  fi
-  
   return 1
-}
-
-# Verificar que el proceso de Node.js esté ejecutándose
-check_node_process() {
-  if pgrep -f "node.*dist/main.js" >/dev/null; then
-    return 0
-  else
-    return 1
-  fi
 }
 
 # Ejecutar verificaciones
@@ -67,14 +47,6 @@ if ! check_node_process; then
 fi
 
 echo "✅ Proceso de Node.js ejecutándose"
-
-# Verificar que el puerto esté abierto
-if ! check_port 3001; then
-  echo "❌ Puerto 3001 no está abierto"
-  exit 1
-fi
-
-echo "✅ Puerto 3001 abierto"
 
 # Verificar endpoint de health
 if ! check_health_endpoint 3001; then

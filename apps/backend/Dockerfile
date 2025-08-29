@@ -61,6 +61,9 @@ COPY apps/backend/docker-entrypoint.sh /docker-entrypoint.sh
 COPY apps/backend/health-check.sh /health-check.sh
 RUN chmod +x /docker-entrypoint.sh /health-check.sh
 
+# Cambiar permisos de directorios
+RUN chown -R nestjs:nodejs /app
+
 # Cambiar al usuario no-root
 USER nestjs
 

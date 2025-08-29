@@ -31,20 +31,22 @@ npx prisma generate
 
 # Esperar a que la base de datos esté lista
 echo "⏳ Esperando a que la base de datos esté lista..."
-max_attempts=60
+max_attempts=15
 attempt=0
 
 while [ $attempt -lt $max_attempts ]; do
   echo "📊 Intento $((attempt + 1))/$max_attempts de conectar a la base de datos..."
   
   # Intentar aplicar migraciones directamente
-  if npx prisma db push --accept-data-loss; then
+  if npx prisma db push --accept-data-loss > /dev/null 2>&1; then
     echo "✅ Base de datos lista y migraciones aplicadas"
     break
   else
     attempt=$((attempt + 1))
-    echo "📊 Base de datos no disponible, reintentando en 10 segundos..."
-    sleep 10
+    if [ $attempt -lt $max_attempts ]; then
+      echo "📊 Base de datos no disponible, reintentando en 3 segundos..."
+      sleep 3
+    fi
   fi
 done
 
@@ -58,13 +60,6 @@ if [ $attempt -eq $max_attempts ]; then
 fi
 
 echo "✅ Base de datos lista y migraciones aplicadas"
-
-# Verificar que el cliente Prisma se generó correctamente
-echo "🔧 Verificando cliente Prisma..."
-if [ ! -f "../../node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client/index.js" ]; then
-  echo "❌ Error: Cliente Prisma no encontrado, regenerando..."
-  npx prisma generate
-fi
 
 # Iniciar la aplicación
 echo "🚀 Iniciando aplicación NestJS..."
