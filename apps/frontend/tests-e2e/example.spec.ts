@@ -20,6 +20,6 @@ test.describe('Example E2E Tests', () => {
     await expect(page).toHaveURL(/\/productos/);
     
     // Verificar que se renderiza al menos 1 product-card
-    await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
+    await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
   });
 });

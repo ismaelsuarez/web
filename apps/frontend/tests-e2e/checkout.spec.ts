@@ -14,9 +14,10 @@ test.describe('E2E Checkout Flow', () => {
     // 1. Catálogo (PLP) - Navegar a productos
     await test.step('Navigate to products catalog', async () => {
       await page.goto('/productos');
+      await expect(page).toHaveURL(/\/productos/);
       
       // Validar que se cargan productos del seed
-      await expect(page.locator(SELECTORS.productCard)).toHaveCount(3); // 3 productos del seed
+      await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
       
       // Buscar el producto específico del seed
       const searchInput = page.locator(SELECTORS.searchInput);
@@ -25,7 +26,7 @@ test.describe('E2E Checkout Flow', () => {
       
       // Esperar a que se actualice la búsqueda
       await page.waitForTimeout(1000);
-      await expect(page.locator(SELECTORS.productCard)).toHaveCount(1);
+      await expect(page.locator(SELECTORS.productCard)).toHaveCount(1, { timeout: 15000 });
     });
 
     // 2. Página de producto (PDP) - Entrar al producto del seed

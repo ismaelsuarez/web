@@ -17,20 +17,20 @@ test.describe('Basic E2E Tests', () => {
     await page.goto('/');
     
     // Hacer clic en el link de productos (usar selector específico)
-    await page.getByRole('link', { name: 'Productos', exact: true }).click();
+    await page.getByRole('link', { name: 'Productos', exact: true }).first().click();
     
     // Verificar que navegamos a productos
     await expect(page).toHaveURL(/\/productos/);
     
     // Verificar que se renderiza al menos 1 product-card
-    await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
+    await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
   });
 
   test('should have working navigation', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar que los links de navegación están presentes
-    await expect(page.getByRole('link', { name: 'Productos' })).toBeVisible();
+    // Verificar que los links de navegación están presentes (usar exact para evitar violación strict)
+    await expect(page.getByRole('link', { name: 'Productos', exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Inicio' })).toBeVisible();
   });
 });

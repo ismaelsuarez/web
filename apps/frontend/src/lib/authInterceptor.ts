@@ -1,12 +1,14 @@
 import axios from 'axios';
 import { authApi } from './api';
 
-// Crear instancia de axios para interceptores
+// Crear instancia de axios para interceptores (soporta runtime env y fallback al proxy /api)
+const runtimeEnv = (globalThis as any)?.window?.ENV;
+const runtimeBaseURL = runtimeEnv?.VITE_API_URL;
+const buildBaseURL = (import.meta as any).env.VITE_API_URL;
+
 const api = axios.create({
-  baseURL: (import.meta as any).env.VITE_API_URL || 'http://localhost:3001',
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: runtimeBaseURL || buildBaseURL || '/api',
+  headers: { 'Content-Type': 'application/json' },
 });
 
 // Interceptor para agregar token a las requests
