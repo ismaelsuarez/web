@@ -3,19 +3,21 @@ import { ApiProperty } from '@nestjs/swagger';
 import { CartItem, ShippingAddress } from '../types';
 
 export const CreatePaymentSchema = z.object({
-  cartItems: z.array(z.object({
-    product: z.object({
-      id: z.string(),
-      name: z.string(),
-      images: z.array(z.string()).optional(),
-    }),
-    variant: z.object({
-      id: z.string(),
-      name: z.string(),
-      price: z.number(),
-    }),
-    quantity: z.number().positive(),
-  })),
+  cartItems: z.array(
+    z.object({
+      product: z.object({
+        id: z.string(),
+        name: z.string(),
+        images: z.array(z.string()).optional(),
+      }),
+      variant: z.object({
+        id: z.string(),
+        name: z.string(),
+        price: z.number(),
+      }),
+      quantity: z.number().positive(),
+    })
+  ),
   shippingAddress: z.object({
     fullName: z.string(),
     email: z.string().email(),

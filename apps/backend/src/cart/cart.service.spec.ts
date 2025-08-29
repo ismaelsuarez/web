@@ -150,7 +150,9 @@ describe('CartService', () => {
         ],
       };
 
-      mockPrismaService.productVariant.findUnique.mockResolvedValue(mockVariant);
+      mockPrismaService.productVariant.findUnique.mockResolvedValue(
+        mockVariant
+      );
       mockPrismaService.cart.findFirst.mockResolvedValue(mockCart);
       mockPrismaService.cartItem.findFirst.mockResolvedValue(null);
       mockPrismaService.cartItem.create.mockResolvedValue({
@@ -214,7 +216,9 @@ describe('CartService', () => {
         items: [mockCartItem],
       };
 
-      mockPrismaService.productVariant.findUnique.mockResolvedValue(mockVariant);
+      mockPrismaService.productVariant.findUnique.mockResolvedValue(
+        mockVariant
+      );
       mockPrismaService.cart.findFirst.mockResolvedValue(mockCart);
       mockPrismaService.cartItem.findFirst.mockResolvedValue(mockCartItem);
       mockPrismaService.cartItem.update.mockResolvedValue({
@@ -224,12 +228,14 @@ describe('CartService', () => {
 
       // Mock the getCart method to return the expected result
       const expectedResult = {
-        items: [{
-          id: mockCartItem.id,
-          quantity: 3,
-          variant: mockCartItem.variant,
-          product: mockCartItem.variant.product,
-        }],
+        items: [
+          {
+            id: mockCartItem.id,
+            quantity: 3,
+            variant: mockCartItem.variant,
+            product: mockCartItem.variant.product,
+          },
+        ],
         total: 3000,
         itemCount: 3,
       };
@@ -239,11 +245,13 @@ describe('CartService', () => {
       mockPrismaService.cart.findFirst.mockResolvedValueOnce({
         id: 1,
         userId: 1,
-        items: [{
-          id: 1,
-          quantity: 3,
-          variant: mockVariant,
-        }],
+        items: [
+          {
+            id: 1,
+            quantity: 3,
+            variant: mockVariant,
+          },
+        ],
       });
 
       const result = await service.addToCart(1, { variantId: 1, quantity: 2 });
@@ -274,19 +282,21 @@ describe('CartService', () => {
         },
       };
 
-      mockPrismaService.productVariant.findUnique.mockResolvedValue(mockVariant);
-
-      await expect(service.addToCart(1, { variantId: 1, quantity: 10 })).rejects.toThrow(
-        'Stock insuficiente. Disponible: 5'
+      mockPrismaService.productVariant.findUnique.mockResolvedValue(
+        mockVariant
       );
+
+      await expect(
+        service.addToCart(1, { variantId: 1, quantity: 10 })
+      ).rejects.toThrow('Stock insuficiente. Disponible: 5');
     });
 
     it('should throw error for non-existent variant', async () => {
       mockPrismaService.productVariant.findUnique.mockResolvedValue(null);
 
-      await expect(service.addToCart(1, { variantId: 999, quantity: 1 })).rejects.toThrow(
-        'Variante no encontrada'
-      );
+      await expect(
+        service.addToCart(1, { variantId: 999, quantity: 1 })
+      ).rejects.toThrow('Variante no encontrada');
     });
   });
 
@@ -330,12 +340,14 @@ describe('CartService', () => {
 
       // Mock the getCart method to return the expected result
       const expectedResult = {
-        items: [{
-          id: mockCartItem.id,
-          quantity: 3,
-          variant: mockCartItem.variant,
-          product: mockCartItem.variant.product,
-        }],
+        items: [
+          {
+            id: mockCartItem.id,
+            quantity: 3,
+            variant: mockCartItem.variant,
+            product: mockCartItem.variant.product,
+          },
+        ],
         total: 3000,
         itemCount: 3,
       };
@@ -344,11 +356,13 @@ describe('CartService', () => {
       mockPrismaService.cart.findFirst.mockResolvedValueOnce({
         id: 1,
         userId: 1,
-        items: [{
-          id: 1,
-          quantity: 3,
-          variant: mockVariant,
-        }],
+        items: [
+          {
+            id: 1,
+            quantity: 3,
+            variant: mockVariant,
+          },
+        ],
       });
 
       const result = await service.updateCartItem(1, 1, { quantity: 3 });
@@ -359,9 +373,9 @@ describe('CartService', () => {
     it('should throw error for non-existent cart item', async () => {
       mockPrismaService.cartItem.findFirst.mockResolvedValue(null);
 
-      await expect(service.updateCartItem(1, 999, { quantity: 1 })).rejects.toThrow(
-        'Item del carrito no encontrado'
-      );
+      await expect(
+        service.updateCartItem(1, 999, { quantity: 1 })
+      ).rejects.toThrow('Item del carrito no encontrado');
     });
   });
 

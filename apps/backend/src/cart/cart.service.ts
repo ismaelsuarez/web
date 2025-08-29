@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AddToCartDto, UpdateCartItemDto } from '../dto/cart.dto';
 
@@ -100,7 +104,7 @@ export class CartService {
     if (existingItem) {
       // Actualizar cantidad existente
       const newQuantity = existingItem.quantity + quantity;
-      
+
       if (variant.stock < newQuantity) {
         throw new BadRequestException(
           `Stock insuficiente para la cantidad total. Disponible: ${variant.stock}`
@@ -226,7 +230,7 @@ export class CartService {
   // Método para verificar disponibilidad de stock sin reservar
   async checkStockAvailability(userId: number) {
     const cart = await this.getCart(userId);
-    
+
     for (const item of cart.items) {
       if (item.variant.stock < item.quantity) {
         throw new BadRequestException(

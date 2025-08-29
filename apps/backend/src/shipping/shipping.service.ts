@@ -116,7 +116,7 @@ export class ShippingService {
 
   calculateShippingCost(province: string, weight: number): number {
     const provinceRate = this.shippingRates.find(
-      (rate) => rate.province.toLowerCase() === province.toLowerCase()
+      rate => rate.province.toLowerCase() === province.toLowerCase()
     );
 
     if (!provinceRate) {
@@ -128,7 +128,7 @@ export class ShippingService {
     }
 
     const weightRange = provinceRate.weightRanges.find(
-      (range) => weight > range.minWeight && weight <= range.maxWeight
+      range => weight > range.minWeight && weight <= range.maxWeight
     );
 
     if (!weightRange) {
@@ -139,7 +139,7 @@ export class ShippingService {
   }
 
   getProvinces(): string[] {
-    return this.shippingRates.map((rate) => rate.province);
+    return this.shippingRates.map(rate => rate.province);
   }
 
   getShippingRates(): ShippingRate[] {

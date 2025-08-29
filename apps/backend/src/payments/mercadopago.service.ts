@@ -10,19 +10,24 @@ export class MercadoPagoService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {
     // Configure MercadoPago with access token
     this.mercadopago = new MercadoPagoConfig({
-      accessToken: this.configService.get<string>('MERCADOPAGO_ACCESS_TOKEN') || '',
+      accessToken:
+        this.configService.get<string>('MERCADOPAGO_ACCESS_TOKEN') || '',
     });
   }
 
-  async createPayment(userId: string, cartItems: CartItem[], shippingAddress: ShippingAddress) {
+  async createPayment(
+    userId: string,
+    cartItems: CartItem[],
+    shippingAddress: ShippingAddress
+  ) {
     try {
       // Calculate total amount
       const totalAmount = cartItems.reduce((sum, item) => {
-        return sum + (item.variant.price * item.quantity);
+        return sum + item.variant.price * item.quantity;
       }, 0);
 
       // Create provisional order
@@ -35,7 +40,7 @@ export class MercadoPagoService {
           items: {
             create: cartItems.map(item => ({
               variant: {
-                connect: { id: parseInt(item.variant.id, 10) }
+                connect: { id: parseInt(item.variant.id, 10) },
               },
               quantity: item.quantity,
               priceAtPurchase: item.variant.price,
@@ -132,7 +137,7 @@ export class MercadoPagoService {
       console.error('Error creating MercadoPago payment:', error);
       throw new HttpException(
         'Error al crear el pago',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -145,23 +150,25 @@ export class MercadoPagoService {
     try {
       // Verify webhook signature (if MercadoPago provides it)
       // Note: MercadoPago doesn't always send signatures, so we'll validate the data structure
-      
+
       if (data.type === 'payment') {
         const paymentId = data.data.id;
-        
+
         // Get payment details from MercadoPago
         const { Payment } = await import('mercadopago');
         const payment = new Payment(this.mercadopago);
         const paymentData = await payment.get({ id: paymentId });
-        
+
         if (paymentData) {
-          const orderId = paymentData.external_reference ? parseInt(paymentData.external_reference, 10) : null;
-          
+          const orderId = paymentData.external_reference
+            ? parseInt(paymentData.external_reference, 10)
+            : null;
+
           // Find the order
           if (!orderId) {
             throw new Error('No external reference found in payment data');
           }
-          
+
           const order = await this.prisma.order.findUnique({
             where: { id: orderId },
             include: { items: true },
@@ -220,7 +227,7 @@ export class MercadoPagoService {
       console.error('Error processing MercadoPago webhook:', error);
       throw new HttpException(
         'Error al procesar webhook',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -246,7 +253,7 @@ export class MercadoPagoService {
       if (order.status !== 'pending') {
         throw new HttpException(
           'La orden ya ha sido procesada',
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST
         );
       }
 
@@ -279,9 +286,8 @@ export class MercadoPagoService {
         const { Payment } = await import('mercadopago');
         const payment = new Payment(this.mercadopago);
         const paymentData = await payment.get({ id: order.mercadopagoId });
-        
+
         if (paymentData) {
-          
           if (paymentData.status === 'approved') {
             // Update order status
             await this.prisma.order.update({
@@ -306,7 +312,7 @@ export class MercadoPagoService {
           } else {
             throw new HttpException(
               `Pago no aprobado. Estado: ${paymentData.status}`,
-              HttpStatus.BAD_REQUEST,
+              HttpStatus.BAD_REQUEST
             );
           }
         }
@@ -314,7 +320,7 @@ export class MercadoPagoService {
 
       throw new HttpException(
         'No se pudo confirmar el pago',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     } catch (error) {
       if (error instanceof HttpException) {
@@ -324,14 +330,14 @@ export class MercadoPagoService {
       console.error('Error confirming checkout:', error);
       throw new HttpException(
         'Error al confirmar el checkout',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
 
   private async decrementStock(items: any[]) {
     // Use a transaction to ensure data consistency
-    await this.prisma.$transaction(async (prisma) => {
+    await this.prisma.$transaction(async prisma => {
       for (const item of items) {
         // Check current stock
         const variant = await prisma.productVariant.findUnique({
@@ -362,22 +368,22 @@ export class MercadoPagoService {
       const { Payment } = await import('mercadopago');
       const payment = new Payment(this.mercadopago);
       const paymentData = await payment.get({ id: paymentId });
-      
-              if (paymentData) {
-          return {
-            status: paymentData.status,
-            statusDetail: paymentData.status_detail,
-            externalReference: paymentData.external_reference,
-          };
-        }
-      
+
+      if (paymentData) {
+        return {
+          status: paymentData.status,
+          statusDetail: paymentData.status_detail,
+          externalReference: paymentData.external_reference,
+        };
+      }
+
       throw new Error('Failed to get payment status');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error getting payment status:', error);
       throw new HttpException(
         'Error al obtener estado del pago',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }

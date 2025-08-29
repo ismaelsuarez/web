@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto, LoginDto, RefreshTokenDto } from '../dto/auth.dto';
@@ -8,7 +12,7 @@ import * as bcrypt from 'bcryptjs';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   async register(dto: RegisterDto) {
@@ -100,7 +104,10 @@ export class AuthService {
       }
 
       // Generar nuevos tokens
-      const tokens = await this.generateTokens(tokenRecord.user.id, tokenRecord.user.email);
+      const tokens = await this.generateTokens(
+        tokenRecord.user.id,
+        tokenRecord.user.email
+      );
 
       // Eliminar token anterior
       await this.prisma.refreshToken.delete({

@@ -10,16 +10,20 @@ describe('Security Guards', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ThrottlerModule.forRoot([{
-          ttl: 900,
-          limit: 100,
-        }]),
+        ThrottlerModule.forRoot([
+          {
+            ttl: 900,
+            limit: 100,
+          },
+        ]),
       ],
       providers: [ThrottleAuthGuard, ThrottlePaymentsGuard],
     }).compile();
 
     throttleAuthGuard = module.get<ThrottleAuthGuard>(ThrottleAuthGuard);
-    throttlePaymentsGuard = module.get<ThrottlePaymentsGuard>(ThrottlePaymentsGuard);
+    throttlePaymentsGuard = module.get<ThrottlePaymentsGuard>(
+      ThrottlePaymentsGuard
+    );
   });
 
   describe('ThrottleAuthGuard', () => {

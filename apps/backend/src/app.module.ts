@@ -18,10 +18,12 @@ import { securityConfig } from './config/security.config';
       isGlobal: true,
     }),
     // 🔒 SECURITY: Rate Limiting configuration
-    ThrottlerModule.forRoot([{
-      ttl: securityConfig.rateLimit.ttl,
-      limit: securityConfig.rateLimit.limit,
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: securityConfig.rateLimit.ttl,
+        limit: securityConfig.rateLimit.limit,
+      },
+    ]),
     // 📝 LOGGING: Structured logging with Pino
     LoggerModule.forRoot({
       pinoHttp: {
@@ -35,12 +37,12 @@ import { securityConfig } from './config/security.config';
           },
         },
         serializers: {
-          req: (req) => ({
+          req: req => ({
             method: req.method,
             url: req.url,
             headers: req.headers,
           }),
-          res: (res) => ({
+          res: res => ({
             statusCode: res.statusCode,
           }),
         },

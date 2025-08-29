@@ -7,11 +7,21 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ThrottleAuthGuard } from '../common/guards/throttle-auth.guard';
-import { RegisterDtoSwagger, LoginDtoSwagger, RefreshTokenDtoSwagger } from '../dto/auth.dto';
+import {
+  RegisterDtoSwagger,
+  LoginDtoSwagger,
+  RefreshTokenDtoSwagger,
+} from '../dto/auth.dto';
 import { AuthenticatedRequest } from '../types';
 import { RegisterDto, LoginDto, RefreshTokenDto } from '../dto/auth.dto';
 
@@ -36,7 +46,7 @@ export class AuthController {
       }
       throw new HttpException(
         'Error al registrar usuario',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -57,7 +67,7 @@ export class AuthController {
       }
       throw new HttpException(
         'Error al iniciar sesión',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -78,7 +88,7 @@ export class AuthController {
       }
       throw new HttpException(
         'Error al refrescar token',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -94,7 +104,7 @@ export class AuthController {
     } catch (error) {
       throw new HttpException(
         'Error al cerrar sesión',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }

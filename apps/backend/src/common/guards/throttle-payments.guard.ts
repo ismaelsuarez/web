@@ -6,7 +6,7 @@ import { ThrottlerRequest } from '../../types';
 export class ThrottlePaymentsGuard extends ThrottlerGuard {
   protected async getTracker(req: ThrottlerRequest): Promise<string> {
     // Use IP address as tracker for rate limiting
-    return req.ips.length ? (req.ips[0] as string) : (req.ip || 'unknown');
+    return req.ips.length ? (req.ips[0] as string) : req.ip || 'unknown';
   }
 
   protected errorMessage = 'Too many payment requests. Please try again later.';

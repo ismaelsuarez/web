@@ -11,11 +11,27 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { CartService } from './cart.service';
-import { AddToCartSchema, UpdateCartItemSchema, CartItemParamsSchema } from '../dto/cart.dto';
+import {
+  AddToCartSchema,
+  UpdateCartItemSchema,
+  CartItemParamsSchema,
+} from '../dto/cart.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { AddToCartDto, UpdateCartItemDto, CartItemParams, AuthenticatedRequest } from '../types';
+import {
+  AddToCartDto,
+  UpdateCartItemDto,
+  CartItemParams,
+  AuthenticatedRequest,
+} from '../types';
 
 @ApiTags('cart')
 @Controller('api/cart')
@@ -34,7 +50,7 @@ export class CartController {
     } catch (error) {
       throw new HttpException(
         'Error al obtener el carrito',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -43,11 +59,20 @@ export class CartController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Add item to cart' })
-  @ApiBody({ type: 'object', schema: { $ref: '#/components/schemas/AddToCartDto' } })
+  @ApiBody({
+    type: 'object',
+    schema: { $ref: '#/components/schemas/AddToCartDto' },
+  })
   @ApiResponse({ status: 200, description: 'Item added to cart successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid data or insufficient stock' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data or insufficient stock',
+  })
   @ApiResponse({ status: 404, description: 'Variant not found' })
-  async addToCart(@Request() req: AuthenticatedRequest, @Body() body: AddToCartDto) {
+  async addToCart(
+    @Request() req: AuthenticatedRequest,
+    @Body() body: AddToCartDto
+  ) {
     try {
       const validatedData = AddToCartSchema.parse(body);
       const userId = parseInt(req.user.id, 10);
@@ -58,7 +83,7 @@ export class CartController {
       }
       throw new HttpException(
         'Error al agregar item al carrito',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }
@@ -68,14 +93,20 @@ export class CartController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update cart item quantity' })
   @ApiParam({ name: 'id', description: 'Cart item ID' })
-  @ApiBody({ type: 'object', schema: { $ref: '#/components/schemas/UpdateCartItemDto' } })
+  @ApiBody({
+    type: 'object',
+    schema: { $ref: '#/components/schemas/UpdateCartItemDto' },
+  })
   @ApiResponse({ status: 200, description: 'Cart item updated successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid data or insufficient stock' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data or insufficient stock',
+  })
   @ApiResponse({ status: 404, description: 'Cart item not found' })
   async updateCartItem(
     @Request() req: AuthenticatedRequest,
     @Param() params: CartItemParams,
-    @Body() body: UpdateCartItemDto,
+    @Body() body: UpdateCartItemDto
   ) {
     try {
       const { id } = CartItemParamsSchema.parse(params);
@@ -88,7 +119,7 @@ export class CartController {
       }
       throw new HttpException(
         'Error al actualizar item del carrito',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }
@@ -100,7 +131,10 @@ export class CartController {
   @ApiParam({ name: 'id', description: 'Cart item ID' })
   @ApiResponse({ status: 200, description: 'Cart item removed successfully' })
   @ApiResponse({ status: 404, description: 'Cart item not found' })
-  async removeCartItem(@Request() req: AuthenticatedRequest, @Param() params: CartItemParams) {
+  async removeCartItem(
+    @Request() req: AuthenticatedRequest,
+    @Param() params: CartItemParams
+  ) {
     try {
       const { id } = CartItemParamsSchema.parse(params);
       const userId = parseInt(req.user.id, 10);
@@ -111,7 +145,7 @@ export class CartController {
       }
       throw new HttpException(
         'Error al eliminar item del carrito',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }
@@ -128,7 +162,7 @@ export class CartController {
     } catch (error) {
       throw new HttpException(
         'Error al vaciar el carrito',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }

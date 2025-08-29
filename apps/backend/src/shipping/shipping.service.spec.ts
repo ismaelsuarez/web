@@ -55,7 +55,7 @@ describe('ShippingService', () => {
       const cost1 = service.calculateShippingCost('BUENOS AIRES', 1);
       const cost2 = service.calculateShippingCost('buenos aires', 1);
       const cost3 = service.calculateShippingCost('Buenos Aires', 1);
-      
+
       expect(cost1).toBe(cost2);
       expect(cost2).toBe(cost3);
       expect(cost1).toBe(500); // 0-1kg range
@@ -65,7 +65,7 @@ describe('ShippingService', () => {
   describe('getProvinces', () => {
     it('should return all available provinces', () => {
       const provinces = service.getProvinces();
-      
+
       expect(provinces).toContain('Buenos Aires');
       expect(provinces).toContain('Córdoba');
       expect(provinces).toContain('Santa Fe');
@@ -76,7 +76,7 @@ describe('ShippingService', () => {
       expect(provinces).toContain('Chaco');
       expect(provinces).toContain('Corrientes');
       expect(provinces).toContain('Misiones');
-      
+
       expect(provinces).toHaveLength(10);
     });
   });
@@ -84,39 +84,39 @@ describe('ShippingService', () => {
   describe('getShippingRates', () => {
     it('should return all shipping rates with weight ranges', () => {
       const rates = service.getShippingRates();
-      
+
       expect(rates).toHaveLength(10);
-      
+
       // Check Buenos Aires rates
       const buenosAires = rates.find(rate => rate.province === 'Buenos Aires');
       expect(buenosAires).toBeDefined();
       expect(buenosAires?.weightRanges).toHaveLength(5);
-      
+
       // Check weight ranges for Buenos Aires
       expect(buenosAires?.weightRanges[0]).toEqual({
         minWeight: 0,
         maxWeight: 1,
         cost: 500,
       });
-      
+
       expect(buenosAires?.weightRanges[1]).toEqual({
         minWeight: 1,
         maxWeight: 3,
         cost: 800,
       });
-      
+
       expect(buenosAires?.weightRanges[2]).toEqual({
         minWeight: 3,
         maxWeight: 5,
         cost: 1200,
       });
-      
+
       expect(buenosAires?.weightRanges[3]).toEqual({
         minWeight: 5,
         maxWeight: 10,
         cost: 1800,
       });
-      
+
       expect(buenosAires?.weightRanges[4]).toEqual({
         minWeight: 10,
         maxWeight: 999,
@@ -126,12 +126,12 @@ describe('ShippingService', () => {
 
     it('should have consistent weight ranges across all provinces', () => {
       const rates = service.getShippingRates();
-      
+
       rates.forEach(rate => {
         expect(rate.weightRanges).toHaveLength(5);
-        
+
         // Check weight range structure
-        rate.weightRanges.forEach((range) => {
+        rate.weightRanges.forEach(range => {
           expect(range).toHaveProperty('minWeight');
           expect(range).toHaveProperty('maxWeight');
           expect(range).toHaveProperty('cost');
@@ -139,7 +139,7 @@ describe('ShippingService', () => {
           expect(range.maxWeight).toBeGreaterThan(range.minWeight);
           expect(range.cost).toBeGreaterThan(0);
         });
-        
+
         // Check weight range continuity
         for (let i = 0; i < rate.weightRanges.length - 1; i++) {
           const current = rate.weightRanges[i];
@@ -163,7 +163,9 @@ describe('ShippingService', () => {
 
     it('should handle very large weights', () => {
       expect(service.calculateShippingCost('Buenos Aires', 999)).toBe(2500); // Max range
-      expect(() => service.calculateShippingCost('Misiones', 1000)).toThrow('No se encontró tarifa para el peso: 1000kg');
+      expect(() => service.calculateShippingCost('Misiones', 1000)).toThrow(
+        'No se encontró tarifa para el peso: 1000kg'
+      );
     });
 
     it('should handle decimal weights', () => {
