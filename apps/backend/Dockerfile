@@ -30,8 +30,8 @@ RUN pnpm --filter backend build
 # Stage de producción
 FROM node:18-alpine AS production
 
-# Instalar pnpm y wget para health checks
-RUN npm install -g pnpm && apk add --no-cache wget
+# Instalar pnpm, wget, curl y netcat para health checks
+RUN npm install -g pnpm && apk add --no-cache wget curl netcat-openbsd
 
 # Crear usuario no-root
 RUN addgroup -g 1001 -S nodejs
@@ -56,9 +56,10 @@ COPY --from=base --chown=nestjs:nodejs /app/apps/backend/node_modules ./apps/bac
 COPY --from=base --chown=nestjs:nodejs /app/packages/ui/node_modules ./packages/ui/node_modules
 COPY --from=base --chown=nestjs:nodejs /app/apps/backend/prisma ./apps/backend/prisma
 
-# Copiar script de entrada
+# Copiar scripts
 COPY apps/backend/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+COPY apps/backend/health-check.sh /health-check.sh
+RUN chmod +x /docker-entrypoint.sh /health-check.sh
 
 # Cambiar al usuario no-root
 USER nestjs
