@@ -54,6 +54,11 @@ COPY --from=base --chown=nestjs:nodejs /app/apps/backend/dist ./apps/backend/dis
 COPY --from=base --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=base --chown=nestjs:nodejs /app/apps/backend/node_modules ./apps/backend/node_modules
 COPY --from=base --chown=nestjs:nodejs /app/packages/ui/node_modules ./packages/ui/node_modules
+COPY --from=base --chown=nestjs:nodejs /app/apps/backend/prisma ./apps/backend/prisma
+
+# Copiar script de entrada
+COPY apps/backend/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # Cambiar al usuario no-root
 USER nestjs
@@ -66,4 +71,4 @@ ENV NODE_ENV=production
 ENV PORT=3001
 
 # Comando de inicio
-CMD ["node", "apps/backend/dist/main.js"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
