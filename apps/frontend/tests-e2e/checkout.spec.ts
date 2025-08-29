@@ -14,58 +14,58 @@ test.describe('E2E Checkout Flow', () => {
       await page.goto('/productos');
       
       // Validar que se cargan productos del seed
-      await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3); // 3 productos del seed
+      await expect(page.locator(SELECTORS.productCard)).toHaveCount(3); // 3 productos del seed
       
       // Buscar el producto específico del seed
-      const searchInput = page.locator('[data-testid="search-input"]');
+      const searchInput = page.locator(SELECTORS.searchInput);
       await searchInput.fill(testProduct.searchTerm);
       await searchInput.press('Enter');
       
       // Esperar a que se actualice la búsqueda
       await page.waitForTimeout(1000);
-      await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
+      await expect(page.locator(SELECTORS.productCard)).toHaveCount(1);
     });
 
     // 2. Página de producto (PDP) - Entrar al producto del seed
     await test.step('Navigate to product detail page', async () => {
       // Hacer clic en el primer producto (notebook del seed)
-      await page.locator('[data-testid="product-card"]').first().click();
+      await page.locator(SELECTORS.productCard).first().click();
       
       // Validar que muestra información del producto del seed
-      await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
-      await expect(page.locator('[data-testid="product-price"]')).toBeVisible();
-      await expect(page.locator('[data-testid="add-to-cart-button"]')).toBeVisible();
+      await expect(page.locator(SELECTORS.productTitle)).toBeVisible();
+      await expect(page.locator(SELECTORS.productPrice)).toBeVisible();
+      await expect(page.locator(SELECTORS.addToCartButton)).toBeVisible();
       
       // Verificar que el título coincide con el producto del seed
-      await expect(page.locator('[data-testid="product-title"]')).toContainText('Notebook');
+      await expect(page.locator(SELECTORS.productTitle)).toContainText('Notebook');
       
       // Agregar al carrito
-      await page.locator('[data-testid="add-to-cart-button"]').click();
+      await page.locator(SELECTORS.addToCartButton).click();
       
       // Verificar que el drawer/cart muestra el item
-      await expect(page.locator('[data-testid="cart-drawer"]')).toBeVisible();
-      await expect(page.locator('[data-testid="cart-item"]')).toHaveCount(1);
+      await expect(page.locator(SELECTORS.cartDrawer)).toBeVisible();
+      await expect(page.locator(SELECTORS.cartItem)).toHaveCount(1);
     });
 
     // 3. Carrito → Checkout - Ir al carrito y hacer login
     await test.step('Go to cart and login', async () => {
       // Ir al carrito
-      await page.locator('[data-testid="cart-button"]').click();
-      await expect(page.locator('[data-testid="cart-drawer"]')).toBeVisible();
+      await page.locator(SELECTORS.cartButton).click();
+      await expect(page.locator(SELECTORS.cartDrawer)).toBeVisible();
       
       // Hacer clic en "Proceder al checkout"
-      await page.locator('[data-testid="checkout-button"]').click();
+      await page.locator(SELECTORS.checkoutButton).click();
       
       // Hacer login con usuario del seed
-      await page.locator('[data-testid="login-email"]').fill(testUser.email);
-      await page.locator('[data-testid="login-password"]').fill(testUser.password);
-      await page.locator('[data-testid="login-submit"]').click();
+      await page.locator(SELECTORS.loginEmail).fill(testUser.email);
+      await page.locator(SELECTORS.loginPassword).fill(testUser.password);
+      await page.locator(SELECTORS.loginSubmit).click();
       
       // Esperar a que se complete el login
       await page.waitForTimeout(2000);
       
       // Confirmar que el carrito persiste con el producto
-      await expect(page.locator('[data-testid="cart-item"]')).toHaveCount(1);
+      await expect(page.locator(SELECTORS.cartItem)).toHaveCount(1);
     });
 
     // 4. Pago (Mercado Pago sandbox) - Configurar envío y crear preference
