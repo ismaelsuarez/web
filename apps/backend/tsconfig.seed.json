@@ -1,6 +1,19 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "types": ["node"],
+    "module": "commonjs",
+    "target": "es2019",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "outDir": "dist-seed"
+  },
+  "include": ["prisma/seed-e2e.ts"]
+}
+
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
     "lib": ["ES2020", "DOM"],
     "types": ["node"],
     "module": "commonjs",

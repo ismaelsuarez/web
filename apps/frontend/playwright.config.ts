@@ -18,6 +18,7 @@ export default defineConfig({
     ['list'],
     ['html', { outputFolder: 'playwright-report' }]
   ],
+  globalSetup: './tests-e2e/global-setup.ts',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -70,11 +71,23 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  ...(process.env.CI ? {} : {
-    webServer: {
+  webServer: [
+    {
+      command: 'pnpm --filter backend start:dev',
+      url: 'http://localhost:3001/api/products',
+      timeout: 180_000,
+      reuseExistingServer: !process.env.CI,
+      env: {
+        PORT: '3001',
+        DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/ecommerce_dev',
+        NODE_ENV: 'test',
+      },
+    },
+    {
       command: 'pnpm dev',
       url: 'http://localhost:3000',
-      reuseExistingServer: true,
+      timeout: 120_000,
+      reuseExistingServer: !process.env.CI,
     },
-  }),
+  ],
 });

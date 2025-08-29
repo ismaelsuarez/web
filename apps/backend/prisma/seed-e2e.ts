@@ -1,4 +1,123 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  // Clean existing data relevant for E2E (idempotent for CI)
+  await prisma.orderItem.deleteMany({});
+  await prisma.order.deleteMany({});
+  await prisma.cartItem.deleteMany({});
+  await prisma.cart.deleteMany({});
+  await prisma.productVariant.deleteMany({});
+  await prisma.product.deleteMany({});
+  await prisma.category.deleteMany({});
+  await prisma.refreshToken.deleteMany({});
+  await prisma.user.deleteMany({});
+
+  // Create categories
+  const category = await prisma.category.create({
+    data: { name: 'Electrónicos', slug: 'electronics' },
+  });
+
+  // Create 3 seed products matching E2E expectations
+  const products = [
+    {
+      title: 'Notebook Gamer Pro',
+      slug: 'notebook-gamer',
+      description: 'Potente notebook para gaming',
+      brand: 'Test Brand',
+      variants: [
+        {
+          sku: 'NB-GAMER-001',
+          price: 250000,
+          stock: 8,
+          images: ['https://example.com/notebook.jpg'],
+          specs: { cpu: 'i7', ram: '16GB' },
+        },
+      ],
+    },
+    {
+      title: 'Mouse Wireless Gaming',
+      slug: 'mouse-wireless',
+      description: 'Mouse gamer inalámbrico',
+      brand: 'Test Brand',
+      variants: [
+        {
+          sku: 'MOUSE-WL-001',
+          price: 15000,
+          stock: 25,
+          images: ['https://example.com/mouse.jpg'],
+          specs: { dpi: '16000', connectivity: '2.4G' },
+        },
+      ],
+    },
+    {
+      title: 'Teclado Mecánico RGB',
+      slug: 'keyboard-mechanical',
+      description: 'Teclado con switches mecánicos',
+      brand: 'Test Brand',
+      variants: [
+        {
+          sku: 'KB-RGB-001',
+          price: 45000,
+          stock: 15,
+          images: ['https://example.com/keyboard.jpg'],
+          specs: { switch: 'Blue', layout: 'ANSI' },
+        },
+      ],
+    },
+  ];
+
+  for (const p of products) {
+    const product = await prisma.product.create({
+      data: {
+        title: p.title,
+        slug: p.slug,
+        description: p.description,
+        brand: p.brand,
+        categoryId: category.id,
+      },
+    });
+    for (const v of p.variants) {
+      await prisma.productVariant.create({
+        data: {
+          sku: v.sku,
+          price: v.price,
+          stock: v.stock,
+          images: v.images,
+          specs: v.specs as any,
+          productId: product.id,
+        },
+      });
+    }
+  }
+
+  // Create test user expected by E2E
+  const hashed = await bcrypt.hash('Test1234', 10);
+  await prisma.user.create({
+    data: {
+      email: 'testuser@example.com',
+      password: hashed,
+      name: 'Usuario Test',
+    },
+  });
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+    // eslint-disable-next-line no-console
+    console.log('✅ Seed E2E completado');
+  })
+  .catch(async (e) => {
+    // eslint-disable-next-line no-console
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
+
+import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();

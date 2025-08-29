@@ -1,0 +1,1798 @@
+Run pnpm --filter frontend test:e2e
+
+> @ecommerce/frontend@1.0.0 test:e2e /home/runner/work/web/web/apps/frontend
+> playwright test
+
+
+Running 27 tests using 1 worker
+
+  ✓   1 [chromium] › tests-e2e/basic.spec.ts:6:3 › Basic E2E Tests › should load homepage (298ms)
+  ✘   2 [chromium] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (16.2s)
+  ✘   3 [chromium] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (retry #1) (16.4s)
+  ✘   4 [chromium] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (retry #2) (16.3s)
+  ✓   5 [chromium] › tests-e2e/basic.spec.ts:29:3 › Basic E2E Tests › should have working navigation (282ms)
+  ✘   6 [chromium] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (16.2s)
+  ✘   7 [chromium] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (retry #1) (16.3s)
+  ✘   8 [chromium] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (retry #2) (16.2s)
+  ✘   9 [chromium] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (5.6s)
+  ✘  10 [chromium] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (retry #1) (5.7s)
+  ✘  11 [chromium] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (retry #2) (5.6s)
+  ✘  12 [chromium] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (31.8s)
+  ✘  13 [chromium] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (retry #1) (31.9s)
+  ✘  14 [chromium] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (retry #2) (31.8s)
+  ✘  15 [chromium] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (31.8s)
+  ✘  16 [chromium] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (retry #1) (31.9s)
+  ✘  17 [chromium] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (retry #2) (31.8s)
+  ✓  18 [chromium] › tests-e2e/example.spec.ts:6:3 › Example E2E Tests › has title (279ms)
+  ✘  19 [chromium] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (16.2s)
+  ✘  20 [chromium] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (retry #1) (16.4s)
+  ✘  21 [chromium] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (retry #2) (16.3s)
+  ✓  22 [firefox] › tests-e2e/basic.spec.ts:6:3 › Basic E2E Tests › should load homepage (1.5s)
+  ✘  23 [firefox] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (15.7s)
+  ✘  24 [firefox] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (retry #1) (17.1s)
+  ✘  25 [firefox] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (retry #2) (16.7s)
+  ✓  26 [firefox] › tests-e2e/basic.spec.ts:29:3 › Basic E2E Tests › should have working navigation (1.5s)
+  ✘  27 [firefox] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (15.6s)
+  ✘  28 [firefox] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (retry #1) (16.7s)
+  ✘  29 [firefox] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (retry #2) (16.5s)
+  ✘  30 [firefox] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (6.4s)
+  ✘  31 [firefox] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (retry #1) (6.6s)
+  ✘  32 [firefox] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (retry #2) (6.4s)
+  ✘  33 [firefox] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (30.1s)
+  ✘  34 [firefox] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (retry #1) (30.3s)
+  ✘  35 [firefox] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (retry #2) (30.1s)
+  ✘  36 [firefox] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (30.1s)
+  ✘  37 [firefox] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (retry #1) (30.3s)
+  ✘  38 [firefox] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (retry #2) (30.1s)
+  ✓  39 [firefox] › tests-e2e/example.spec.ts:6:3 › Example E2E Tests › has title (1.4s)
+  ✘  40 [firefox] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (15.7s)
+  ✘  41 [firefox] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (retry #1) (16.9s)
+  ✘  42 [firefox] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (retry #2) (16.7s)
+  ✓  43 [webkit] › tests-e2e/basic.spec.ts:6:3 › Basic E2E Tests › should load homepage (4.7s)
+  ✘  44 [webkit] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (17.8s)
+  ✘  45 [webkit] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (retry #1) (17.0s)
+  ✘  46 [webkit] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page (retry #2) (16.9s)
+  ✓  47 [webkit] › tests-e2e/basic.spec.ts:29:3 › Basic E2E Tests › should have working navigation (689ms)
+  ✘  48 [webkit] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (16.6s)
+  ✘  49 [webkit] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (retry #1) (16.7s)
+  ✘  50 [webkit] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation (retry #2) (16.6s)
+  ✘  51 [webkit] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (5.9s)
+  ✘  52 [webkit] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (retry #1) (6.0s)
+  ✘  53 [webkit] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data (retry #2) (5.9s)
+  ✘  54 [webkit] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (31.9s)
+  ✘  55 [webkit] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (retry #1) (32.0s)
+  ✘  56 [webkit] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information (retry #2) (31.9s)
+  ✘  57 [webkit] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (32.0s)
+  ✘  58 [webkit] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (retry #1) (32.0s)
+  ✘  59 [webkit] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products (retry #2) (31.9s)
+  ✓  60 [webkit] › tests-e2e/example.spec.ts:6:3 › Example E2E Tests › has title (689ms)
+  ✘  61 [webkit] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (16.9s)
+  ✘  62 [webkit] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (retry #1) (17.0s)
+  ✘  63 [webkit] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link (retry #2) (17.1s)
+
+
+  1) [chromium] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-chromium-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-chromium-retry2/error-context.md
+
+  2) [chromium] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation › Navigate to products catalog 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-chromium-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-chromium-retry2/error-context.md
+
+  3) [chromium] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-chromium-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-chromium-retry2/error-context.md
+
+  4) [chromium] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-chromium-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-chromium-retry2/error-context.md
+
+  5) [chromium] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-chromium-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-chromium-retry2/error-context.md
+
+  6) [chromium] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link ────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-chromium-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-chromium-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/example-Example-E2E-Tests-get-started-link-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-chromium-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-chromium-retry2/error-context.md
+
+  7) [firefox] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page ─
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-firefox/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-firefox-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-firefox-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-firefox-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-firefox-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-firefox-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-firefox-retry2/error-context.md
+
+  8) [firefox] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation › Navigate to products catalog 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-firefox/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-firefox-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-firefox-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-firefox-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-firefox-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-firefox-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-firefox-retry2/error-context.md
+
+  9) [firefox] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-firefox/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-firefox-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-firefox-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-firefox-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-firefox-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-firefox-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-firefox-retry2/error-context.md
+
+  10) [firefox] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-firefox/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-firefox-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-firefox-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-firefox-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-firefox-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-firefox-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-firefox-retry2/error-context.md
+
+  11) [firefox] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-firefox/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-firefox-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-firefox-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-firefox-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-firefox-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-firefox-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-firefox-retry2/error-context.md
+
+  12) [firefox] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link ────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-firefox/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-firefox-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-firefox-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-firefox-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/example-Example-E2E-Tests-get-started-link-firefox-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-firefox-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-firefox-retry2/error-context.md
+
+  13) [webkit] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page ─
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-webkit/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-webkit-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-webkit-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-webkit-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-webkit-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      24 |     
+      25 |     // Verificar que se renderiza al menos 1 product-card
+    > 26 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      27 |   });
+      28 |
+      29 |   test('should have working navigation', async ({ page }) => {
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/basic.spec.ts:26:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-webkit-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/basic-Basic-E2E-Tests-should-navigate-to-products-page-webkit-retry2/error-context.md
+
+  14) [webkit] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation › Navigate to products catalog 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-webkit/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-webkit-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-webkit-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-webkit-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-webkit-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      18 |       
+      19 |       // Validar que se cargan productos del seed
+    > 20 |       await expect(page.locator(SELECTORS.productCard)).toHaveCount(3, { timeout: 15000 }); // 3 productos del seed
+         |                                                         ^
+      21 |       
+      22 |       // Buscar el producto específico del seed
+      23 |       const searchInput = page.locator(SELECTORS.searchInput);
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:20:57
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:15:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-webkit-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-bbb0b-talog-to-order-confirmation-webkit-retry2/error-context.md
+
+  15) [webkit] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-webkit/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-webkit-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-webkit-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-webkit-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-webkit-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 3
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('[data-testid="product-card"]')
+        9 × locator resolved to 0 elements
+          - unexpected value "0"
+
+
+      148 |     
+      149 |     // Verificar que hay productos del seed (3 productos)
+    > 150 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
+          |                                                                ^
+      151 |     
+      152 |     // Verificar que aparecen los productos del seed
+      153 |     await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:150:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-webkit-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-b1928-atalog-loads-with-seed-data-webkit-retry2/error-context.md
+
+  16) [webkit] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-webkit/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-webkit-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-webkit-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-webkit-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-webkit-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      159 |     // Ir a productos y seleccionar el notebook del seed
+      160 |     await page.goto('/productos');
+    > 161 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      162 |     
+      163 |     // Verificar elementos de la página de producto
+      164 |     await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:161:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-webkit-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-cd0cd-ws-correct-seed-information-webkit-retry2/error-context.md
+
+  17) [webkit] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-webkit/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-webkit-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-webkit-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-webkit-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-webkit-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="product-card"]').first()
+
+
+      173 |     // Agregar producto del seed al carrito
+      174 |     await page.goto('/productos');
+    > 175 |     await page.locator('[data-testid="product-card"]').first().click();
+          |                                                                ^
+      176 |     await page.locator('[data-testid="add-to-cart-button"]').click();
+      177 |     
+      178 |     // Verificar que aparece en el carrito
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/checkout.spec.ts:175:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-webkit-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/checkout-E2E-Checkout-Flow-2daf2-ty-works-with-seed-products-webkit-retry2/error-context.md
+
+  18) [webkit] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link ─────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-webkit/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-webkit-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-webkit-retry1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-webkit-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/example-Example-E2E-Tests-get-started-link-webkit-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-testid="product-card"]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('[data-testid="product-card"]')
+        19 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      21 |     
+      22 |     // Verificar que se renderiza al menos 1 product-card
+    > 23 |     await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1, { timeout: 15000 });
+         |                                                                ^
+      24 |   });
+      25 | });
+      26 |
+        at /home/runner/work/web/web/apps/frontend/tests-e2e/example.spec.ts:23:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/example-Example-E2E-Tests-get-started-link-webkit-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/example-Example-E2E-Tests-get-started-link-webkit-retry2/error-context.md
+
+  18 failed
+    [chromium] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page ─
+    [chromium] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation 
+    [chromium] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data 
+    [chromium] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information 
+    [chromium] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products 
+    [chromium] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link ─────────────
+    [firefox] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page ──
+    [firefox] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation 
+    [firefox] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data 
+    [firefox] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information 
+    [firefox] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products 
+    [firefox] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link ──────────────
+    [webkit] › tests-e2e/basic.spec.ts:16:3 › Basic E2E Tests › should navigate to products page ───
+    [webkit] › tests-e2e/checkout.spec.ts:8:3 › E2E Checkout Flow › Complete checkout flow from catalog to order confirmation 
+    [webkit] › tests-e2e/checkout.spec.ts:143:3 › E2E Checkout Flow › Product catalog loads with seed data 
+    [webkit] › tests-e2e/checkout.spec.ts:158:3 › E2E Checkout Flow › Product detail page shows correct seed information 
+    [webkit] › tests-e2e/checkout.spec.ts:172:3 › E2E Checkout Flow › Cart functionality works with seed products 
+    [webkit] › tests-e2e/example.spec.ts:13:3 › Example E2E Tests › get started link ───────────────
+  9 passed (19.0m)
+/home/runner/work/web/web/apps/frontend:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @ecommerce/frontend@1.0.0 test:e2e: `playwright test`
+Exit status 1
+Error: Process completed with exit code 1.
