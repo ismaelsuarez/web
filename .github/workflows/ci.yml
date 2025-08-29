@@ -142,7 +142,7 @@ jobs:
     - name: Start services with docker compose
       run: docker compose -f docker-compose.staging.yml up -d
       env:
-        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce?schema=public"
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce_staging?schema=public"
         JWT_ACCESS_SECRET: "test-secret"
         JWT_REFRESH_SECRET: "test-refresh-secret"
         MERCADOPAGO_ACCESS_TOKEN: "test-token"
@@ -158,10 +158,15 @@ jobs:
         timeout 60 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
         echo "Services are ready!"
 
+    - name: Apply Prisma schema (staging)
+      run: pnpm --filter backend db:push
+      env:
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce_staging?schema=public"
+
     - name: Run E2E seed
       run: pnpm --filter backend db:seed:e2e
       env:
-        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce?schema=public"
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce_staging?schema=public"
 
     - name: Install Playwright browsers
       run: pnpm --filter frontend exec playwright install --with-deps
@@ -170,7 +175,7 @@ jobs:
       run: pnpm --filter frontend test:e2e
       env:
         VITE_API_URL: "http://localhost:3001"
-        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce?schema=public"
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce_staging?schema=public"
 
     - name: Upload Playwright report
       uses: actions/upload-artifact@v4
