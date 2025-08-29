@@ -12,14 +12,21 @@ cd /app/apps/backend
 
 # Verificar que los archivos necesarios existen
 echo "📁 Verificando archivos necesarios..."
+echo "📂 Directorio actual: $(pwd)"
+echo "📂 Contenido del directorio:"
+ls -la
+
 if [ ! -f "dist/main.js" ]; then
   echo "❌ Error: dist/main.js no encontrado. Verificando build..."
+  echo "📂 Contenido de dist/:"
   ls -la dist/ || echo "❌ Directorio dist/ no existe"
   exit 1
 fi
 
 if [ ! -f "prisma/schema.prisma" ]; then
   echo "❌ Error: prisma/schema.prisma no encontrado"
+  echo "📂 Contenido de prisma/:"
+  ls -la prisma/ || echo "❌ Directorio prisma/ no existe"
   exit 1
 fi
 
@@ -27,7 +34,11 @@ echo "✅ Archivos necesarios verificados"
 
 # Generar cliente Prisma primero
 echo "🔧 Generando cliente Prisma..."
-npx prisma generate
+if ! npx prisma generate; then
+  echo "❌ Error: Fallo al generar cliente Prisma"
+  exit 1
+fi
+echo "✅ Cliente Prisma generado"
 
 # Esperar a que la base de datos esté lista
 echo "⏳ Esperando a que la base de datos esté lista..."
@@ -38,7 +49,7 @@ while [ $attempt -lt $max_attempts ]; do
   echo "📊 Intento $((attempt + 1))/$max_attempts de conectar a la base de datos..."
   
   # Intentar aplicar migraciones directamente
-  if npx prisma db push --accept-data-loss > /dev/null 2>&1; then
+  if npx prisma db push --accept-data-loss; then
     echo "✅ Base de datos lista y migraciones aplicadas"
     break
   else
