@@ -77,5 +77,15 @@ echo "🚀 Iniciando aplicación NestJS..."
 echo "📊 Puerto: ${PORT:-3001}"
 echo "🌍 Entorno: ${NODE_ENV:-development}"
 
+# Verificar que el archivo main.js existe y es ejecutable
+echo "🔍 Verificando archivo main.js..."
+if [ ! -f "dist/main.js" ]; then
+  echo "❌ Error: dist/main.js no existe después de las verificaciones"
+  exit 1
+fi
+
+echo "✅ Archivo main.js encontrado"
+
 # Ejecutar con más logging
+echo "🚀 Ejecutando: node dist/main.js"
 exec node dist/main.js
