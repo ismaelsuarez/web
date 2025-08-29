@@ -11,7 +11,7 @@ test.describe('E2E Checkout Flow', () => {
       await page.goto('/productos');
       
       // Validar que se cargan productos (>0 cards)
-      await expect(page.locator(SELECTORS.productCard)).toHaveCount({ min: 1 });
+      await expect(page.locator(SELECTORS.productCard)).toHaveCount(1);
       
       // Buscar un producto y confirmar que aparece en el listado
       const searchInput = page.locator(SELECTORS.searchInput);
@@ -20,7 +20,7 @@ test.describe('E2E Checkout Flow', () => {
       
       // Esperar a que se actualice la búsqueda
       await page.waitForTimeout(1000);
-      await expect(page.locator(SELECTORS.productCard)).toHaveCount({ min: 1 });
+      await expect(page.locator(SELECTORS.productCard)).toHaveCount(1);
     });
 
     // 2. Página de producto (PDP) - Entrar a un producto
@@ -161,7 +161,7 @@ test.describe('E2E Checkout Flow', () => {
     await expect(page).toHaveTitle(/Ecommerce App/);
     
     // Verificar que hay productos
-    await expect(page.locator('[data-testid="product-card"]')).toHaveCount({ min: 1 });
+    await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
     
     // Probar búsqueda
     const searchInput = page.locator('[data-testid="search-input"]');
