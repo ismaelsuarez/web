@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-interface ShippingRate {
+export interface ShippingRate {
   province: string;
   weightRanges: {
     minWeight: number;

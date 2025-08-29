@@ -45,7 +45,6 @@ export class MercadoPagoService {
         include: {
           items: {
             include: {
-              product: true,
               variant: true,
             },
           },
@@ -55,7 +54,7 @@ export class MercadoPagoService {
       // Prepare preference items for MercadoPago
       const preferenceItems = cartItems.map((item, index) => ({
         id: `item_${index}`,
-        title: `${item.variant.name}`,
+        title: `${item.variant.name} - Variant`,
         unit_price: item.variant.price,
         quantity: item.quantity,
         currency_id: 'ARS',
@@ -230,11 +229,10 @@ export class MercadoPagoService {
     try {
       // Find the order
       const order = await this.prisma.order.findUnique({
-        where: { id: orderId },
+        where: { id: parseInt(orderId, 10) },
         include: {
           items: {
             include: {
-              product: true,
               variant: true,
             },
           },
@@ -256,7 +254,7 @@ export class MercadoPagoService {
       if (paymentMethod === 'offline') {
         // Update order status
         await this.prisma.order.update({
-          where: { id: orderId },
+          where: { id: parseInt(orderId, 10) },
           data: {
             status: 'paid',
             updatedAt: new Date(),
@@ -264,7 +262,9 @@ export class MercadoPagoService {
         });
 
         // Decrement stock transactionally
-        await this.decrementStock(order.items);
+        if (order.items) {
+          await this.decrementStock(order.items);
+        }
 
         return {
           success: true,
@@ -285,7 +285,7 @@ export class MercadoPagoService {
           if (paymentData.status === 'approved') {
             // Update order status
             await this.prisma.order.update({
-              where: { id: orderId },
+              where: { id: parseInt(orderId, 10) },
               data: {
                 status: 'paid',
                 updatedAt: new Date(),
@@ -293,7 +293,9 @@ export class MercadoPagoService {
             });
 
             // Decrement stock transactionally
-            await this.decrementStock(order.items);
+            if (order.items) {
+              await this.decrementStock(order.items);
+            }
 
             return {
               success: true,

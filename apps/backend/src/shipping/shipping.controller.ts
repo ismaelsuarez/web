@@ -1,6 +1,6 @@
 import { Controller, Get, Query, HttpException, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
-import { ShippingService } from './shipping.service';
+import { ShippingService, ShippingRate } from './shipping.service';
 
 @ApiTags('shipping')
 @Controller('api/shipping')
@@ -79,7 +79,7 @@ export class ShippingController {
   @Get('rates')
   @ApiOperation({ summary: 'Get all shipping rates' })
   @ApiResponse({ status: 200, description: 'Shipping rates retrieved successfully' })
-  async getShippingRates() {
+  async getShippingRates(): Promise<{ success: boolean; data: ShippingRate[]; message: string }> {
     try {
       const rates = this.shippingService.getShippingRates();
 
