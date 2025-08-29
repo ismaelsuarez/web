@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -14,7 +14,6 @@ async function main() {
       create: {
         name: 'Electronics',
         slug: 'electronics',
-        description: 'Electronic devices and gadgets',
       },
     }),
     prisma.category.upsert({
@@ -23,7 +22,6 @@ async function main() {
       create: {
         name: 'Computers',
         slug: 'computers',
-        description: 'Computers and accessories',
       },
     }),
     prisma.category.upsert({
@@ -32,7 +30,6 @@ async function main() {
       create: {
         name: 'Accessories',
         slug: 'accessories',
-        description: 'Computer and phone accessories',
       },
     }),
   ]);
@@ -99,11 +96,8 @@ async function main() {
   const variants = await Promise.all([
     // Notebook Gamer - Variantes
     prisma.productVariant.upsert({
-      where: { 
-        productId_sku: {
-          productId: products[0].id,
-          sku: 'NB-GAMER-001'
-        }
+      where: {
+        sku: 'NB-GAMER-001'
       },
       update: {
         price: 250000, // $250,000 ARS
@@ -121,11 +115,8 @@ async function main() {
       },
     }),
     prisma.productVariant.upsert({
-      where: { 
-        productId_sku: {
-          productId: products[0].id,
-          sku: 'NB-GAMER-002'
-        }
+      where: {
+        sku: 'NB-GAMER-002'
       },
       update: {
         price: 350000, // $350,000 ARS
@@ -144,11 +135,8 @@ async function main() {
     }),
     // Mouse Wireless - Variantes
     prisma.productVariant.upsert({
-      where: { 
-        productId_sku: {
-          productId: products[1].id,
-          sku: 'MOUSE-001'
-        }
+      where: {
+        sku: 'MOUSE-001'
       },
       update: {
         price: 15000, // $15,000 ARS
@@ -167,11 +155,8 @@ async function main() {
     }),
     // Keyboard Mechanical - Variantes
     prisma.productVariant.upsert({
-      where: { 
-        productId_sku: {
-          productId: products[2].id,
-          sku: 'KB-MECH-001'
-        }
+      where: {
+        sku: 'KB-MECH-001'
       },
       update: {
         price: 45000, // $45,000 ARS
