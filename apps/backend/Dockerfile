@@ -30,8 +30,8 @@ RUN pnpm --filter backend build
 # Stage de producción
 FROM node:18-alpine AS production
 
-# Instalar pnpm
-RUN npm install -g pnpm
+# Instalar pnpm y wget para health checks
+RUN npm install -g pnpm && apk add --no-cache wget
 
 # Crear usuario no-root
 RUN addgroup -g 1001 -S nodejs
