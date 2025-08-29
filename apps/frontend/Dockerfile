@@ -9,6 +9,7 @@ WORKDIR /app
 
 # Copiar archivos de configuración
 COPY package.json pnpm-lock.yaml ./
+COPY tsconfig.json ./
 COPY apps/frontend/package.json ./apps/frontend/
 COPY packages/ui/package.json ./packages/ui/
 COPY pnpm-workspace.yaml ./
