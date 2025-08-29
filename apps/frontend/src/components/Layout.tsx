@@ -178,6 +178,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <button
                 onClick={toggleCart}
                 className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
+                data-testid="cart-button"
               >
                 <ShoppingCart size={24} />
                 {getItemCount() > 0 && (

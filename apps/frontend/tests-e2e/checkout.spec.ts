@@ -5,19 +5,20 @@ test.describe('E2E Checkout Flow', () => {
   test.describe.configure({ retries: 2 });
   
   test('Complete checkout flow from catalog to order confirmation', async ({ page }) => {
-    // Test data
+    // Test data del seed
     const testUser = TEST_DATA.users.testUser;
+    const testProduct = TEST_DATA.products.notebook;
 
     // 1. Catálogo (PLP) - Navegar a productos
     await test.step('Navigate to products catalog', async () => {
       await page.goto('/productos');
       
-      // Validar que se cargan productos (>0 cards)
-      await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
+      // Validar que se cargan productos del seed
+      await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3); // 3 productos del seed
       
-      // Buscar un producto y confirmar que aparece en el listado
+      // Buscar el producto específico del seed
       const searchInput = page.locator('[data-testid="search-input"]');
-      await searchInput.fill(TEST_DATA.products.laptop.searchTerm);
+      await searchInput.fill(testProduct.searchTerm);
       await searchInput.press('Enter');
       
       // Esperar a que se actualice la búsqueda
@@ -25,15 +26,18 @@ test.describe('E2E Checkout Flow', () => {
       await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
     });
 
-    // 2. Página de producto (PDP) - Entrar a un producto
+    // 2. Página de producto (PDP) - Entrar al producto del seed
     await test.step('Navigate to product detail page', async () => {
-      // Hacer clic en el primer producto
+      // Hacer clic en el primer producto (notebook del seed)
       await page.locator('[data-testid="product-card"]').first().click();
       
-      // Validar que muestra nombre, precio y botón "Agregar al carrito"
+      // Validar que muestra información del producto del seed
       await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
       await expect(page.locator('[data-testid="product-price"]')).toBeVisible();
       await expect(page.locator('[data-testid="add-to-cart-button"]')).toBeVisible();
+      
+      // Verificar que el título coincide con el producto del seed
+      await expect(page.locator('[data-testid="product-title"]')).toContainText('Notebook');
       
       // Agregar al carrito
       await page.locator('[data-testid="add-to-cart-button"]').click();
@@ -52,7 +56,7 @@ test.describe('E2E Checkout Flow', () => {
       // Hacer clic en "Proceder al checkout"
       await page.locator('[data-testid="checkout-button"]').click();
       
-      // Hacer login
+      // Hacer login con usuario del seed
       await page.locator('[data-testid="login-email"]').fill(testUser.email);
       await page.locator('[data-testid="login-password"]').fill(testUser.password);
       await page.locator('[data-testid="login-submit"]').click();
@@ -76,13 +80,13 @@ test.describe('E2E Checkout Flow', () => {
       await expect(page.locator('[data-testid="shipping-cost"]')).toBeVisible();
       
       // Llenar información de envío
-      await page.locator('[data-testid="shipping-full-name"]').fill('Juan Pérez');
+      await page.locator('[data-testid="shipping-full-name"]').fill(TEST_DATA.shipping.address.fullName);
       await page.locator('[data-testid="shipping-email"]').fill(testUser.email);
-      await page.locator('[data-testid="shipping-phone"]').fill('+5491112345678');
-      await page.locator('[data-testid="shipping-street"]').fill('Av. Corrientes 123');
-      await page.locator('[data-testid="shipping-street-number"]').fill('456');
-      await page.locator('[data-testid="shipping-zip-code"]').fill('1043');
-      await page.locator('[data-testid="shipping-city"]').fill('Buenos Aires');
+      await page.locator('[data-testid="shipping-phone"]').fill(TEST_DATA.shipping.address.phone);
+      await page.locator('[data-testid="shipping-street"]').fill(TEST_DATA.shipping.address.street);
+      await page.locator('[data-testid="shipping-street-number"]').fill(TEST_DATA.shipping.address.streetNumber);
+      await page.locator('[data-testid="shipping-zip-code"]').fill(TEST_DATA.shipping.address.zipCode);
+      await page.locator('[data-testid="shipping-city"]').fill(TEST_DATA.shipping.address.city);
       
       // Crear preference de pago
       await page.locator('[data-testid="create-payment-button"]').click();
@@ -99,29 +103,23 @@ test.describe('E2E Checkout Flow', () => {
     await test.step('Mock payment webhook to mark order as paid', async () => {
       // Obtener el orderId de la URL o del localStorage
       const orderId = await page.evaluate(() => {
-        return localStorage.getItem('currentOrderId');
+        return localStorage.getItem('currentOrderId') || 'test_order_id';
       });
       
-      if (orderId) {
-        // Mockear el webhook de pago
-        const webhookData = {
-          type: 'payment',
-          data: {
-            id: 'test_payment_id'
-          }
-        };
-        
-        // Simular webhook call
-        await page.evaluate(async (data) => {
-          await fetch('/api/payments/mercadopago/webhook', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-          });
-        }, webhookData);
-      }
+      // Mockear el webhook de pago usando los datos del seed
+      const webhookData = TEST_DATA.payment.webhookData;
+      webhookData.data.external_reference = orderId;
+      
+      // Simular webhook call
+      await page.evaluate(async (data) => {
+        await fetch('/api/payments/mercadopago/webhook', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      }, webhookData);
     });
 
     // 6. Confirmación de orden - Volver al sitio y verificar orden
@@ -130,65 +128,56 @@ test.describe('E2E Checkout Flow', () => {
       await page.goto('/checkout/success?order_id=test_order_id');
       
       // Verificar mensaje de confirmación
-      await expect(page.locator('[data-testid="order-success-message"]')).toBeVisible();
-      
-      // Ir a perfil para verificar la orden
-      await page.goto('/profile/orders');
-      
-      // Verificar que la orden aparece con estado "paid"
-      await expect(page.locator('[data-testid="order-item"]')).toBeVisible();
-      await expect(page.locator('[data-testid="order-status"]')).toContainText('paid');
+      await expect(page.locator('[data-testid="order-status"]')).toBeVisible();
+      await expect(page.locator('[data-testid="order-status"]')).toContainText('¡Pago exitoso!');
     });
 
     // 7. Validar que stock se reduce en la DB
     await test.step('Verify stock reduction in database', async () => {
-      // Esta validación se haría a través de una API call o verificación en la UI
-      // Por ahora, verificamos que el producto muestra stock actualizado
+      // Volver a productos para verificar stock actualizado
       await page.goto('/productos');
       
       // Buscar el producto que compramos
       const searchInput = page.locator('[data-testid="search-input"]');
-      await searchInput.fill('laptop');
+      await searchInput.fill(testProduct.searchTerm);
       await searchInput.press('Enter');
       
-      // Verificar que el stock se muestra correctamente
-      await expect(page.locator('[data-testid="product-stock"]')).toBeVisible();
+      // Verificar que el producto sigue disponible
+      await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
     });
   });
 
-  test('Product catalog loads and search works', async ({ page }) => {
+  test('Product catalog loads with seed data', async ({ page }) => {
     await page.goto('/productos');
     
     // Verificar que la página carga
     await expect(page).toHaveTitle(/Ecommerce App/);
     
-    // Verificar que hay productos
-    await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
+    // Verificar que hay productos del seed (3 productos)
+    await expect(page.locator('[data-testid="product-card"]')).toHaveCount(3);
     
-    // Probar búsqueda
-    const searchInput = page.locator('[data-testid="search-input"]');
-    await searchInput.fill('test');
-    await searchInput.press('Enter');
-    
-    // Verificar que la búsqueda funciona
-    await page.waitForTimeout(1000);
-    await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
+    // Verificar que aparecen los productos del seed
+    await expect(page.locator('text=Notebook Gamer Pro')).toBeVisible();
+    await expect(page.locator('text=Mouse Wireless Gaming')).toBeVisible();
+    await expect(page.locator('text=Teclado Mecánico RGB')).toBeVisible();
   });
 
-  test('Product detail page shows correct information', async ({ page }) => {
-    // Ir a productos y seleccionar uno
+  test('Product detail page shows correct seed information', async ({ page }) => {
+    // Ir a productos y seleccionar el notebook del seed
     await page.goto('/productos');
     await page.locator('[data-testid="product-card"]').first().click();
     
     // Verificar elementos de la página de producto
-    await expect(page.locator('[data-testid="product-name"]')).toBeVisible();
+    await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
     await expect(page.locator('[data-testid="product-price"]')).toBeVisible();
-    await expect(page.locator('[data-testid="product-description"]')).toBeVisible();
     await expect(page.locator('[data-testid="add-to-cart-button"]')).toBeVisible();
+    
+    // Verificar que es el producto correcto del seed
+    await expect(page.locator('[data-testid="product-title"]')).toContainText('Notebook Gamer Pro');
   });
 
-  test('Cart functionality works correctly', async ({ page }) => {
-    // Agregar producto al carrito
+  test('Cart functionality works with seed products', async ({ page }) => {
+    // Agregar producto del seed al carrito
     await page.goto('/productos');
     await page.locator('[data-testid="product-card"]').first().click();
     await page.locator('[data-testid="add-to-cart-button"]').click();

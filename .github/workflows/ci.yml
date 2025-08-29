@@ -158,6 +158,11 @@ jobs:
         timeout 60 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
         echo "Services are ready!"
 
+    - name: Run E2E seed
+      run: pnpm --filter backend db:seed:e2e
+      env:
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce?schema=public"
+
     - name: Install Playwright browsers
       run: pnpm --filter frontend exec playwright install --with-deps
 

@@ -76,6 +76,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="tu@email.com"
                 required
+                data-testid="login-email"
               />
             </div>
             
@@ -90,6 +91,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="••••••••"
                 required
+                data-testid="login-password"
               />
             </div>
 
@@ -103,6 +105,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               type="submit" 
               className="w-full"
               disabled={loginMutation.isPending}
+              data-testid="login-submit"
             >
               {loginMutation.isPending ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </Button>
