@@ -3,32 +3,16 @@
   "compilerOptions": {
     "types": ["node"],
     "module": "commonjs",
-    "target": "es2019",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "outDir": "dist-seed"
-  },
-  "include": ["prisma/seed-e2e.ts"]
-}
-
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "lib": ["ES2020", "DOM"],
-    "types": ["node"],
-    "module": "commonjs",
     "target": "ES2020",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "strict": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ES2020"],
+    "outDir": "dist-seed"
   },
-  "include": [
-    "prisma/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["prisma/seed-e2e.ts"],
+  "exclude": ["node_modules", "dist"]
 }
