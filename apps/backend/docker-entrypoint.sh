@@ -31,7 +31,7 @@ npx prisma generate
 
 # Esperar a que la base de datos esté lista
 echo "⏳ Esperando a que la base de datos esté lista..."
-max_attempts=30
+max_attempts=60
 attempt=0
 
 while [ $attempt -lt $max_attempts ]; do
@@ -43,8 +43,8 @@ while [ $attempt -lt $max_attempts ]; do
     break
   else
     attempt=$((attempt + 1))
-    echo "📊 Base de datos no disponible, reintentando en 5 segundos..."
-    sleep 5
+    echo "📊 Base de datos no disponible, reintentando en 10 segundos..."
+    sleep 10
   fi
 done
 
@@ -52,11 +52,9 @@ if [ $attempt -eq $max_attempts ]; then
   echo "❌ Error: No se pudo conectar a la base de datos después de $max_attempts intentos"
   echo "🔍 Verificando variables de entorno..."
   echo "DATABASE_URL: ${DATABASE_URL:0:50}..."
-  echo "🔍 Intentando continuar sin migraciones..."
-  
-  # Intentar generar el cliente Prisma de todas formas
-  echo "🔧 Generando cliente Prisma..."
-  npx prisma generate
+  echo "❌ Fallo crítico: La aplicación requiere una base de datos funcional"
+  echo "❌ No se puede continuar sin migraciones aplicadas correctamente"
+  exit 1
 fi
 
 echo "✅ Base de datos lista y migraciones aplicadas"
