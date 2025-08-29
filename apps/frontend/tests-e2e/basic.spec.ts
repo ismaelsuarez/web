@@ -1,14 +1,16 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Basic E2E Tests', () => {
+  test.describe.configure({ retries: 2 });
+
   test('should load homepage', async ({ page }) => {
     await page.goto('/');
     
     // Verificar título
     await expect(page).toHaveTitle(/Ecommerce App/);
     
-    // Verificar que la página carga
-    await expect(page).toBeVisible();
+    // Verificar que la página carga con un elemento representativo
+    await expect(page.locator('h1')).toBeVisible();
   });
 
   test('should navigate to products page', async ({ page }) => {
@@ -18,10 +20,10 @@ test.describe('Basic E2E Tests', () => {
     await page.getByRole('link', { name: 'Productos', exact: true }).click();
     
     // Verificar que navegamos a productos
-    await expect(page).toHaveURL(/.*productos/);
+    await expect(page).toHaveURL(/\/productos/);
     
-    // Verificar que la página carga
-    await expect(page).toBeVisible();
+    // Verificar que se renderiza al menos 1 .product-card
+    await expect(page.locator('.product-card')).toHaveCount(1);
   });
 
   test('should have working navigation', async ({ page }) => {

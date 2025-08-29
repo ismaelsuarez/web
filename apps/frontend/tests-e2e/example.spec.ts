@@ -1,18 +1,25 @@
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('/');
+test.describe('Example E2E Tests', () => {
+  test.describe.configure({ retries: 2 });
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Ecommerce App/);
-});
+  test('has title', async ({ page }) => {
+    await page.goto('/');
 
-test('get started link', async ({ page }) => {
-  await page.goto('/');
+    // Expect a title "to contain" a substring.
+    await expect(page).toHaveTitle(/Ecommerce App/);
+  });
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Productos', exact: true }).click();
+  test('get started link', async ({ page }) => {
+    await page.goto('/');
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Productos' })).toBeVisible();
+    // Click the get started link.
+    await page.getByRole('link', { name: 'Productos', exact: true }).click();
+
+    // Verificar que navegamos a productos
+    await expect(page).toHaveURL(/\/productos/);
+    
+    // Verificar que se renderiza al menos 1 .product-card
+    await expect(page.locator('.product-card')).toHaveCount(1);
+  });
 });

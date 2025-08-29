@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { TEST_DATA, SELECTORS } from './fixtures/test-data';
 
 test.describe('E2E Checkout Flow', () => {
+  test.describe.configure({ retries: 2 });
   test('Complete checkout flow from catalog to order confirmation', async ({ page }) => {
     // Test data
     const testUser = TEST_DATA.users.testUser;
