@@ -76,7 +76,7 @@ export default defineConfig({
       command: 'pnpm --filter backend start:dev',
       url: 'http://localhost:3001/api/products',
       timeout: 180_000,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: true,
       env: {
         PORT: '3001',
         DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/ecommerce_dev',
@@ -87,7 +87,7 @@ export default defineConfig({
       command: 'pnpm dev',
       url: 'http://localhost:3000',
       timeout: 120_000,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: true,
     },
   ],
 });
