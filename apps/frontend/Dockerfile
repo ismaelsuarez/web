@@ -21,7 +21,9 @@ COPY apps/frontend ./apps/frontend
 COPY packages/ui ./packages/ui
 
 # Build de la aplicación
-RUN pnpm --filter frontend build
+WORKDIR /app/apps/frontend
+RUN pnpm build
+WORKDIR /app
 
 # Stage de producción con nginx
 FROM nginx:alpine AS production
