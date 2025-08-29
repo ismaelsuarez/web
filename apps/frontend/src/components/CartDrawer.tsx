@@ -34,7 +34,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-hidden" data-testid="cart-drawer">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
@@ -114,6 +114,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <button
                   onClick={onCheckout}
                   className="w-full bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors font-medium"
+                  data-testid="checkout-button"
                 >
                   Proceder al Checkout
                 </button>

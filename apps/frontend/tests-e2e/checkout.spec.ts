@@ -3,6 +3,7 @@ import { TEST_DATA, SELECTORS } from './fixtures/test-data';
 
 test.describe('E2E Checkout Flow', () => {
   test.describe.configure({ retries: 2 });
+  
   test('Complete checkout flow from catalog to order confirmation', async ({ page }) => {
     // Test data
     const testUser = TEST_DATA.users.testUser;
@@ -12,34 +13,34 @@ test.describe('E2E Checkout Flow', () => {
       await page.goto('/productos');
       
       // Validar que se cargan productos (>0 cards)
-      await expect(page.locator(SELECTORS.productCard)).toHaveCount(1);
+      await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
       
       // Buscar un producto y confirmar que aparece en el listado
-      const searchInput = page.locator(SELECTORS.searchInput);
+      const searchInput = page.locator('[data-testid="search-input"]');
       await searchInput.fill(TEST_DATA.products.laptop.searchTerm);
       await searchInput.press('Enter');
       
       // Esperar a que se actualice la búsqueda
       await page.waitForTimeout(1000);
-      await expect(page.locator(SELECTORS.productCard)).toHaveCount(1);
+      await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
     });
 
     // 2. Página de producto (PDP) - Entrar a un producto
     await test.step('Navigate to product detail page', async () => {
       // Hacer clic en el primer producto
-      await page.locator(SELECTORS.productCard).first().click();
+      await page.locator('[data-testid="product-card"]').first().click();
       
       // Validar que muestra nombre, precio y botón "Agregar al carrito"
-      await expect(page.locator(SELECTORS.productName)).toBeVisible();
-      await expect(page.locator(SELECTORS.productPrice)).toBeVisible();
-      await expect(page.locator(SELECTORS.addToCartButton)).toBeVisible();
+      await expect(page.locator('[data-testid="product-title"]')).toBeVisible();
+      await expect(page.locator('[data-testid="product-price"]')).toBeVisible();
+      await expect(page.locator('[data-testid="add-to-cart-button"]')).toBeVisible();
       
       // Agregar al carrito
-      await page.locator(SELECTORS.addToCartButton).click();
+      await page.locator('[data-testid="add-to-cart-button"]').click();
       
       // Verificar que el drawer/cart muestra el item
-      await expect(page.locator(SELECTORS.cartDrawer)).toBeVisible();
-      await expect(page.locator(SELECTORS.cartItem)).toHaveCount(1);
+      await expect(page.locator('[data-testid="cart-drawer"]')).toBeVisible();
+      await expect(page.locator('[data-testid="cart-item"]')).toHaveCount(1);
     });
 
     // 3. Carrito → Checkout - Ir al carrito y hacer login

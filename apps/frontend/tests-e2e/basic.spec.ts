@@ -22,8 +22,8 @@ test.describe('Basic E2E Tests', () => {
     // Verificar que navegamos a productos
     await expect(page).toHaveURL(/\/productos/);
     
-    // Verificar que se renderiza al menos 1 .product-card
-    await expect(page.locator('.product-card')).toHaveCount(1);
+    // Verificar que se renderiza al menos 1 product-card
+    await expect(page.locator('[data-testid="product-card"]')).toHaveCount(1);
   });
 
   test('should have working navigation', async ({ page }) => {

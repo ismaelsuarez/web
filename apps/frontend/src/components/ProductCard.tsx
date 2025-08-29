@@ -22,7 +22,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
   const hasStock = lowestStock > 0;
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow" data-testid="product-card">
       <Link to={`/productos/${product.id}`}>
         <img
           src={product.variants[0]?.images[0] || '/placeholder.png'}
@@ -39,7 +39,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
         </div>
         
         <Link to={`/productos/${product.id}`}>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1 hover:text-primary-600 transition-colors">
+          <h3 className="text-lg font-semibold text-gray-900 mb-1 hover:text-primary-600 transition-colors" data-testid="product-title">
             {product.title}
           </h3>
         </Link>
@@ -78,6 +78,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
             onClick={() => onAddToCart(product, product.variants[0])}
             disabled={!hasStock}
             className="flex-1"
+            data-testid="add-to-cart-button"
           >
             {hasStock ? 'Agregar al carrito' : 'Sin stock'}
           </Button>
