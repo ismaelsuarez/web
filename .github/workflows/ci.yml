@@ -139,8 +139,8 @@ jobs:
     - name: Generate Prisma client
       run: pnpm --filter backend db:generate
 
-    - name: Start services with docker-compose
-      run: docker-compose -f docker-compose.staging.yml up -d
+    - name: Start services with docker compose
+      run: docker compose -f docker-compose.staging.yml up -d
       env:
         DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce?schema=public"
         JWT_ACCESS_SECRET: "test-secret"
@@ -176,4 +176,4 @@ jobs:
 
     - name: Stop services
       if: always()
-      run: docker-compose -f docker-compose.staging.yml down
+      run: docker compose -f docker-compose.staging.yml down
