@@ -42,8 +42,9 @@ COPY --from=base /app/apps/frontend/dist /usr/share/nginx/html
 RUN echo 'window.ENV = {};' > /usr/share/nginx/html/env-config.js
 
 # Script para inyectar variables de entorno
+RUN apk add --no-cache dos2unix
 COPY apps/frontend/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+RUN dos2unix /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
 # Exponer puerto
 EXPOSE 80
