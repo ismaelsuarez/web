@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from './Card';
 import { Button } from './Button';
-import type { Product, ProductVariant } from '../../../apps/frontend/src/types/api';
+import type { Product, ProductVariant } from '../types/api';
 
 export interface ProductCardProps {
   product: Product;
@@ -14,9 +14,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
   className = '',
 }) => {
-  const cheapestVariant = product.variants.reduce((min, variant) =>
+  const cheapestVariant = product.variants.reduce<ProductVariant>((min, variant) =>
     variant.price < min.price ? variant : min
-  );
+  , product.variants[0]!);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-AR', {
