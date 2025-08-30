@@ -1,0 +1,192 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - name: Setup pnpm cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Generate Prisma client
+      run: |
+        pnpm --filter backend db:generate
+        pnpm --filter frontend exec prisma generate || true
+
+    - name: Run backend tests
+      run: pnpm --filter backend test
+      env:
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db?schema=public"
+        JWT_ACCESS_SECRET: "test-secret"
+        JWT_REFRESH_SECRET: "test-refresh-secret"
+        MERCADOPAGO_ACCESS_TOKEN: "test-token"
+        MERCADOPAGO_PUBLIC_KEY: "test-key"
+        FRONTEND_URL: "http://localhost:5173"
+        BACKEND_URL: "http://localhost:3001"
+
+    - name: Run backend tests with coverage
+      run: pnpm --filter backend test:cov
+      env:
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db?schema=public"
+        JWT_ACCESS_SECRET: "test-secret"
+        JWT_REFRESH_SECRET: "test-refresh-secret"
+        MERCADOPAGO_ACCESS_TOKEN: "test-token"
+        MERCADOPAGO_PUBLIC_KEY: "test-key"
+        FRONTEND_URL: "http://localhost:5173"
+        BACKEND_URL: "http://localhost:3001"
+
+    - name: Build frontend
+      run: pnpm --filter frontend build
+      env:
+        VITE_API_URL: "http://localhost:3001"
+
+    - name: Run frontend tests
+      run: pnpm --filter frontend test:run
+      env:
+        VITE_API_URL: "http://localhost:3001"
+
+    - name: Run frontend tests with coverage
+      run: pnpm --filter frontend test:coverage
+      env:
+        VITE_API_URL: "http://localhost:3001"
+
+    - name: Upload backend coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./apps/backend/coverage/lcov.info
+        flags: backend
+        name: backend-coverage
+
+    - name: Upload frontend coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./apps/frontend/coverage/lcov.info
+        flags: frontend
+        name: frontend-coverage
+
+    - name: Lint backend
+      run: pnpm --filter backend lint
+
+    - name: Lint frontend
+      run: pnpm --filter frontend lint
+
+    - name: Type check backend
+      run: pnpm --filter backend type-check
+
+    - name: Type check frontend
+      run: pnpm --filter frontend type-check
+
+    - name: Format check
+      run: |
+        pnpm --filter backend format --check
+        pnpm --filter frontend format --check
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: test-and-build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js 18.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18.x
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Generate Prisma client
+      run: pnpm --filter backend db:generate
+
+    - name: Start services with docker compose
+      run: docker compose -f docker-compose.staging.yml up -d
+      env:
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce_staging?schema=public"
+        JWT_ACCESS_SECRET: "test-secret"
+        JWT_REFRESH_SECRET: "test-refresh-secret"
+        MERCADOPAGO_ACCESS_TOKEN: "test-token"
+        MERCADOPAGO_PUBLIC_KEY: "test-key"
+        FRONTEND_URL: "http://localhost:3000"
+        BACKEND_URL: "http://localhost:3001"
+
+    - name: Wait for services to be ready
+      run: |
+        echo "Waiting for backend to be ready..."
+        timeout 60 bash -c 'until curl -f http://localhost:3001/health; do sleep 2; done'
+        echo "Waiting for frontend to be ready..."
+        timeout 60 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
+        echo "Services are ready!"
+
+    - name: Apply Prisma schema (staging)
+      run: pnpm --filter backend db:push
+      env:
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce_staging?schema=public"
+
+    - name: Run E2E seed
+      run: pnpm --filter backend db:seed:e2e
+      env:
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce_staging?schema=public"
+
+    - name: Install Playwright browsers
+      run: pnpm --filter frontend exec playwright install --with-deps
+
+    - name: Run E2E tests
+      run: pnpm --filter frontend test:e2e
+      env:
+        VITE_API_URL: "http://localhost:3001"
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/ecommerce_staging?schema=public"
+
+    - name: Upload Playwright report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report
+        path: apps/frontend/playwright-report/
+        retention-days: 30
+
+    - name: Stop services
+      if: always()
+      run: docker compose -f docker-compose.staging.yml down
