@@ -9,7 +9,7 @@ export interface NormalizedAddressInput {
 
 export interface NormalizedAddressOutput {
   street_name: string;
-  street_number: string; // Mercado Pago SDKs suelen exigir string en algunos builds
+  street_number: number;
   zip_code: string;
   city: string;
   state: string;
@@ -18,7 +18,7 @@ export interface NormalizedAddressOutput {
 
 export function normalizeAddress(input: NormalizedAddressInput): NormalizedAddressOutput {
   const num = Number(input.street_number);
-  const street_number = Number.isFinite(num) ? String(num) : String(input.street_number ?? '0');
+  const street_number = Number.isFinite(num) ? num : 0;
   return {
     street_name: input.street_name,
     street_number,
