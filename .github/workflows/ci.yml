@@ -153,8 +153,11 @@ jobs:
     - name: Run E2E seed
       run: pnpm --filter backend db:seed:e2e
 
+    - name: Setup Playwright dependencies
+      uses: microsoft/playwright-github-action@v1
+
     - name: Install Playwright browsers
-      run: pnpm --filter frontend exec playwright install --with-deps
+      run: pnpm --filter frontend exec playwright install
 
     - name: Run E2E tests
       run: pnpm --filter frontend test:e2e
