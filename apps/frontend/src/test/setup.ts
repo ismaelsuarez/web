@@ -36,3 +36,11 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
+
+// Evita el error de preámbulo de @vitejs/plugin-react en Vitest
+// Referencia: https://github.com/vitejs/vite-plugin-react/pull/11#discussion_r430879201
+declare global {
+	var __vite_plugin_react_preamble_installed__: boolean | undefined;
+}
+
+globalThis.__vite_plugin_react_preamble_installed__ = true;
