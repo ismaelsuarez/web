@@ -18,7 +18,7 @@ export const ProductDetail: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
   const addToCartMutation = useAddToCart();
   
-  const { data: product, isLoading, error } = useProduct(slug as unknown as number);
+  const { data: product, isLoading, error } = useProduct(slug as string);
 
   if (isLoading) {
     return (

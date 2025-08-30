@@ -91,7 +91,7 @@ describe('ProductCard', () => {
     renderWithRouter(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     const links = screen.getAllByRole('link');
-    expect(links[0]).toHaveAttribute('href', '/productos/1');
+    expect(links[0]).toHaveAttribute('href', '/productos/test-product');
   });
 
   it('should show "Ver detalles" button', () => {
@@ -193,6 +193,6 @@ describe('ProductCard', () => {
     expect(image).toHaveAttribute('alt', 'Test Product');
 
     const links = screen.getAllByRole('link');
-    expect(links[0]).toHaveAttribute('href', '/productos/1');
+    expect(links[0]).toHaveAttribute('href', '/productos/test-product');
   });
 });
