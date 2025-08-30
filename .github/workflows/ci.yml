@@ -9,6 +9,9 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -18,36 +21,75 @@ jobs:
       with:
         version: 8
 
-    - name: Setup Node.js 18.x
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: 18.x
-        cache: 'pnpm'
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - name: Setup pnpm cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
     - name: Generate Prisma client
-      run: pnpm --filter backend db:generate
+      run: |
+        pnpm --filter backend db:generate
+        pnpm --filter frontend exec prisma generate || true
 
-    # ... (aquí irían los demás pasos de linting, type-check, format-check, tests unitarios y build)
     - name: Lint backend
       run: pnpm --filter backend lint
     - name: Lint frontend
       run: pnpm --filter frontend lint
+
     - name: Type check backend
       run: pnpm --filter backend type-check
     - name: Type check frontend
       run: pnpm --filter frontend type-check
+
     - name: Format check
-      run: pnpm --filter backend format --check && pnpm --filter frontend format --check
-    - name: Run backend tests
-      run: pnpm --filter backend test
-    - name: Run frontend tests
-      run: pnpm --filter frontend test:run
+      run: |
+        pnpm --filter backend format --check
+        pnpm --filter frontend format --check
+
+    - name: Run backend tests with coverage
+      run: pnpm --filter backend test:cov
+      env:
+        DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db?schema=public"
+        JWT_ACCESS_SECRET: "test-secret"
+        JWT_REFRESH_SECRET: "test-refresh-secret"
+
+    - name: Run frontend tests with coverage
+      run: pnpm --filter frontend test:coverage
+      env:
+        VITE_API_URL: "http://localhost:3001"
+
+    - name: Upload backend coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./apps/backend/coverage/lcov.info
+        flags: backend
+        name: backend-coverage
+
+    - name: Upload frontend coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./apps/frontend/coverage/lcov.info
+        flags: frontend
+        name: frontend-coverage
+
     - name: Build projects
       run: pnpm turbo build
-
 
   e2e-tests:
     runs-on: ubuntu-latest
@@ -72,7 +114,19 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 18.x
-        cache: 'pnpm'
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - name: Setup pnpm cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
