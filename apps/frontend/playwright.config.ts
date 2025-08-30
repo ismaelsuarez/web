@@ -79,7 +79,7 @@ export default defineConfig({
       reuseExistingServer: true,
       env: {
         PORT: '3001',
-        DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/ecommerce_dev',
+        DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/ecommerce_e2e',
         NODE_ENV: 'test',
       },
     },
