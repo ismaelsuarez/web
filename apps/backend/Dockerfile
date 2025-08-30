@@ -34,7 +34,7 @@ RUN pnpm --filter backend build
 FROM node:18-alpine AS production
 
 # Instalar pnpm, wget, curl, netcat y OpenSSL para Prisma
-RUN npm install -g pnpm && apk add --no-cache wget curl netcat-openbsd openssl
+RUN npm install -g pnpm && apk add --no-cache wget curl netcat-openbsd openssl dos2unix
 
 # Crear usuario no-root
 RUN addgroup -g 1001 -S nodejs
@@ -65,7 +65,7 @@ COPY --from=base --chown=nestjs:nodejs /app/apps/backend/prisma ./apps/backend/p
 # Copiar scripts
 COPY apps/backend/start.sh /start.sh
 COPY apps/backend/health-check.sh /health-check.sh
-RUN chmod +x /start.sh /health-check.sh && chown nestjs:nodejs /start.sh /health-check.sh
+RUN dos2unix /start.sh /health-check.sh && chmod +x /start.sh /health-check.sh && chown nestjs:nodejs /start.sh /health-check.sh
 
 # Cambiar permisos de directorios
 RUN chown -R nestjs:nodejs /app
