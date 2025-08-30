@@ -78,4 +78,23 @@ export class ProductsService {
       },
     });
   }
+
+  async findBySlug(slug: string) {
+    return this.prisma.product.findUnique({
+      where: { slug },
+      include: {
+        category: true,
+        variants: {
+          select: {
+            id: true,
+            sku: true,
+            price: true,
+            stock: true,
+            images: true,
+            specs: true,
+          },
+        },
+      },
+    });
+  }
 }

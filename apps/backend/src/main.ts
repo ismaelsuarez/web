@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import * as helmet from 'helmet';
+import helmet from 'helmet';
 import { securityConfig } from './config/security.config';
 
 async function bootstrap() {
@@ -11,16 +11,25 @@ async function bootstrap() {
 
   // 🔒 SECURITY: Helmet.js configuration
   app.use(
-    helmet.default({
+    helmet({
       contentSecurityPolicy: securityConfig.csp.enabled
-        ? {
-            directives: securityConfig.csp.directives,
-          }
+        ? { directives: securityConfig.csp.directives }
         : false,
-      crossOriginEmbedderPolicy: false,
-      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      crossOriginEmbedderPolicy: true,
+      crossOriginResourcePolicy: { policy: 'same-origin' },
     })
   );
+
+  // Enable HSTS only when behind HTTPS (production)
+  if (process.env.NODE_ENV === 'production') {
+    app.use(
+      helmet.hsts({
+        maxAge: 15552000, // 180 days
+        includeSubDomains: true,
+        preload: false,
+      })
+    );
+  }
 
   // 🔒 SECURITY: Disable X-Powered-By header
   app.getHttpAdapter().getInstance().disable('x-powered-by');

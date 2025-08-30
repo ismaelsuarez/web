@@ -14,11 +14,11 @@ export const useProducts = (params?: {
   });
 };
 
-export const useProduct = (id: number) => {
+export const useProduct = (slugOrId: string | number) => {
   return useQuery({
-    queryKey: ['product', id],
-    queryFn: () => productsApi.getProduct(id),
-    enabled: !!id,
+    queryKey: ['product', slugOrId],
+    queryFn: () => productsApi.getProduct(slugOrId),
+    enabled: !!slugOrId,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };

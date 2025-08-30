@@ -9,7 +9,7 @@ import { useAddToCart } from '../hooks/useCart';
 import type { ProductVariant } from '../types/api';
 
 export const ProductDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -18,7 +18,7 @@ export const ProductDetail: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
   const addToCartMutation = useAddToCart();
   
-  const { data: product, isLoading, error } = useProduct(Number(id));
+  const { data: product, isLoading, error } = useProduct(slug as unknown as number);
 
   if (isLoading) {
     return (

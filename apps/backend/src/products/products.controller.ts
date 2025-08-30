@@ -76,4 +76,17 @@ export class ProductsController {
       throw new HttpException('Invalid product ID', HttpStatus.BAD_REQUEST);
     }
   }
+
+  @Get('slug/:slug')
+  @ApiOperation({ summary: 'Get a product by slug' })
+  @ApiParam({ name: 'slug', description: 'Product slug' })
+  @ApiResponse({ status: 200, description: 'Product retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Product not found' })
+  async findOneBySlug(@Param('slug') slug: string) {
+    const product = await this.productsService.findBySlug(slug);
+    if (!product) {
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+    }
+    return product;
+  }
 }

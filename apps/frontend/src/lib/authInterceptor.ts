@@ -7,7 +7,9 @@ const runtimeBaseURL = runtimeEnv?.VITE_API_URL;
 const buildBaseURL = (import.meta as any).env.VITE_API_URL;
 
 const api = axios.create({
-  baseURL: runtimeBaseURL || buildBaseURL || '/api',
+  // Default to empty base URL so callers can use absolute paths like '/api/...'
+  // and avoid duplicating '/api' when ENV provides '/api' as well.
+  baseURL: runtimeBaseURL || buildBaseURL || '',
   headers: { 'Content-Type': 'application/json' },
 });
 

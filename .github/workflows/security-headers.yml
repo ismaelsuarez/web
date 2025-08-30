@@ -1,0 +1,33 @@
+name: security-headers
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Staging HTTPS URL (e.g., https://staging.example.com)'
+        required: true
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install curl and bash (preinstalled)
+        run: echo "using system curl/bash"
+
+      - name: Validate security headers
+        env:
+          STAGING_URL: ${{ github.event.inputs.url }}
+        run: |
+          chmod +x scripts/validate-headers.sh
+          if [ -z "$STAGING_URL" ]; then
+            echo "STAGING_URL not provided via workflow_dispatch input. Skipping validation."; exit 0
+          fi
+          scripts/validate-headers.sh "$STAGING_URL"
+

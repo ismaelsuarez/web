@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { CartItem, ShippingAddress, MercadoPagoWebhookData } from '../types';
+import { normalizeAddress } from './mp.helpers';
 
 @Injectable()
 export class MercadoPagoService {
@@ -84,17 +85,15 @@ export class MercadoPagoService {
         payer: {
           name: shippingAddress.fullName,
           email: shippingAddress.email,
-          phone: {
-            number: shippingAddress.phone,
-          },
-          address: {
+          phone: { number: shippingAddress.phone },
+          address: normalizeAddress({
             street_name: shippingAddress.street,
-            street_number: String(Number(shippingAddress.streetNumber) || 0),
+            street_number: shippingAddress.streetNumber,
             zip_code: shippingAddress.zipCode,
             city: shippingAddress.city,
             state: shippingAddress.province,
             country: 'AR',
-          },
+          }),
         },
         shipments: {
           cost: shippingAddress.shippingCost,

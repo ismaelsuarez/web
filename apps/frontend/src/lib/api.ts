@@ -14,8 +14,11 @@ export const productsApi = {
     return response.data;
   },
 
-  getProduct: async (id: number): Promise<Product> => {
-    const response = await api.get(`/api/products/${id}`);
+  getProduct: async (slugOrId: string | number): Promise<Product> => {
+    const path = typeof slugOrId === 'string' && isNaN(Number(slugOrId))
+      ? `/api/products/slug/${slugOrId}`
+      : `/api/products/${slugOrId}`;
+    const response = await api.get(path);
     return response.data;
   },
 };

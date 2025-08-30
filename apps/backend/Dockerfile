@@ -81,4 +81,5 @@ ENV NODE_ENV=production
 ENV PORT=3001
 
 # Usar el script de inicio simple
+HEALTHCHECK --interval=30s --timeout=10s --retries=5 CMD wget --no-verbose --tries=1 --spider http://localhost:3001/api/products || exit 1
 CMD ["/start.sh"]

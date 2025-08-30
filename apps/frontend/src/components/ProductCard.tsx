@@ -23,7 +23,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow" data-testid="product-card">
-      <Link to={`/productos/${product.id}`}>
+      <Link to={`/productos/${product.slug}`}>
         <img
           src={product.variants[0]?.images[0] || '/placeholder.png'}
           alt={product.title}
@@ -38,7 +38,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
           </span>
         </div>
         
-        <Link to={`/productos/${product.id}`}>
+        <Link to={`/productos/${product.slug}`}>
           <h3 className="text-lg font-semibold text-gray-900 mb-1 hover:text-primary-600 transition-colors" data-testid="product-title">
             {product.title}
           </h3>
