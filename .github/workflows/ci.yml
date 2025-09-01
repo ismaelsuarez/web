@@ -207,6 +207,16 @@ jobs:
           echo "EOF"
         } >> "$GITHUB_OUTPUT"
 
+    - name: Debug DB (psql inspect if still empty)
+      if: steps.verify-final.outputs.count == '0'
+      run: |
+        echo "DATABASE_URL=$DATABASE_URL"
+        docker compose -f docker-compose.staging.yml exec -T postgres psql -U postgres -d ecommerce_staging -c 'select current_database(), current_schema();'
+        docker compose -f docker-compose.staging.yml exec -T postgres psql -U postgres -d ecommerce_staging -c '\dt'
+        docker compose -f docker-compose.staging.yml exec -T postgres psql -U postgres -d ecommerce_staging -c 'select count(*) as product_count from "Product";'
+        docker compose -f docker-compose.staging.yml exec -T postgres psql -U postgres -d ecommerce_staging -c 'select count(*) as category_count from "Category";'
+        docker compose -f docker-compose.staging.yml exec -T postgres psql -U postgres -d ecommerce_staging -c 'select count(*) as variant_count from "ProductVariant";'
+
     - name: Fail if still empty after emergency seed
       if: steps.verify-final.outputs.count == '0'
       run: |
