@@ -5,6 +5,9 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Starting E2E seed...');
+  const dbUrl = process.env.DATABASE_URL || '';
+  const masked = dbUrl.length > 16 ? dbUrl.slice(0, 16) + '***' : '***';
+  console.log('🔗 DATABASE_URL:', masked);
 
   // Categoría base
   const category = await prisma.category.upsert({
@@ -100,6 +103,20 @@ async function main() {
 
   // Limpiar carritos del usuario de prueba (idempotente)
   await prisma.cart.deleteMany({ where: { userId: testUser.id } });
+
+  // Verificaciones de conteo
+  const [categoriesCount, productsCount, variantsCount] = await Promise.all([
+    prisma.category.count(),
+    prisma.product.count(),
+    prisma.productVariant.count(),
+  ]);
+  console.log('📊 Seed counts -> categories:', categoriesCount, 'products:', productsCount, 'variants:', variantsCount);
+
+  if (productsCount === 0) {
+    console.error('❌ E2E seed completed but products count is 0');
+    // Código 2 indica seed sin datos efectivos para que CI lo diferencie de errores inesperados
+    process.exit(2);
+  }
 
   console.log('✅ E2E seed completed');
 }

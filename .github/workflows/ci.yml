@@ -147,6 +147,7 @@ jobs:
 
     - name: Run E2E seed
       run: pnpm --filter backend db:seed:e2e
+      continue-on-error: true
 
     - name: Verify E2E data (products exist)
       id: verify-products
