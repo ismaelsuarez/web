@@ -163,8 +163,16 @@ jobs:
           echo "EOF"
         } >> "$GITHUB_OUTPUT"
 
+    - name: Compute products count via psql
+      id: psql-count
+      shell: bash
+      run: |
+        COUNT=$(docker compose -f docker-compose.staging.yml exec -T postgres psql -U postgres -d ecommerce_staging -t -A -c 'select count(*) from products;')
+        echo "psql products count: $COUNT"
+        echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
     - name: Re-run seed if empty (fallback)
-      if: steps.verify-products.outputs.count == '0'
+      if: steps.psql-count.outputs.count == '0'
       env:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       run: |
@@ -173,7 +181,7 @@ jobs:
 
     - name: Re-verify E2E data
       id: verify-after-seed
-      if: steps.verify-products.outputs.count == '0'
+      if: steps.psql-count.outputs.count == '0'
       env:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       shell: bash
@@ -195,7 +203,7 @@ jobs:
 
     - name: Final verify E2E data
       id: verify-final
-      if: steps.verify-products.outputs.count == '0'
+      if: steps.psql-count.outputs.count == '0'
       env:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       shell: bash
