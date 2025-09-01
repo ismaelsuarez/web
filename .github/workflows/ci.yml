@@ -190,7 +190,7 @@ jobs:
       env:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       run: |
-        pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const p=new PrismaClient();try{const cat=await p.category.upsert({where:{slug:"electronics"},update:{},create:{name:"Electronics",slug:"electronics"}});const prod=await p.product.upsert({where:{slug:"notebook-gamer"},update:{},create:{title:"Notebook Gamer Pro",slug:"notebook-gamer",brand:"Test Brand",description:"Seeded product",categoryId:cat.id}});await p.productVariant.upsert({where:{sku:"NB-GAMER-001"},update:{},create:{productId:prod.id,sku:"NB-GAMER-001",price:250000,stock:8,images:[]}});console.log("Emergency seed completed");}catch(e){console.error(e);process.exit(1);}finally{await p.$disconnect();}})();'
+        pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const p=new PrismaClient();try{const cat=await p.category.upsert({where:{slug:"electronics"},update:{},create:{name:"Electronics",slug:"electronics"}});const prod=await p.product.upsert({where:{slug:"notebook-gamer"},update:{},create:{title:"Notebook Gamer Pro",slug:"notebook-gamer",brand:"Test Brand",description:"Seeded product",categoryId:cat.id}});await p.productVariant.upsert({where:{sku:"NB-GAMER-001"},update:{},create:{productId:prod.id,sku:"NB-GAMER-001",price:250000,stock:8,images:[]}});console.log("Emergency seed completed");}catch(e){console.error(e);}finally{await p.$disconnect();}})();'
 
     - name: Final verify E2E data
       id: verify-final
