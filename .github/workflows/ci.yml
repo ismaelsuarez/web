@@ -154,8 +154,13 @@ jobs:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       shell: bash
       run: |
-        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
-        echo "count=$COUNT" >> $GITHUB_OUTPUT
+        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();process.stdout.write(String(c));}catch(e){process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
+        echo "E2E verify - products count: $COUNT"
+        {
+          echo "count<<EOF"
+          echo "$COUNT"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
 
     - name: Re-run seed if empty (fallback)
       if: steps.verify-products.outputs.count == '0'
@@ -172,8 +177,13 @@ jobs:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       shell: bash
       run: |
-        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E re-verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
-        echo "count=$COUNT" >> $GITHUB_OUTPUT
+        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();process.stdout.write(String(c));}catch(e){process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
+        echo "E2E re-verify - products count: $COUNT"
+        {
+          echo "count<<EOF"
+          echo "$COUNT"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
 
     - name: Emergency minimal seed (ensure at least 1 product)
       if: steps.verify-after-seed.outputs.count == '0'
@@ -189,8 +199,13 @@ jobs:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       shell: bash
       run: |
-        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E final verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
-        echo "count=$COUNT" >> $GITHUB_OUTPUT
+        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();process.stdout.write(String(c));}catch(e){process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
+        echo "E2E final verify - products count: $COUNT"
+        {
+          echo "count<<EOF"
+          echo "$COUNT"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
 
     - name: Fail if still empty after emergency seed
       if: steps.verify-final.outputs.count == '0'
