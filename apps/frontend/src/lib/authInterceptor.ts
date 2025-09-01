@@ -3,13 +3,18 @@ import { authApi } from './api';
 
 // Crear instancia de axios para interceptores (soporta runtime env y fallback al proxy /api)
 const runtimeEnv = (globalThis as any)?.window?.ENV;
-const runtimeBaseURL = runtimeEnv?.VITE_API_URL;
-const buildBaseURL = (import.meta as any).env.VITE_API_URL;
+const runtimeBaseURL = runtimeEnv?.VITE_API_URL as string | undefined;
+const buildBaseURL = (import.meta as any).env.VITE_API_URL as string | undefined;
+
+// Elegir baseURL solo cuando es una URL absoluta (http/https). Si es un path como '/api',
+// dejamos baseURL vacío para evitar duplicar '/api' en las rutas ya absolutas del caller.
+const chosenBaseURL = runtimeBaseURL ?? buildBaseURL;
+const effectiveBaseURL = chosenBaseURL && !chosenBaseURL.startsWith('/') ? chosenBaseURL : '';
 
 const api = axios.create({
   // Default to empty base URL so callers can use absolute paths like '/api/...'
   // and avoid duplicating '/api' when ENV provides '/api' as well.
-  baseURL: runtimeBaseURL || buildBaseURL || '',
+  baseURL: effectiveBaseURL,
   headers: { 'Content-Type': 'application/json' },
 });
 
