@@ -46,12 +46,12 @@ const confirmCheckout = async (data: ConfirmCheckoutRequest) => {
 
 const getShippingCost = async (province: string, weight: number) => {
   const response = await api.get(`/api/shipping/cost?province=${province}&weight=${weight}`);
-  return response.data;
+  return response.data.data;
 };
 
 const getProvinces = async () => {
   const response = await api.get('/api/shipping/provinces');
-  return response.data;
+  return response.data.data;
 };
 
 // Hooks
