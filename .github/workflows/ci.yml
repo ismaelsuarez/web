@@ -154,7 +154,7 @@ jobs:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       shell: bash
       run: |
-        COUNT=$(node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
+        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
         echo "count=$COUNT" >> $GITHUB_OUTPUT
 
     - name: Re-run seed if empty (fallback)
@@ -172,7 +172,7 @@ jobs:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       shell: bash
       run: |
-        COUNT=$(node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E re-verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
+        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E re-verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
         echo "count=$COUNT" >> $GITHUB_OUTPUT
 
     - name: Emergency minimal seed (ensure at least 1 product)
@@ -180,7 +180,7 @@ jobs:
       env:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       run: |
-        node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const p=new PrismaClient();try{const cat=await p.category.upsert({where:{slug:"electronics"},update:{},create:{name:"Electronics",slug:"electronics"}});const prod=await p.product.upsert({where:{slug:"notebook-gamer"},update:{},create:{title:"Notebook Gamer Pro",slug:"notebook-gamer",brand:"Test Brand",description:"Seeded product",categoryId:cat.id}});await p.productVariant.upsert({where:{sku:"NB-GAMER-001"},update:{},create:{productId:prod.id,sku:"NB-GAMER-001",price:250000,stock:8,images:[]}});console.log("Emergency seed completed");}catch(e){console.error(e);process.exit(1);}finally{await p.$disconnect();}})();'
+        pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const p=new PrismaClient();try{const cat=await p.category.upsert({where:{slug:"electronics"},update:{},create:{name:"Electronics",slug:"electronics"}});const prod=await p.product.upsert({where:{slug:"notebook-gamer"},update:{},create:{title:"Notebook Gamer Pro",slug:"notebook-gamer",brand:"Test Brand",description:"Seeded product",categoryId:cat.id}});await p.productVariant.upsert({where:{sku:"NB-GAMER-001"},update:{},create:{productId:prod.id,sku:"NB-GAMER-001",price:250000,stock:8,images:[]}});console.log("Emergency seed completed");}catch(e){console.error(e);process.exit(1);}finally{await p.$disconnect();}})();'
 
     - name: Final verify E2E data
       id: verify-final
@@ -189,7 +189,7 @@ jobs:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       shell: bash
       run: |
-        COUNT=$(node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E final verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
+        COUNT=$(pnpm --filter backend exec node -e 'const {PrismaClient}=require("@prisma/client");(async()=>{const prisma=new PrismaClient();try{const c=await prisma.product.count();console.log("E2E final verify - products count:",c);process.stdout.write(String(c));}catch(e){console.error(e);process.stdout.write("0");}finally{await prisma.$disconnect();}})();')
         echo "count=$COUNT" >> $GITHUB_OUTPUT
 
     - name: Fail if still empty after emergency seed
