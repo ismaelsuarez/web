@@ -152,7 +152,7 @@ jobs:
       env:
         DATABASE_URL: ${{ env.DATABASE_URL }}
       run: |
-        node -e "const { PrismaClient } = require('@prisma/client'); (async () => { const prisma = new PrismaClient(); const count = await prisma.product.count(); console.log('E2E verify - products count:', count); await prisma.$disconnect(); if (count === 0) { process.exit(2); } })().catch(e => { console.error(e); process.exit(1); });"
+        node -e 'const { PrismaClient } = require("@prisma/client"); (async () => { const prisma = new PrismaClient(); const count = await prisma.product.count(); console.log("E2E verify - products count:", count); await prisma.$disconnect(); if (count === 0) { process.exit(2); } })().catch(e => { console.error(e); process.exit(1); });'
 
     - name: Re-run seed if verification failed
       if: failure()
