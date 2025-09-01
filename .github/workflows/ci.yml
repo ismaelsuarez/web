@@ -134,24 +134,27 @@ jobs:
     - name: Generate Prisma client
       run: pnpm --filter backend db:generate
 
-    - name: Start services with Docker Compose
-      run: docker compose -f docker-compose.staging.yml up --build -d --wait
+    - name: Start databases (Postgres & Redis) only
+      run: docker compose -f docker-compose.staging.yml up -d --wait postgres redis
 
-    - name: Debug - Show Docker container status
+    - name: Debug - Show Docker container status (DBs)
       run: docker compose -f docker-compose.staging.yml ps
-
-    - name: Debug - Show Docker container logs
-      if: failure()
-      run: docker compose -f docker-compose.staging.yml logs
-
-    - name: Wait for backend internal startup (e.g., db push in start.sh)
-      run: sleep 10
 
     - name: Apply Prisma schema (staging)
       run: pnpm --filter backend db:push
 
     - name: Run E2E seed
       run: pnpm --filter backend db:seed:e2e
+
+    - name: Start backend and frontend services
+      run: docker compose -f docker-compose.staging.yml up --build -d --wait backend frontend
+
+    - name: Debug - Show Docker container status (all)
+      run: docker compose -f docker-compose.staging.yml ps
+
+    - name: Debug - Show Docker container logs on failure
+      if: failure()
+      run: docker compose -f docker-compose.staging.yml logs
 
     - name: Install Playwright browsers (with system deps)
       run: pnpm --filter frontend exec playwright install --with-deps
